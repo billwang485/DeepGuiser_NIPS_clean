@@ -1,9 +1,11 @@
 import os
 import re
+import sys
 import random
 import time
 import shutil
 import difflib
+import logging
 import itertools
 from copy import deepcopy
 from collections import defaultdict
@@ -927,6 +929,23 @@ def localtime_as_dirname():
     default_EXP = " ".join(x[1:-1])
     return default_EXP
 
+def preprocess_exp_dir(args):
+    if not os.path.exists(args.prefix):
+        os.makedirs(args.prefix)
+    log_dir = 'log'
+    if args.debug:
+        log_dir = os.path.join(log_dir, 'debug')
+    if not os.path.exists(os.path.join(args.prefix, log_dir)):
+        os.makedirs(os.path.join(args.prefix, log_dir))
+    args.save = os.path.join(args.prefix, log_dir, args.save)
+
+def initialize_logger(args):
+    log_format = '%(asctime)s %(message)s'
+    logging.basicConfig(stream=sys.stdout, level=logging.INFO, format=log_format, datefmt='%m/%d %I:%M:%S %p')
+    fh = logging.FileHandler(os.path.join(args.save, 'log.txt'))
+    fh.setFormatter(logging.Formatter(log_format))
+    logging.getLogger().addHandler(fh)
+    logger = logging.getLogger()
 
 class AvgrageMeter(object):
     def __init__(self):

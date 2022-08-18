@@ -1,6 +1,6 @@
 import os
 import sys
-sys.path.append(os.getcwd(), '..')
+sys.path.append(os.path.join(os.getcwd(), '..'))
 import glob
 import random
 import logging
@@ -21,16 +21,16 @@ You can bypass the first 50 epochs of training by loading pretrained models
 '''
 
 parser = argparse.ArgumentParser("DeepGuiser")
-parser.add_argument('--data', type=str, default='../data', help='location of the data corpus')
+parser.add_argument('--data', type=str, default=os.path.join(os.getcwd(), '..','../data'), help='location of the data corpus')
 parser.add_argument('--batch_size', type=int, default=64, help='batch size')
-parser.add_argument('--learning_rate', type=float, default=0.05, help='init learning rate')
+parser.add_argument('--learning_rate', '-lr', type=float, default=0.05, help='init learning rate')
 parser.add_argument('--momentum', type=float, default=0.9, help='momentum')
 parser.add_argument('--weight_decay', type=float, default=3e-4, help='weight decay')
 parser.add_argument('--report_freq', type=int, default=50, help='report frequency')
 parser.add_argument('--test_freq', type=int, default=10, help='test frequency')
 parser.add_argument('--test_archs', type=int, default=100, help='how many archs to test supernet')
 parser.add_argument('--gpu', type=int, default=0, help='gpu device id')
-parser.add_argument('--epochs', type=int, default=1000, help='number of training epochs')
+parser.add_argument('--epochs', type=int, default=1, help='number of training epochs')
 parser.add_argument('--init_channels', type=int, default=20, help='number of init channels')
 parser.add_argument('--layers', type=int, default=8, help='total number of layers')
 parser.add_argument('--save', type=str, default=utils.localtime_as_dirname(), help='experiment name')
@@ -54,6 +54,7 @@ parser.add_argument('--transformer_normalize', action='store_true', default=Fals
 parser.add_argument('--num_nodes', type=int, default=4, help='number of intermediate nodes')
 parser.add_argument('--op_type', type=str, default='LOOSE_END_PRIMITIVES', help='LOOSE_END_PRIMITIVES | FULLY_CONCAT_PRIMITIVES')
 parser.add_argument('--transfer', action='store_true', default=True, help='eval the transferability')
+parser.add_argument('--debug', action='store_true', default=False, help='debud mode')
 args = parser.parse_args()
 
 if args.op_type=='LOOSE_END_PRIMITIVES':
@@ -62,21 +63,13 @@ else:
     args.loose_end = False
 args.cutout = False
 
-if not os.path.exists(args.prefix):
-    os.makedirs(args.prefix)
-log_dir = 'log'
-if args.debug:
-    tmp = os.path.join(log_dir, 'debug')
-args.save = os.path.join(args.prefix, log_dir, args.save)
+utils.preprocess_exp_dir(args)
 utils.create_exp_dir(args.save, scripts_to_save=glob.glob('*.py')+glob.glob('*.sh')+glob.glob('*.yml'))
 
-log_format = '%(asctime)s %(message)s'
-logging.basicConfig(stream=sys.stdout, level=logging.INFO, format=log_format, datefmt='%m/%d %I:%M:%S %p')
-fh = logging.FileHandler(os.path.join(args.save, 'log.txt'))
-fh.setFormatter(logging.Formatter(log_format))
-logging.getLogger().addHandler(fh)
-logger = logging.getLogger()
+utils.initialize_logger(args)
+
 CIFAR_CLASSES = 10
+
 summaryWriter = SummaryWriter(os.path.join(args.save, "runs"))
 
 def main():

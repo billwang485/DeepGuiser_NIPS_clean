@@ -1,7 +1,7 @@
 from operations import *
 import utils
 import numpy as np
-from basic_models.basic_gates_models import DenseGraphOpEdgeFlow, GCNFlowArchEmbedder
+from basic_parts.basic_gates_models import GCNFlowArchEmbedder
 from scipy.stats import kendalltau
 
 

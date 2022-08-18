@@ -1,4 +1,5 @@
 import utils
+import genotypes
 from operations import *
 
 
