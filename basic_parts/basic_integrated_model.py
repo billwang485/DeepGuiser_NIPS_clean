@@ -1,12 +1,10 @@
+from copy import deepcopy
+import numpy as np
+import utils
 import genotypes
 from operations import *
 from predictors.predictors import VanillaGatesPredictor
-import utils
-import numpy as np
-from utils import Linf_PGD
-from copy import deepcopy
 from basic_parts.basic_nat_models import NASCell, ArchMaster
-from utils import NormalizeByChannelMeanStd
 from basic_parts.basic_arch_transformers import ArchTransformerGates, ArchTransformer
 
 
@@ -86,7 +84,7 @@ class NASNetwork(nn.Module):
         self.single = False
         mean = torch.tensor([0.4914, 0.4822, 0.4465], dtype=torch.float32).cuda()
         std = torch.tensor([0.2023, 0.1994, 0.2010], dtype=torch.float32).cuda()
-        self.normalizer = NormalizeByChannelMeanStd(mean=mean, std=std)
+        self.normalizer = utils.NormalizeByChannelMeanStd(mean=mean, std=std)
         self.count = 0
         self.reward = utils.AvgrageMeter()
         self.optimized_acc_adv = utils.AvgrageMeter()
@@ -99,7 +97,7 @@ class NASNetwork(nn.Module):
         self.tiny_imagenet = True
         mean = torch.tensor([0.485, 0.456, 0.406], dtype=torch.float32).cuda()
         std = torch.tensor([0.229, 0.224, 0.225], dtype=torch.float32).cuda()
-        self.normalizer = NormalizeByChannelMeanStd(mean=mean, std=std)
+        self.normalizer = utils.NormalizeByChannelMeanStd(mean=mean, std=std)
 
     def re_initialize_arch_transformer(self):
         # self.arch_transformer = New_ArchTransformer(self._steps, self._device, self.edge_hid, self.transformer_nfeat, self.transformer_nhid, self.transformer_dropout, self.transformer_normalize, op_type=self.op_type)
@@ -271,8 +269,8 @@ class NASNetwork(nn.Module):
         optimized_reduce = surrogate_arch[1]
         arch_normal = target_arch[0]
         arch_reduce = target_arch[1]
-        input_adv = Linf_PGD(model_twin, optimized_normal, optimized_reduce, input, target, eps=eps, alpha=eps / 10, steps=steps, rand_start=True)
-        input_adv_ = Linf_PGD(model_twin, arch_normal, arch_reduce, input, target, eps=eps, alpha=eps / 10, steps=steps, rand_start=True)
+        input_adv = utils.Linf_PGD(model_twin, optimized_normal, optimized_reduce, input, target, eps=eps, alpha=eps / 10, steps=steps, rand_start=True)
+        input_adv_ = utils.Linf_PGD(model_twin, arch_normal, arch_reduce, input, target, eps=eps, alpha=eps / 10, steps=steps, rand_start=True)
 
         logits = self._inner_forward(input, arch_normal, arch_reduce)
         acc_clean = utils.accuracy(logits, target, topk=(1, 5))[0] / 100.0
@@ -373,8 +371,8 @@ class NASNetwork(nn.Module):
             n = input.size(0)
             input = input.to(self._device)
             target = target.to(self._device)
-            input_adv = Linf_PGD(model_twin, surrogate_normal, surrogate_reduce, input, target, eps=eps, alpha=eps / 10, steps=steps, rand_start=True)
-            # input_adv_ = Linf_PGD(model_twin, target_normal, target_reduce, input, target, eps= eps, alpha= eps / 10, steps = steps, rand_start=True)
+            input_adv = utils.Linf_PGD(model_twin, surrogate_normal, surrogate_reduce, input, target, eps=eps, alpha=eps / 10, steps=steps, rand_start=True)
+            # input_adv_ = utils.Linf_PGD(model_twin, target_normal, target_reduce, input, target, eps= eps, alpha= eps / 10, steps = steps, rand_start=True)
             logits = self._inner_forward(input, target_normal, target_reduce)
             acc_clean = utils.accuracy(logits, target, topk=(1, 5))[0] / 100.0
             acc_clean_.update(acc_clean, n)

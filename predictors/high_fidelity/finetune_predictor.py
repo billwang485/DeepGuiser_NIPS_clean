@@ -9,37 +9,13 @@ import argparse
 import torch.nn as nn
 import torch.utils
 import torch.backends.cudnn as cudnn
-import time
-import re
-from search_model_twin import NASNetwork as Network
+from basic_parts.basic_integrated_model import NASNetwork as Network
 import random
-from predictors import PredictorDataSet
-from scipy.stats import kendalltau
+from predictors.predictor_dataset import PredictorDataSet
 from torch.utils.tensorboard import SummaryWriter
-from torch.utils.data import SubsetRandomSampler,Sampler
-from typing import Iterator, Iterable, Optional, Sequence, List, TypeVar, Generic, Sized, Union
-min_batch_size = 4
-class predictor_sampler(Sampler[int]):
-    indices: Sequence[int]
+from predictors.predictor_sampler import PredictorSampler
 
-    def __init__(self, indices: Sequence[int], generator=None, batch_size = min_batch_size) -> None:
-        self.indices = indices
-        self.generator = generator
-        self.batch_size = batch_size
-
-    def __iter__(self) -> Iterator[int]:
-        for i in torch.randperm(int(len(self.indices) / self.batch_size), generator=self.generator):
-            for j in torch.randperm(self.batch_size, generator=self.generator):
-                yield self.indices[i * self.batch_size + j]
-
-    def __len__(self) -> int:
-        return len(self.indices)
-
-
-localtime = time.asctime( time.localtime(time.time()))
-x = re.split(r"[\s,(:)]",localtime)
-default_EXP = " ".join(x[1:-1])
-parser = argparse.ArgumentParser("NAT")
+parser = argparse.ArgumentParser("DeepGuiser")
 parser.add_argument('--data', type=str, default='../data', help='location of the data corpus')
 parser.add_argument('--batch_size', type=int, default=256, help='batch size')
 parser.add_argument('--lr', type=float, default=1e-3, help='init learning rate')
@@ -55,7 +31,7 @@ parser.add_argument('--ta', type=int, default=400, help='total archs')
 # parser.add_argument('--fp', type=float, default=0.8, help='free portion')
 parser.add_argument('--init_channels', type=int, default=20, help='number of init channels')
 parser.add_argument('--layers', type=int, default=8, help='total number of layers')
-parser.add_argument('--save', type=str, default=default_EXP, help='experiment name')
+parser.add_argument('--save', type=str, default=utils.localtime_as_dirname, help='experiment name')
 parser.add_argument('--seed', type=int, default=1234, help='random seed')
 parser.add_argument('--train_portion', type=float, default=1, help='data portion for training weights')
 # parser.add_argument('--n_archs', type=int, default=10, help='number of candidate archs')
@@ -86,7 +62,7 @@ parser.add_argument('--test_data_path', type=str, default='final_test_data515', 
 parser.add_argument('--loss_type', type=str, default='mse', help=' ')
 parser.add_argument('--pw', type=str, default=' ', help='The path to pretrained weight if there is(dir)')
 parser.add_argument('--pws', type=str, default='LOOSE_END_supernet', help='The path to pretrained weight if there is(dir)')
-min_batch_size = 4
+MIN_BATCH_SIZE = 4
 args = parser.parse_args()
 args.mode = 'high_fidelity'
 # args.train_portion = 1
@@ -165,7 +141,7 @@ def main():
     num_train = len(train_data)
     indices = list(range(num_train))
     # random.shuffle(indices)
-    split = int(np.floor(num_train * args.train_portion / min_batch_size) * min_batch_size)
+    split = int(np.floor(num_train * args.train_portion / MIN_BATCH_SIZE) * MIN_BATCH_SIZE)
 
     # if not args.debug:
     train_queue = torch.utils.data.DataLoader(
@@ -180,7 +156,7 @@ def main():
     
         valid_queue = torch.utils.data.DataLoader(
             train_data, 4,
-            sampler=predictor_sampler(indices[split:num_train]),
+            sampler=PredictorSampler(indices[split:num_train]),
             # sampler=torch.utils.data.sampler.SubsetRandomSampler(indices[split:num_train]),
             pin_memory=True, num_workers=2
         )

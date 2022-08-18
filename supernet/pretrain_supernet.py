@@ -1,29 +1,26 @@
-from operator import truediv
 import os
 import sys
+sys.path.append(os.getcwd(), '..')
 import glob
-import numpy as np
-import torch
-import utils
+import random
 import logging
 import argparse
+import numpy as np
+import torch
 import torch.nn as nn
 import torch.utils
-import torchvision.datasets as dset
 import torch.backends.cudnn as cudnn
-import time
-import re
-from search_model_twin import NASNetwork as Network
-import random
 from torch.utils.tensorboard import SummaryWriter
+import utils
+from basic_parts.basic_integrated_model import NASNetwork as Network
+
+
 '''
 This file trains supernet and twin supernet for 50 epochs and save them
 You can bypass the first 50 epochs of training by loading pretrained models
 '''
-localtime = time.asctime( time.localtime(time.time()))
-x = re.split(r"[\s,(:)]",localtime)
-default_EXP = " ".join(x[1:-1])
-parser = argparse.ArgumentParser("NAT")
+
+parser = argparse.ArgumentParser("DeepGuiser")
 parser.add_argument('--data', type=str, default='../data', help='location of the data corpus')
 parser.add_argument('--batch_size', type=int, default=64, help='batch size')
 parser.add_argument('--learning_rate', type=float, default=0.05, help='init learning rate')
@@ -31,11 +28,12 @@ parser.add_argument('--momentum', type=float, default=0.9, help='momentum')
 parser.add_argument('--weight_decay', type=float, default=3e-4, help='weight decay')
 parser.add_argument('--report_freq', type=int, default=50, help='report frequency')
 parser.add_argument('--test_freq', type=int, default=10, help='test frequency')
+parser.add_argument('--test_archs', type=int, default=100, help='how many archs to test supernet')
 parser.add_argument('--gpu', type=int, default=0, help='gpu device id')
 parser.add_argument('--epochs', type=int, default=1000, help='number of training epochs')
 parser.add_argument('--init_channels', type=int, default=20, help='number of init channels')
 parser.add_argument('--layers', type=int, default=8, help='total number of layers')
-parser.add_argument('--save', type=str, default=default_EXP, help='experiment name')
+parser.add_argument('--save', type=str, default=utils.localtime_as_dirname(), help='experiment name')
 parser.add_argument('--seed', type=int, default=1234, help='random seed')
 parser.add_argument('--n_archs', type=int, default=1, help='number of candidate archs')
 parser.add_argument('--prefix', type=str, default='.', help='parent save path')
@@ -62,12 +60,14 @@ if args.op_type=='LOOSE_END_PRIMITIVES':
     args.loose_end = True
 else:
     args.loose_end = False
+args.cutout = False
 
 if not os.path.exists(args.prefix):
     os.makedirs(args.prefix)
-
-args.save = os.path.join(args.prefix, "Pretrained_Supernets", args.save)
-args.cutout = False
+log_dir = 'log'
+if args.debug:
+    tmp = os.path.join(log_dir, 'debug')
+args.save = os.path.join(args.prefix, log_dir, args.save)
 utils.create_exp_dir(args.save, scripts_to_save=glob.glob('*.py')+glob.glob('*.sh')+glob.glob('*.yml'))
 
 log_format = '%(asctime)s %(message)s'
@@ -107,7 +107,7 @@ def main():
         weight_decay=args.weight_decay
     )
 
-    train_queue, test_queue, _ = utils.get_train_queue(args)
+    train_queue, test_queue, _ = utils.get_cifar_data_queue(args)
 
     if args.scheduler == "naive_cosine":
         scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(
@@ -118,12 +118,10 @@ def main():
 
     model.to(device)
 
-    test_archs = 10
-
     normal_list = []
     reduce_list = []
 
-    for i in range(test_archs):
+    for i in range(args.test_archs):
         normal_list.append(model.arch_normal_master.forward())
         reduce_list.append(model.arch_reduce_master.forward())
 
@@ -139,19 +137,16 @@ def main():
         update_w(train_queue, model, device, epoch)
         if (epoch) % args.test_freq == 0:
             valid_acc = utils.AvgrageMeter()
-            # valid_loss = utils.AvgrageMeter()
-            for i in range(test_archs):
-                tmp = model._test_acc(test_queue, normal_list[i], reduce_list[i])
-                valid_acc.update(tmp, 1)
+            for i in range(args.test_archs):
+                valid_acc.update(model._test_acc(test_queue, normal_list[i], reduce_list[i]), 1)
             summaryWriter.add_scalar('valid_acc', valid_acc.avg, epoch)
         
         if epoch % 50 == 0:
-            utils.save(model, os.path.join(args.save, 'model_{}.pt'.format(epoch)))
+            utils.save(model, os.path.join(args.save, 'supernet_{}.pt'.format(epoch)))
 
     # save model
     if args.store == 1:
-        utils.save(model, os.path.join(args.save, 'model.pt'))
-        # utils.save(model_twin, os.path.join(args.save, 'model_twin.pt'))
+        utils.save(model, os.path.join(args.save, 'supernet.pt'))
 
 def update_w(valid_queue, model, device, epoch):
     objs = utils.AvgrageMeter()

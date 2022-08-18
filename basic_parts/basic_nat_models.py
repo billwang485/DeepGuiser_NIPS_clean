@@ -1,7 +1,5 @@
-import genotypes
-from operations import *
 import utils
-from pygcn.layers import GraphConvolution
+from operations import *
 
 
 class NASOp(nn.Module):
@@ -23,20 +21,7 @@ class NASOp(nn.Module):
 
 
 class NASCell(nn.Module):
-    def __init__(
-        self,
-        steps,
-        device,
-        multiplier,
-        C_prev_prev,
-        C_prev,
-        C,
-        reduction,
-        reduction_prev,
-        loose_end=False,
-        concat=None,
-        op_type="FULLY_CONCAT_PRIMITIVES",
-    ):
+    def __init__(self, steps, device, multiplier, C_prev_prev, C_prev, C, reduction, reduction_prev, loose_end=False, concat=None, op_type="FULLY_CONCAT_PRIMITIVES"):
         super(NASCell, self).__init__()
         self.steps = steps
         self.device = device

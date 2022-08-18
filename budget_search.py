@@ -22,7 +22,7 @@ import re
 localtime = time.asctime(time.localtime(time.time()))
 x = re.split(r"[\s,(:)]", localtime)
 default_EXP = " ".join(x[1:-1])
-parser = argparse.ArgumentParser("NAT")
+parser = argparse.ArgumentParser("DeepGuiser")
 parser.add_argument("--gpu", type=int, default=0, help="gpu device id")
 parser.add_argument("--budget", nargs="+", type=float, default=[4.9, 5.2], help=" ")
 parser.add_argument("--init_channels", type=int, default=20, help="number of init channels")

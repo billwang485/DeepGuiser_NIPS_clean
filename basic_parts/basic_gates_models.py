@@ -1,6 +1,7 @@
-from operations import *
-import numpy as np
 import math
+import numpy as np
+
+from operations import *
 
 
 class DenseGraphOpEdgeFlow(nn.Module):

@@ -1,13 +1,8 @@
-import genotypes
-from operations import *
 import utils
-from pygcn.layers import GraphConvolution
 import torch
-import utils
-import genotypes
-from operations import *
-import utils
 from pygcn.layers import GraphConvolution
+from operations import *
+import genotypes
 from genotypes import LooseEnd_Transition_Dict, FullyConcat_Transition_Dict
 
 

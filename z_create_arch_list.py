@@ -18,7 +18,7 @@ from search_model_twin import NASNetwork as Network
 import random
 from single_model import FinalNetwork as FinalNet
 
-parser = argparse.ArgumentParser("NAT")
+parser = argparse.ArgumentParser("DeepGuiser")
 parser.add_argument('--data', type=str, default='../data', help='location of the data corpus')
 parser.add_argument('--batch_size', type=int, default=64, help='batch size')
 parser.add_argument('--learning_rate', type=float, default=0.05, help='init learning rate')

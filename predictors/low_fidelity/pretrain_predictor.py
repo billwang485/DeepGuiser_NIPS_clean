@@ -20,7 +20,7 @@ from torch.utils.tensorboard import SummaryWriter
 localtime = time.asctime( time.localtime(time.time()))
 x = re.split(r"[\s,(:)]",localtime)
 default_EXP = " ".join(x[1:-1])
-parser = argparse.ArgumentParser("NAT")
+parser = argparse.ArgumentParser("DeepGuiser")
 parser.add_argument('--data', type=str, default='../data', help='location of the data corpus')
 parser.add_argument('--batch_size', type=int, default=256, help='batch size')
 parser.add_argument('--lr', type=float, default=1e-3, help='init learning rate')
