@@ -12,7 +12,6 @@ class PredictorDataSet(Dataset):
         else:
             assert 0       
         self.data = self.constrain_data
-        # random.shuffle(self.data)
 
     def __len__(self):#返回整个数据集的大小
         return len(self.data)

@@ -1,8 +1,7 @@
 import torch
-import utils
 
 
-class Transformer(object):
+class BasicNATLearner(object):
     def __init__(self, model, model_twin, args):
         self.args = args
         self.model = model
