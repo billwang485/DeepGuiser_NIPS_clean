@@ -4,7 +4,7 @@ import os
 import numpy as np
 from utils import arch_to_genotype, draw_genotype
 from copy import deepcopy
-from search_model_gates import NASNetwork as Network
+from integrated_models.nat_disguier.search_model_gates import NASNetwork as Network
 from PyPDF2 import PdfFileMerger
 
 

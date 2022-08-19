@@ -5,7 +5,7 @@ import genotypes
 from operations import *
 from predictors.predictors import VanillaGatesPredictor
 from basic_parts.basic_nat_models import NASCell, ArchMaster
-from basic_parts.basic_arch_transformers import ArchTransformerGates, ArchTransformer
+from basic_parts.basic_arch_transformers import ArchTransformerTwin, ArchTransformer
 
 
 class NASNetwork(nn.Module):
@@ -38,6 +38,9 @@ class NASNetwork(nn.Module):
         self._steps = steps
         multiplier = steps
         self._device = device
+        self._reduce_concat = reduce_concat
+        self._normal_concat = normal_concat
+        self._stem_multiplier = stem_multiplier
 
         self.controller_hid = controller_hid
         self.entropy_coeff = entropy_coeff
@@ -93,22 +96,46 @@ class NASNetwork(nn.Module):
         self.pgd_step = 10
         self.tiny_imagenet = False
 
+    def get_twin_model(self):
+        twin_model = deepcopy(self)
+        if hasattr(twin_model, "arch_normal_master"):
+            del(twin_model.arch_normal_master)  
+        if hasattr(twin_model, "arch_reduce_master"):
+            del(twin_model.arch_reduce_master)  
+        # del(twin_model.arch_reduce_master)
+        if hasattr(twin_model, "arch_normal_master_demo"):
+            del(twin_model.arch_normal_master_demo) 
+        # del(twin_model.arch_normal_master_demo)
+        if hasattr(twin_model, "arch_reduce_master_demo"):
+            del(twin_model.arch_reduce_master_demo) 
+        # del(twin_model.arch_reduce_master_demo)
+        if hasattr(twin_model, "_arch_parameters"):
+            del(twin_model._arch_parameters) 
+        # del(twin_model._arch_parameters)
+        if hasattr(twin_model, "arch_transformer"):
+            del(twin_model.arch_transformer) 
+        if hasattr(twin_model, "_transformer_parameters"):
+            del(twin_model._transformer_parameters) 
+        if hasattr(twin_model, "_predictor"):
+            del(twin_model._transformer_parameters) 
+        return twin_model
+
     def initialize_tiny_imagenet(self):
         self.tiny_imagenet = True
         mean = torch.tensor([0.485, 0.456, 0.406], dtype=torch.float32).cuda()
         std = torch.tensor([0.229, 0.224, 0.225], dtype=torch.float32).cuda()
         self.normalizer = utils.NormalizeByChannelMeanStd(mean=mean, std=std)
 
-    def re_initialize_arch_transformer(self):
+    def _initialize_arch_transformer(self):
         # self.arch_transformer = New_ArchTransformer(self._steps, self._device, self.edge_hid, self.transformer_nfeat, self.transformer_nhid, self.transformer_dropout, self.transformer_normalize, op_type=self.op_type)
-        self.arch_transformer = ArchTransformerGates(
+        self.arch_transformer = ArchTransformerTwin(
             self._steps, self._device, self.edge_hid, self.transformer_nfeat, self.transformer_nhid, self.transformer_dropout, self.transformer_normalize, op_type=self.op_type
         )
         self._transformer_parameters = list(self.arch_transformer.parameters())
 
     def _initialize_predictor(self, args, name):
-        if name == "WarmUp":
-            self.predictor = VanillaGatesPredictor(self._device, args)
+        if name == "VanillaGates":
+            self._predictor = VanillaGatesPredictor(self._device, args)
         elif name == "NAT":
             assert 0
 
@@ -127,11 +154,11 @@ class NASNetwork(nn.Module):
         self.arch_reduce_master_demo.demo = True
         self._arch_parameters = list(self.arch_normal_master.parameters()) + list(self.arch_reduce_master.parameters())
 
-    def _initialize_arch_transformer(self):
-        self.arch_transformer = ArchTransformer(
-            self._steps, self._device, self.edge_hid, self.transformer_nfeat, self.transformer_nhid, self.transformer_dropout, self.transformer_normalize, op_type=self.op_type
-        )
-        self._transformer_parameters = list(self.arch_transformer.parameters())
+    # def _initialize_arch_transformer(self):
+    #     self.arch_transformer = ArchTransformer(
+    #         self._steps, self._device, self.edge_hid, self.transformer_nfeat, self.transformer_nhid, self.transformer_dropout, self.transformer_normalize, op_type=self.op_type
+    #     )
+    #     self._transformer_parameters = list(self.arch_transformer.parameters())
 
     def _inner_forward(self, input, arch_normal, arch_reduce):
         input = self.normalizer(input)

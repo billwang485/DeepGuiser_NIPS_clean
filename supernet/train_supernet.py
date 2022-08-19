@@ -122,12 +122,14 @@ def main():
     model._model_optimizer = model_optimizer
 
     for epoch in range(args.epochs+1):
-        scheduler.step()
-        lr = scheduler.get_lr()[0]
+        lr = scheduler.get_last_lr()[0]
+
         logging.info('epoch %d lr %e', epoch, lr)
 
         logging.info('Updating Shared Parameters')
         update_w(train_queue, model, device, epoch)
+        scheduler.step()
+
         if (epoch) % args.test_freq == 0:
             valid_acc = utils.AvgrageMeter()
             for i in range(args.test_archs):
@@ -135,11 +137,11 @@ def main():
             summaryWriter.add_scalar('valid_acc', valid_acc.avg, epoch)
         
         if epoch % 50 == 0:
-            utils.save(model, os.path.join(args.save, 'supernet_{}.pt'.format(epoch)))
+            utils.save_supernet(model, os.path.join(args.save, 'supernet_{}.pt'.format(epoch)))
 
     # save model
     if args.store == 1:
-        utils.save(model, os.path.join(args.save, 'supernet.pt'))
+        utils.save_supernet(model, os.path.join(args.save, 'supernet.pt'))
 
 def update_w(valid_queue, model, device, epoch):
     objs = utils.AvgrageMeter()

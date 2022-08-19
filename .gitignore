@@ -1,3 +1,9 @@
+# log dirs
 supernet/log
+integrated_models/nat_disguiser/log
+# saved model path
 supernet/selected_supernets
+#  __pycache__
 __pycache__
+predictors/__pycache__
+integrated_models/__pycache__

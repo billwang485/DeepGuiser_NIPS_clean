@@ -175,12 +175,7 @@ def _data_transforms_mura(args):
     if args.cutout:
         train_transform.transforms.append(Cutout(args.cutout_length))
 
-    valid_transform = transforms.Compose(
-        [
-            transforms.ToTensor(),
-            transforms.Normalize(MURA_MEAN, MURA_STD),
-        ]
-    )
+    valid_transform = transforms.Compose([transforms.ToTensor(), transforms.Normalize(MURA_MEAN, MURA_STD),])
     return train_transform, valid_transform
 
 
@@ -188,42 +183,21 @@ def _data_transforms_cifar10(args):
     CIFAR_MEAN = [0.49139968, 0.48215827, 0.44653124]
     CIFAR_STD = [0.24703233, 0.24348505, 0.26158768]
 
-    train_transform = transforms.Compose(
-        [
-            transforms.RandomCrop(32, padding=4),
-            transforms.RandomHorizontalFlip(),
-            transforms.ToTensor(),
-        ]
-    )
+    train_transform = transforms.Compose([transforms.RandomCrop(32, padding=4), transforms.RandomHorizontalFlip(), transforms.ToTensor(),])
     if args.cutout:
         train_transform.transforms.append(Cutout(args.cutout_length))
 
-    valid_transform = transforms.Compose(
-        [
-            transforms.ToTensor(),
-        ]
-    )
+    valid_transform = transforms.Compose([transforms.ToTensor(),])
     return train_transform, valid_transform
 
 
 def _data_transforms_imagenet(args):
 
-    train_transform = transforms.Compose(
-        [
-            transforms.RandomResizedCrop(64),
-            transforms.RandomHorizontalFlip(),
-            transforms.ToTensor(),
-        ]
-    )
+    train_transform = transforms.Compose([transforms.RandomResizedCrop(64), transforms.RandomHorizontalFlip(), transforms.ToTensor(),])
     if args.cutout:
         train_transform.transforms.append(Cutout(args.cutout_length))
 
-    valid_transform = transforms.Compose(
-        [
-            transforms.Resize(64),
-            transforms.ToTensor(),
-        ]
-    )
+    valid_transform = transforms.Compose([transforms.Resize(64), transforms.ToTensor(),])
     return train_transform, valid_transform
 
 
@@ -246,30 +220,51 @@ def save_checkpoint(state, is_best, save):
         shutil.copyfile(filename, best_filename)
 
 
-def save(model, model_path):
-    # torch.save(model.state_dict(), model_path)
-    model_dict = {"state_dict": model.state_dict()}
-    if hasattr(model, "arch_normal") and hasattr(model, "arch_reduce"):
-        model_dict["arch_normal"] = model.arch_normal
-        model_dict["arch_reduce"] = model.arch_reduce
-    torch.save(model_dict, model_path)
+# def save(model, model_path):
+#     # torch.save(model.state_dict(), model_path)
+#     model_dict = {"state_dict": model.state_dict()}
+#     if hasattr(model, "arch_normal") and hasattr(model, "arch_reduce"):
+#         model_dict["arch_normal"] = model.arch_normal
+#         model_dict["arch_reduce"] = model.arch_reduce
+#     torch.save(model_dict, model_path)
 
+def save_supernet(integrated_model, save_path):
+    assert hasattr(integrated_model, "stem") and hasattr(integrated_model, "cells")
+    model_dict = {"type":"supernet", "stem": integrated_model.stem.state_dict(), "cells": integrated_model.cells.state_dict()}
+    torch.save(model_dict, save_path)
 
-def load(model, model_path, only_arch=False):
+def save_nat_disguiser(integrated_model, save_path):
+    supernet_dict = {"type":"supernet", "stem": integrated_model.stem.state_dict(), "cells": integrated_model.cells.state_dict()}
+    model_dict = {"type":"nat_disguiser", "supernet": supernet_dict, "arch_transformer": integrated_model.arch_transformer.state_dict(), "arch_embedder": integrated_model.arch_transformer.arch_embedder.state_dict()}
+    torch.save(model_dict, save_path)
+
+def load_supernet(integrated_model, model_path):
     model_dict = torch.load(model_path, map_location="cpu")
-    if "state_dict" in model_dict:
-        if not only_arch:
-            model.load_state_dict(model_dict["state_dict"], strict=False)
-            if hasattr(model, "arch_normal") and hasattr(model, "arch_reduce"):
-                model.arch_normal = model_dict["arch_normal"]
-                model.arch_reduce = model_dict["arch_reduce"]
-                model.single = True
-        else:
-            assert hasattr(model, "arch_normal") and hasattr(model, "arch_reduce")
-            model.arch_normal = model_dict["arch_normal"]
-            model.arch_reduce = model_dict["arch_reduce"]
-    else:
-        model.load_state_dict(model_dict)
+    assert model_dict['type'] == 'supernet'
+    assert hasattr(integrated_model, 'stem')
+    integrated_model.stem.load_state_dict(model_dict['stem'])
+    assert hasattr(integrated_model, 'cells')
+    integrated_model.cells.load_state_dict(model_dict['cells'])
+
+def load_pretrained_arch_embedder(integrated_model, model_path):
+    model_dict = torch.load(model_path, map_location="cpu")
+    if model_dict['type'] == 'arch_embedder':
+        integrated_model.arch_transformer.arch_embedder.load_state_dict(model_dict['arch_embedder'])
+# def load(model, model_path, only_arch=False):
+#     model_dict = torch.load(model_path, map_location="cpu")
+#     if "state_dict" in model_dict:
+#         if not only_arch:
+#             model.load_state_dict(model_dict["state_dict"], strict=False)
+#             if hasattr(model, "arch_normal") and hasattr(model, "arch_reduce"):
+#                 model.arch_normal = model_dict["arch_normal"]
+#                 model.arch_reduce = model_dict["arch_reduce"]
+#                 model.single = True
+#         else:
+#             assert hasattr(model, "arch_normal") and hasattr(model, "arch_reduce")
+#             model.arch_normal = model_dict["arch_normal"]
+#             model.arch_reduce = model_dict["arch_reduce"]
+#     else:
+#         model.load_state_dict(model_dict)
 
 
 def drop_path(x, drop_prob):
@@ -511,15 +506,6 @@ def concat_archs(arch1, arch2, op_type):
         if (f, t) in ft and TRANSFORM_MASK[arch[ft.index((f, t))][0]][op]:
             arch[ft.index((f, t))] = (op, f, t)
     return arch
-
-
-def parse_args_(args):
-    if args.op_type == "L":
-        args.op_type = "LOOSE_END_PRIMITIVES"
-    elif args.op_type == "B":
-        args.op_type = "BOTTLENECK_PRIMITIVES"
-    else:
-        pass
 
 
 def primitives_translation(op_type="LOOSE_END_PRIMTIVES"):
@@ -929,23 +915,26 @@ def localtime_as_dirname():
     default_EXP = " ".join(x[1:-1])
     return default_EXP
 
+
 def preprocess_exp_dir(args):
     if not os.path.exists(args.prefix):
         os.makedirs(args.prefix)
-    log_dir = 'log'
+    log_dir = "log"
     if args.debug:
-        log_dir = os.path.join(log_dir, 'debug')
+        log_dir = os.path.join(log_dir, "debug")
     if not os.path.exists(os.path.join(args.prefix, log_dir)):
         os.makedirs(os.path.join(args.prefix, log_dir))
     args.save = os.path.join(args.prefix, log_dir, args.save)
 
+
 def initialize_logger(args):
-    log_format = '%(asctime)s %(message)s'
-    logging.basicConfig(stream=sys.stdout, level=logging.INFO, format=log_format, datefmt='%m/%d %I:%M:%S %p')
-    fh = logging.FileHandler(os.path.join(args.save, 'log.txt'))
+    log_format = "%(asctime)s %(message)s"
+    logging.basicConfig(stream=sys.stdout, level=logging.INFO, format=log_format, datefmt="%m/%d %I:%M:%S %p")
+    fh = logging.FileHandler(os.path.join(args.save, "log.txt"))
     fh.setFormatter(logging.Formatter(log_format))
     logging.getLogger().addHandler(fh)
     logger = logging.getLogger()
+
 
 class AvgrageMeter(object):
     def __init__(self):
