@@ -296,8 +296,8 @@ class NASNetwork(nn.Module):
         optimized_reduce = surrogate_arch[1]
         arch_normal = target_arch[0]
         arch_reduce = target_arch[1]
-        input_adv = utils.Linf_PGD(model_twin, optimized_normal, optimized_reduce, input, target, eps=eps, alpha=eps / 10, steps=steps, rand_start=True)
-        input_adv_ = utils.Linf_PGD(model_twin, arch_normal, arch_reduce, input, target, eps=eps, alpha=eps / 10, steps=steps, rand_start=True)
+        input_adv = utils.linf_pgd(model_twin, optimized_normal, optimized_reduce, input, target, eps=eps, alpha=eps / 10, steps=steps, rand_start=True)
+        input_adv_ = utils.linf_pgd(model_twin, arch_normal, arch_reduce, input, target, eps=eps, alpha=eps / 10, steps=steps, rand_start=True)
 
         logits = self._inner_forward(input, arch_normal, arch_reduce)
         acc_clean = utils.accuracy(logits, target, topk=(1, 5))[0] / 100.0
@@ -398,8 +398,8 @@ class NASNetwork(nn.Module):
             n = input.size(0)
             input = input.to(self._device)
             target = target.to(self._device)
-            input_adv = utils.Linf_PGD(model_twin, surrogate_normal, surrogate_reduce, input, target, eps=eps, alpha=eps / 10, steps=steps, rand_start=True)
-            # input_adv_ = utils.Linf_PGD(model_twin, target_normal, target_reduce, input, target, eps= eps, alpha= eps / 10, steps = steps, rand_start=True)
+            input_adv = utils.linf_pgd(model_twin, surrogate_normal, surrogate_reduce, input, target, eps=eps, alpha=eps / 10, steps=steps, rand_start=True)
+            # input_adv_ = utils.linf_pgd(model_twin, target_normal, target_reduce, input, target, eps= eps, alpha= eps / 10, steps = steps, rand_start=True)
             logits = self._inner_forward(input, target_normal, target_reduce)
             acc_clean = utils.accuracy(logits, target, topk=(1, 5))[0] / 100.0
             acc_clean_.update(acc_clean, n)

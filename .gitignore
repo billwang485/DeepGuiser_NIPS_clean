@@ -7,3 +7,6 @@ supernet/selected_supernets
 __pycache__
 predictors/__pycache__
 integrated_models/__pycache__
+# file
+*.json
+*.yaml

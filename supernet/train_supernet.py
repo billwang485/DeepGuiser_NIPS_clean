@@ -1,6 +1,7 @@
 import os
 import sys
-sys.path.append(os.path.join(os.getcwd(), '..'))
+STEM_WORK_DIR = os.path.join(os.getcwd(), "..")
+sys.path.append(STEM_WORK_DIR)
 import glob
 import random
 import logging
@@ -21,7 +22,7 @@ You can bypass the first 50 epochs of training by loading pretrained models
 '''
 
 parser = argparse.ArgumentParser("DeepGuiser")
-parser.add_argument('--data', type=str, default=os.path.join(os.getcwd(), '..','../data'), help='location of the data corpus')
+parser.add_argument('--data', type=str, default=os.path.join(STEM_WORK_DIR, '../data'), help='location of the data corpus')
 parser.add_argument('--batch_size', type=int, default=64, help='batch size')
 parser.add_argument('--learning_rate', '-lr', type=float, default=0.05, help='init learning rate')
 parser.add_argument('--momentum', type=float, default=0.9, help='momentum')
@@ -121,7 +122,7 @@ def main():
     logging.info("param size = %fMB", utils.count_parameters_in_MB(model))
     model._model_optimizer = model_optimizer
 
-    for epoch in range(args.epochs+1):
+    for epoch in range(args.epochs):
         lr = scheduler.get_last_lr()[0]
 
         logging.info('epoch %d lr %e', epoch, lr)

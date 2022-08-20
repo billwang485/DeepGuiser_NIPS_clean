@@ -18,7 +18,7 @@ import random
 from copy import deepcopy
 from scipy.stats import kendalltau
 import shutil
-from distillation import Linf_PGD
+from distillation import linf_pgd
 '''
 This files tests the transferbility isotonicity on supernets finetune models and trained-from-scratch models
 '''
@@ -253,7 +253,7 @@ def Testing_Transfer_Isotonicity(args, valid_queue, criterion, device, surrogate
                 target = target.to(device)
                 # logging.info('Testing Acc of Surrogate Model')
                 # acc_clean = surrogate_model._test_acc(valid_queue, surrogate_model.arch_normal, surrogate_model.arch_reduce)
-                input_adv = Linf_PGD(surrogate_model, surrogate_model.arch_normal, surrogate_model.arch_reduce, input, target, eps, alpha=eps/10, steps=10)
+                input_adv = linf_pgd(surrogate_model, surrogate_model.arch_normal, surrogate_model.arch_reduce, input, target, eps, alpha=eps/10, steps=10)
                 # surrogate_acc_clean_single[j].update(acc_clean.item(), n)
                 # surrogate_acc_adv_single[j].update(acc_adv.item(), n)
                 (acc_clean, acc_adv) = target_model.eval_transfer(input_adv, input, target)

@@ -34,7 +34,7 @@ class FinalNetwork(NASNetwork):
     
     def generate_adv_input(self, input_clean, valid_target, eps):
         self.eval()
-        input_adv = utils.Linf_PGD(self, self.arch_normal, self.arch_reduce, input_clean, valid_target, eps = eps, alpha=eps/10, steps=10)
+        input_adv = utils.linf_pgd(self, self.arch_normal, self.arch_reduce, input_clean, valid_target, eps = eps, alpha=eps/10, steps=10)
 
         logits = self._inner_forward(input_clean, self.arch_normal, self.arch_reduce)
         acc_clean = utils.accuracy(logits, valid_target, topk=(1, 5))[0] / 100.0
@@ -70,7 +70,7 @@ class FinalNetwork(NASNetwork):
         model_twin.eval()
         (optimized_normal, optimized_reduce) = (model_twin.arch_normal, model_twin.arch_reduce)
         (arch_normal, arch_reduce) = (self.arch_normal, self.arch_reduce)
-        input_adv = utils.Linf_PGD(model_twin, optimized_normal, optimized_reduce, input, target, eps= eps, alpha= eps / 10, steps = steps, rand_start=True)
+        input_adv = utils.linf_pgd(model_twin, optimized_normal, optimized_reduce, input, target, eps= eps, alpha= eps / 10, steps = steps, rand_start=True)
         
         logits = self._inner_forward(input_adv, arch_normal, arch_reduce)
         optimized_acc_adv = utils.accuracy(logits, target, topk=(1, 5))[0] / 100.0

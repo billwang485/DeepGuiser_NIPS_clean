@@ -131,8 +131,8 @@ class NATDisguiser(Network):
         arch_reduce = self.arch_reduce
         optimized_normal = self.optimized_normal
         optimized_reduce = self.optimized_reduce
-        input_adv = utils.Linf_PGD(model_twin, optimized_normal, optimized_reduce, input, target, eps=eps, alpha=eps / steps, steps=steps, rand_start=False)
-        input_adv_ = utils.Linf_PGD(model_twin, arch_normal, arch_reduce, input, target, eps=eps, alpha=eps / steps, steps=steps, rand_start=False)
+        input_adv = utils.linf_pgd(model_twin, optimized_normal, optimized_reduce, input, target, eps=eps, alpha=eps / steps, steps=steps, rand_start=False)
+        input_adv_ = utils.linf_pgd(model_twin, arch_normal, arch_reduce, input, target, eps=eps, alpha=eps / steps, steps=steps, rand_start=False)
 
         logits = self._inner_forward(input, arch_normal, arch_reduce)
         acc_clean = utils.accuracy(logits, target, topk=(1, 5))[0] / 100.0

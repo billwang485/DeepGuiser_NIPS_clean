@@ -1,9 +1,11 @@
 import os
 import re
 import sys
-import random
+import json
 import time
+import yaml
 import shutil
+import random
 import difflib
 import logging
 import itertools
@@ -15,6 +17,7 @@ from torch.autograd import Variable
 import torchvision.transforms as transforms
 import torchvision.datasets as dset
 from graphviz import Digraph
+from PyPDF2 import PdfFileMerger
 import numpy as np
 import scipy.sparse as sp
 import genotypes
@@ -219,6 +222,11 @@ def save_checkpoint(state, is_best, save):
         best_filename = os.path.join(save, "model_best.pth")
         shutil.copyfile(filename, best_filename)
 
+def save_as_json(model_dir, params, name='params.json'):
+    """Save params to a .json file. Params is a dictionary of parameters."""
+    path = os.path.join(model_dir, name)
+    with open(path, 'w') as f:
+        json.dump(params, f, indent=2, sort_keys=True)
 
 # def save(model, model_path):
 #     # torch.save(model.state_dict(), model_path)
@@ -227,15 +235,13 @@ def save_checkpoint(state, is_best, save):
 #         model_dict["arch_normal"] = model.arch_normal
 #         model_dict["arch_reduce"] = model.arch_reduce
 #     torch.save(model_dict, model_path)
+def save_compiled_based(model, save_path):
+    model_dict = {"type": "compiled_based", "weight": model.state_dict()}
+    torch.save(model_dict, save_path)
 
 def save_supernet(integrated_model, save_path):
     assert hasattr(integrated_model, "stem") and hasattr(integrated_model, "cells")
     model_dict = {"type":"supernet", "stem": integrated_model.stem.state_dict(), "cells": integrated_model.cells.state_dict()}
-    torch.save(model_dict, save_path)
-
-def save_nat_disguiser(integrated_model, save_path):
-    supernet_dict = {"type":"supernet", "stem": integrated_model.stem.state_dict(), "cells": integrated_model.cells.state_dict()}
-    model_dict = {"type":"nat_disguiser", "supernet": supernet_dict, "arch_transformer": integrated_model.arch_transformer.state_dict(), "arch_embedder": integrated_model.arch_transformer.arch_embedder.state_dict()}
     torch.save(model_dict, save_path)
 
 def load_supernet(integrated_model, model_path):
@@ -245,6 +251,11 @@ def load_supernet(integrated_model, model_path):
     integrated_model.stem.load_state_dict(model_dict['stem'])
     assert hasattr(integrated_model, 'cells')
     integrated_model.cells.load_state_dict(model_dict['cells'])
+
+def save_nat_disguiser(integrated_model, save_path):
+    supernet_dict = {"type":"supernet", "stem": integrated_model.stem.state_dict(), "cells": integrated_model.cells.state_dict()}
+    model_dict = {"type":"nat_disguiser", "supernet": supernet_dict, "arch_transformer": integrated_model.arch_transformer.state_dict(), "arch_embedder": integrated_model.arch_transformer.arch_embedder.state_dict()}
+    torch.save(model_dict, save_path)
 
 def load_pretrained_arch_embedder(integrated_model, model_path):
     model_dict = torch.load(model_path, map_location="cpu")
@@ -333,6 +344,20 @@ def draw_genotype(genotype, n_nodes, filename, concat=None):
 
     g.render(filename, view=False)
 
+def draw_clean(genotype, save_path, name, steps = 4):
+    draw_genotype(genotype.normal, steps, os.path.join(save_path, "normal"), genotype.normal_concat)
+    draw_genotype(genotype.reduce, steps, os.path.join(save_path, "reduce"), genotype.reduce_concat)
+    file_merger = PdfFileMerger()
+
+    file_merger.append(os.path.join(save_path, "normal.pdf"))
+    file_merger.append(os.path.join(save_path, "reduce.pdf"))
+
+    file_merger.write(os.path.join(save_path,"{}.pdf".format(name)))
+
+    os.remove(os.path.join(save_path, "normal.pdf"))
+    os.remove(os.path.join(save_path, "normal"))
+    os.remove(os.path.join(save_path, "reduce"))
+    os.remove(os.path.join(save_path, "reduce.pdf"))
 
 def arch_to_genotype(arch_normal, arch_reduce, n_nodes, cell_type, normal_concat=None, reduce_concat=None, hanag=False):
     try:
@@ -707,7 +732,7 @@ def get_tim_data(args, seed=1234):
     return train_queue, test_queue
 
 
-def get_final_train_data(args, CIFAR_CLASSES=10, seed=1234):
+def get_final_test_data(args, CIFAR_CLASSES=10, seed=1234):
     train_transform, valid_transform = _data_transforms_cifar10(args)
     if CIFAR_CLASSES == 10:
 
@@ -857,7 +882,7 @@ def gradient_wrt_input(model, arch_normal, arch_reduce, inputs, targets, criteri
     return data_grad.clone().detach()
 
 
-def Linf_PGD(model, arch_normal, arch_reduce, dat, lbl, eps, alpha, steps, is_targeted=False, rand_start=True, momentum=False, mu=1, criterion=nn.CrossEntropyLoss()):
+def linf_pgd(model, arch_normal, arch_reduce, dat, lbl, eps, alpha, steps, is_targeted=False, rand_start=True, momentum=False, mu=1, criterion=nn.CrossEntropyLoss()):
     x_nat = dat.clone().detach()
     x_adv = None
     if rand_start:
@@ -895,6 +920,14 @@ def Linf_PGD(model, arch_normal, arch_reduce, dat, lbl, eps, alpha, steps, is_ta
             x_adv = torch.clamp(x_adv, 0.0, 1.0)
     return x_adv.clone().detach()
 
+def load_yaml(yaml_path):
+    with open(yaml_path) as f:
+        data = yaml.load(f, Loader=yaml.FullLoader)
+    return data
+
+def save_yaml(save_dict, yaml_path):
+    with open(yaml_path, 'w') as f:
+        yaml.dump(save_dict, f)
 
 class NormalizeByChannelMeanStd(nn.Module):
     def __init__(self, mean, std):
@@ -934,6 +967,8 @@ def initialize_logger(args):
     fh.setFormatter(logging.Formatter(log_format))
     logging.getLogger().addHandler(fh)
     logger = logging.getLogger()
+    return logger
+
 
 
 class AvgrageMeter(object):
