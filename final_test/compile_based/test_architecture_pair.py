@@ -13,8 +13,6 @@ import torch.utils
 import torch.backends.cudnn as cudnn
 import utils
 import genotypes
-from final_test import utils_final as uf
-from utils import arch_to_genotype, draw_genotype
 from final_test.compile_based.models import NetworkCIFAR, NetworkImageNet
 '''
 This files tests the transferbility isotonicity on supernets and trained-from-scratch models
@@ -101,35 +99,10 @@ def main():
     else:
         assert False, "unsupported scheduler type: %s" % args.scheduler
 
-    for epoch in range(args.epochs):
-        # scheduler.step()
-        lr = scheduler.get_last_lr()[0]
-        logging.info('epoch %d lr %e', epoch, lr)
-        top1 = utils.AvgrageMeter()
-        top5 = utils.AvgrageMeter()
-        objs = utils.AvgrageMeter()
-        for step, (input, target) in enumerate(train_queue):
-            target_model.train()
-            target_optimizer.zero_grad()
-            n = input.size(0)
-            input = input.to(device)
-            target = target.to(device)
-            logits, _ = target_model(input)
-            loss = criterion(logits, target)
-            loss.backward()
-            target_optimizer.step()
-            prec1, prec5 = utils.accuracy(logits, target, topk=(1, 5))
-            objs.update(loss.item(), n)
-            top1.update(prec1.item(), n)
-            top5.update(prec5.item(), n)
-            if step % args.report_freq == 0:
-                logging.info('Target Model: Step=%03d Loss=%e Top1=%f Top5=%f', step, objs.avg, top1.avg, top5.avg)
-        scheduler.step()
-        
-    logging.info('Target Model: Loss=%e Top1=%f Top5=%f', objs.avg, top1.avg, top5.avg)
+    utils.train_model(target_model, train_queue, device, criterion, target_optimizer, scheduler, args.epochs, logger)
 
     utils.save_compiled_based(target_model, os.path.join(args.save, 'target_model.pt'))
-    acc_clean_target, _ = uf.test_clean_accuracy(target_model, test_queue, logger)
+    acc_clean_target, _ = utils.test_clean_accuracy(target_model, test_queue, logger)
 
     logging.info('training Surrogate Model')
 
@@ -150,34 +123,10 @@ def main():
     else:
         assert False, "unsupported scheduler type: %s" % args.scheduler
 
-    for epoch in range(args.epochs):
-        
-        lr = scheduler.get_last_lr()[0]
-        logging.info('epoch %d lr %e', epoch, lr)
-        top1 = utils.AvgrageMeter()
-        top5 = utils.AvgrageMeter()
-        objs = utils.AvgrageMeter()
-        for step, (input, target) in enumerate(train_queue):
-            surrogate_model.train()
-            surrogate_optimizer.zero_grad()
-            n = input.size(0)
-            input = input.to(device)
-            target = target.to(device)
-            logits, _ = surrogate_model(input)
-            loss = criterion(logits, target)
-            loss.backward()
-            surrogate_optimizer.step()
-            prec1, prec5 = utils.accuracy(logits, target, topk=(1, 5))
-            objs.update(loss.item(), n)
-            top1.update(prec1.item(), n)
-            top5.update(prec5.item(), n)
-            if step % args.report_freq == 0:
-                logging.info('Surrogate Model: Step=%03d Loss=%e Top1=%f Top5=%f', step, objs.avg, top1.avg, top5.avg)
-        scheduler.step()
-    logging.info('Surrogate Model: Loss=%e Top1=%f Top5=%f', objs.avg, top1.avg, top5.avg)
+    utils.train_model(target_model, train_queue, device, criterion, target_optimizer, scheduler, args.epochs, logger)
 
     utils.save_compiled_based(surrogate_model, os.path.join(args.save, 'surrogate_model.pt'))
-    acc_clean_surrogate, _ = uf.test_clean_accuracy(surrogate_model, test_queue, logger)
+    acc_clean_surrogate, _ = utils.test_clean_accuracy(surrogate_model, test_queue, logger)
 
 
     logging.info('training Target Baseline Model')
@@ -199,33 +148,10 @@ def main():
     else:
         assert False, "unsupported scheduler type: %s" % args.scheduler
 
-    for epoch in range(args.epochs):
-        lr = scheduler.get_last_lr()[0]
-        logging.info('epoch %d lr %e', epoch, lr)
-        top1 = utils.AvgrageMeter()
-        top5 = utils.AvgrageMeter()
-        objs = utils.AvgrageMeter()
-        for step, (input, target) in enumerate(train_queue):
-            baseline_model.train()
-            target_baseline_optimizer.zero_grad()
-            n = input.size(0)
-            input = input.to(device)
-            target = target.to(device)
-            logits, _ = baseline_model(input)
-            loss = criterion(logits, target)
-            loss.backward()
-            target_baseline_optimizer.step()
-            prec1, prec5 = utils.accuracy(logits, target, topk=(1, 5))
-            objs.update(loss.item(), n)
-            top1.update(prec1.item(), n)
-            top5.update(prec5.item(), n)
-            if step % args.report_freq == 0:
-                logging.info('Baseline Model: Step=%03d Loss=%e Top1=%f Top5=%f', step, objs.avg, top1.avg, top5.avg)
-        scheduler.step()
-    logging.info('Baseline Model: Loss=%e Top1=%f Top5=%f', objs.avg, top1.avg, top5.avg)
+    utils.train_model(target_model, train_queue, device, criterion, target_optimizer, scheduler, args.epochs, logger)
 
     utils.save_compiled_based(baseline_model, os.path.join(args.save, 'baseline_model.pt'))
-    acc_clean_baseline, _ = uf.test_clean_accuracy(baseline_model, test_queue, logger)
+    acc_clean_baseline, _ = utils.test_clean_accuracy(baseline_model, test_queue, logger)
 
     logging.info('training completed')
 
@@ -233,7 +159,7 @@ def main():
 
     attack_info = utils.load_yaml(args.attack_info)
 
-    acc_adv_baseline, acc_adv_surrogate = uf.compiled_pgd_test(target_model, surrogate_model, baseline_model, test_queue, attack_info, logger)
+    acc_adv_baseline, acc_adv_surrogate = utils.compiled_pgd_test(target_model, surrogate_model, baseline_model, test_queue, attack_info, logger)
     save_dict = {}
     save_dict['target_genotype'] = '{}'.format(target_genotype)
     save_dict['surrogate_arch'] = '{}'.format(surrogate_genotpye)

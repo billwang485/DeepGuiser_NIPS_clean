@@ -1,20 +1,23 @@
 import torch
 from torch.utils.data import Dataset
+import utils
+from genotypes import Genotype
 
 class PredictorDataSet(Dataset):
-    def __init__(self, free_pair_path, constrain_pair_path, args):
-        if args.mode == 'low_fidelity':
-            self.free_data = torch.load(free_pair_path, map_location='cpu')
-            self.constrain_data = torch.load(constrain_pair_path, map_location='cpu')
-            self.constrain_data.extend(self.free_data)
-        elif args.mode == 'high_fidelity':
-            self.constrain_data = torch.load(constrain_pair_path, map_location='cpu')
-        else:
-            assert 0       
-        self.data = self.constrain_data
+    def __init__(self, data_path):
+        self.data = utils.load_yaml(data_path)
+        self._mode = "acc_adv_surrogate"
+    
+    def set_mode(self, mode):
+        self._mode = mode
 
     def __len__(self):#返回整个数据集的大小
         return len(self.data)
 
     def __getitem__(self,index):
-        return self.data[index]
+        if self._mode == "acc_adv_surrogate":
+            target_arch = utils.genotype_to_arch(eval(self.data[index]['target_genotype']))
+            surrogate_arch = utils.genotype_to_arch(eval(self.data[index]['surrogate_genotype']))
+            acc_adv_surrogate = self.data[index]["adversarial_accuracy"]["surrogate"]
+            return_data = {"target_arch": torch.tensor(target_arch), "surrogate_arch": torch.tensor(surrogate_arch), "label": torch.tensor(acc_adv_surrogate)}
+        return return_data

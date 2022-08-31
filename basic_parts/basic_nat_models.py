@@ -117,6 +117,9 @@ class ArchMaster(nn.Module):
 
     def _get_default_hidden(self, key):
         return utils.get_variable(torch.zeros(key, self.controller_hid), self.device, requires_grad=False)
+    
+    def use_demo(self, value = True):
+        self.demo = value
 
     # device
     def init_hidden(self, batch_size):

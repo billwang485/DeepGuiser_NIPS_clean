@@ -10,3 +10,6 @@ integrated_models/__pycache__
 # file
 *.json
 *.yaml
+
+# tmp gitignore
+final_train_data514

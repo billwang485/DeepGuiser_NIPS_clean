@@ -6,13 +6,14 @@ from scipy.stats import kendalltau
 
 
 class VanillaGatesPredictor(nn.Module):
-    def __init__(self, device, args, normalize=False, dropout=0):
+
+    TYPE = "predictor"
+
+    def __init__(self, device, op_type, loss_type = 'mse', dropout=0, mode = "high_fidelity"):
         super(VanillaGatesPredictor, self).__init__()
-        self.steps = args.num_nodes
-        self.device = device
-        self.normalize = normalize
-        self.op_type = args.op_type
-        (self.transform2gates, self.transform2nat, self.gates_op_list) = utils.primitives_translation(self.op_type)
+        self._device = device
+        self._op_type = op_type
+        (self.transform2gates, self.transform2nat, self.gates_op_list) = utils.primitives_translation(self._op_type)
         self.arch_embedder = GCNFlowArchEmbedder(self.gates_op_list, node_dim=32, op_dim=32, use_bn=False, hidden_dim=32, gcn_out_dims=[64] * 4, gcn_kwargs={"residual_only": 2})
 
         self.fcs = nn.Sequential(
@@ -23,37 +24,33 @@ class VanillaGatesPredictor(nn.Module):
             nn.Linear(64, 1, bias=False),
         )
 
+        self._mode = mode
 
-        if hasattr(args, "mode") and hasattr(args, "loss_type") and hasattr(args, "use_sch"):
-            self.mode = args.mode
-
-            if self.mode == "low_fidelity":
-                self.optimizer = torch.optim.Adam(
-                    self.parameters(),
-                    lr=args.lr,
-                    betas=(0.5, 0.999),
-                    weight_decay=args.transformer_weight_decay,
-                )
-            elif self.mode == "high_fidelity":
-                self.optimizer = torch.optim.Adam(
-                    self.parameters(),
-                    args.lr,
-                    weight_decay=args.transformer_weight_decay,
-                )
-            self.loss_type = args.loss_type
-        else:
-            self.eval()
-        self.rt = args.rt
+        # if self._mode == "low_fidelity":
+        #     self.optimizer = torch.optim.Adam(
+        #         self.parameters(),
+        #         lr=args.learning_rate,
+        #         betas=(0.5, 0.999),
+        #         weight_decay=args.transformer_weight_decay,
+        #     )
+        # elif self._mode == "high_fidelity":
+        #     self.optimizer = torch.optim.Adam(
+        #         self.parameters(),
+        #         args.learning_rate,
+        #         weight_decay=args.transformer_weight_decay,
+        #     )
+        self._loss_type = loss_type
         self.compare_margin = 0.01
         self.max_grad_norm = 5.0
         self.margin_l2 = False
-        self.epoch = 0
 
     def forward(self, target_arch, surrogate_arch, gates_input=False):
         if not gates_input:
-            (arch_normal_t, arch_reduce_t) = target_arch
-            (arch_normal_s, arch_reduce_s) = surrogate_arch
-            assert len(arch_normal_t) == len(arch_reduce_t) and len(arch_normal_s) == len(arch_reduce_s)
+            arch_normal_t = target_arch[:,0,:,:]
+            arch_reduce_t = target_arch[:,1,:,:]
+            arch_normal_s = surrogate_arch[:,0,:,:]
+            arch_reduce_s = surrogate_arch[:,1,:,:]
+            # assert len(arch_normal_t) == len(arch_reduce_t) and len(arch_normal_s) == len(arch_reduce_s)
             gates_arch_t = utils.nat_arch_to_gates_p(arch_normal_t, arch_reduce_t, self.transform2gates)
             gates_arch_s = utils.nat_arch_to_gates_p(arch_normal_s, arch_reduce_s, self.transform2gates)
         else:
@@ -68,7 +65,7 @@ class VanillaGatesPredictor(nn.Module):
         return score
 
     def step_mse(self, archs, label):
-        label = label.to(self.device)
+        label = label.to(self._device)
         scores = self.forward(archs["target_arch"], archs["surrogate_arch"])
         loss = self._mse_loss(scores, label) * 100
         return loss, scores
@@ -89,7 +86,7 @@ class VanillaGatesPredictor(nn.Module):
     def step(self, archs, label):
         if not self.training:
             self.train()
-        if self.loss_type == "mse":
+        if self._loss_type == "mse":
             loss, scores = self.step_mse(archs, label)
         elif self.loss_type == "ranking":
             loss, scores = self.step_compare(archs, label)
@@ -99,7 +96,7 @@ class VanillaGatesPredictor(nn.Module):
             loss = loss2 + 0.2 * loss1
         else:
             assert 0
-        self.update_step(loss)
+        # self.update_step(loss)
         kendall = kendalltau(label.squeeze().tolist(), scores.squeeze().tolist()).correlation
         return loss, scores, kendall
 
@@ -112,25 +109,20 @@ class VanillaGatesPredictor(nn.Module):
         count = 0
         success_count = 0
         for step, data_point in enumerate(test_queue):
-            if self.rt == "a":
-                label = data_point["absolute_reward"]
-            elif self.rt == "r":
-                label = data_point["relative_reward"]
-            else:
-                if self.mode == "high_fidelity":
-                    label = data_point["acc_adv_surrogate"]
-                else:
-                    label = data_point["acc_adv"]
-            if self.loss_type == "mse":
+            label = data_point["label"]
+            if self._loss_type == "mse":
                 loss, score = self.step_mse(data_point, label)
-            elif self.loss_type == "ranking":
+            elif self._loss_type == "ranking":
                 loss, score = self.step_compare(data_point, label)
-            elif self.loss_type == "mix":
+            elif self._loss_type == "mix":
                 loss1, score = self.step_mse(data_point, label)
                 loss2, _ = self.step_compare(data_point, label)
                 loss = loss2 + 0.2 * loss1
             else:
                 assert 0
+            data_point = utils.data_point_2_cpu(data_point)
+            label = data_point["label"]
+            torch.cuda.empty_cache()
             scores.extend(score.squeeze().tolist())
             reals.extend(label.squeeze().tolist())
             avg_loss.update(loss.item(), 1)
@@ -139,7 +131,8 @@ class VanillaGatesPredictor(nn.Module):
             count = count + 1
             if tmp1.index(max(tmp1)) == tmp2.index(max(tmp2)):
                 success_count = success_count + 1
-        if self.mode == "low_fidelity":
+            data_point = utils.data_point_2_cpu(data_point)
+        if self._mode == "low_fidelity":
             tmp = 100
             patk = utils.patk(reals, scores, tmp)
         else:
@@ -147,7 +140,7 @@ class VanillaGatesPredictor(nn.Module):
             patk = success_count / count
 
         kendalltau_, _ = kendalltau(reals, scores)
-        logger.info("testing predictors on %d transforms with %s mode", len(scores), self.mode)
+        logger.info("testing predictors on %d transforms with %s mode", len(scores), self._mode)
         logger.info(
             "average loss=%.4f patk=%.2f kendalltau=%.4f",
             avg_loss.avg,
@@ -158,6 +151,9 @@ class VanillaGatesPredictor(nn.Module):
 
     def _mse_loss(self, scores, labels):
         return F.mse_loss(scores.squeeze(), scores.new(labels.float()))
+    
+    def set_optimizer(self, optimizer):
+        self.optimizer = optimizer
 
     def _pair_loss(self, scores1, scores2, better_list):
         s_1 = scores1.requires_grad_()

@@ -10,6 +10,8 @@ from basic_parts.basic_arch_transformers import ArchTransformerGates
 
 
 class NATDisguiser(Network):
+
+    TYPE = "NATDisguiser"
     def __init__(
         self,
         C,

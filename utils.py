@@ -236,8 +236,18 @@ def save_as_json(model_dir, params, name='params.json'):
 #         model_dict["arch_reduce"] = model.arch_reduce
 #     torch.save(model_dict, model_path)
 def save_compiled_based(model, save_path):
-    model_dict = {"type": "compiled_based", "weight": model.state_dict()}
+    model_dict = {"type": "compiled_based", "weight": model.state_dict(), "genotype":"{}".format(model._genotype), "C" : model._C, "layers": model._layers, "auxiliary": model._auxiliary}
     torch.save(model_dict, save_path)
+
+def save_predictor(model, save_path):
+    model_dict = {"type": "predictor", "state_dict": model.state_dict()}
+    torch.save(model_dict, save_path)
+
+def load_predictor(model, save_path):
+    model_dict = torch.load(save_path, map_location="cpu")
+    if model.TYPE == "predictor":
+        model.load_state_dict(model_dict['state_dict'])
+    
 
 def save_supernet(integrated_model, save_path):
     assert hasattr(integrated_model, "stem") and hasattr(integrated_model, "cells")
@@ -361,7 +371,7 @@ def draw_clean(genotype, save_path, name, steps = 4):
 
 def arch_to_genotype(arch_normal, arch_reduce, n_nodes, cell_type, normal_concat=None, reduce_concat=None, hanag=False):
     try:
-        primitives = eval(cell_type)
+        primitives = eval("genotypes.{}".format(cell_type))
     except:
         assert False, "not supported op type %s" % (cell_type)
 
@@ -488,7 +498,7 @@ def convert_lstm_output(n_nodes, prev_nodes, prev_ops):
 def translate_arch(arch, action, op_type="FULLY_CONCAT_PRIMITIVES"):
     # print(action)
     try:
-        COMPACT_PRIMITIVES = eval(op_type)
+        COMPACT_PRIMITIVES = eval("genotypes.{}".format(op_type))
     except:
         assert False, "not supported op type %s" % (op_type)
     arch_list = []
@@ -500,14 +510,17 @@ def translate_arch(arch, action, op_type="FULLY_CONCAT_PRIMITIVES"):
 
 def genotype_to_arch(genotype, op_type="LOOSE_END_PRIMITIVES"):
     try:
-        COMPACT_PRIMITIVES = eval(op_type)
+        COMPACT_PRIMITIVES = eval("genotypes.{}".format(op_type))
     except:
         assert False, "not supported op type %s" % (op_type)
     arch_normal = [(COMPACT_PRIMITIVES.index(op), f, t) for op, f, t in genotype.normal]
     arch_reduce = [(COMPACT_PRIMITIVES.index(op), f, t) for op, f, t in genotype.reduce]
     return arch_normal, arch_reduce
 
-
+def initialize_optimizer(parameter, learning_rate, momentum, weight_decay, type = "Adam"):
+    if type == "Adam" and momentum == "default":
+        return torch.optim.Adam(parameter, lr=learning_rate, weight_decay=weight_decay)
+    
 def str_diff_num(a, b):
     counter = 0
     for i, s in enumerate(difflib.ndiff(a, b)):
@@ -568,15 +581,19 @@ def nat_arch_to_gates(nat_normal, nat_reduce, transform2gates, batch_size=1):
 
     return [gates_normal, gates_reduce]
 
+def data_point_2_cpu(data_point):
+    return_data = {"target_arch": data_point["target_arch"].cpu(), "surrogate_arch": data_point["surrogate_arch"].cpu(), "label": data_point["label"].cpu()}
+    torch.cuda.empty_cache()
+    return return_data
 
 def nat_arch_to_gates_p(nat_normal, nat_reduce, transform2gates, batch_size=1):
     # nat_normal.sort(key=lambda x: x[-1])
     # nat_reduce.sort(key=lambda x: x[-1])
-    batch_size = len(nat_normal[0][0])
+    batch_size = nat_normal.shape[0]
     gates = []
     for i in range(batch_size):
-        nat_normal_ = [(x[0][i], x[1][i], x[2][i]) for x in nat_normal]
-        nat_reduce_ = [(x[0][i], x[1][i], x[2][i]) for x in nat_reduce]
+        nat_normal_ = nat_normal[i]
+        nat_reduce_ = nat_reduce[i]
         gates_normal = [[], []]
         gates_reduce = [[], []]
         for i, (op, f, t) in enumerate(nat_normal_):
@@ -766,6 +783,7 @@ def get_final_test_data(args, CIFAR_CLASSES=10, seed=1234):
 
 
 def get_cifar_data_queue(args, seed=1234):
+    ''' get_train_queue'''
 
     train_transform, valid_transform = _data_transforms_cifar10(args)
 
@@ -969,7 +987,145 @@ def initialize_logger(args):
     logger = logging.getLogger()
     return logger
 
+def unified_forward(model, inputs):
+    if model.model_type == "compiled_base":
+        logits, _ = model(inputs)
+    else:
+        logits = model(inputs)
+    
+    return logits
 
+def train_model(model, train_queue, device, criterion, optimizer, scheduler, epochs, logger = None):
+    model.to(device)
+    for epoch in range(epochs):
+        
+        lr = scheduler.get_lr()[0]
+        if logger is not None:
+            logger.info('epoch %d lr %e', epoch, lr)
+        top1 = AvgrageMeter()
+        top5 = AvgrageMeter()
+        objs = AvgrageMeter()
+        for step, (input, target) in enumerate(train_queue):
+            model.train()
+            optimizer.zero_grad()
+            n = input.size(0)
+            input = input.to(device)
+            target = target.to(device)
+            logits = unified_forward(model, input)
+            
+            loss = criterion(logits, target)
+            loss.backward()
+            optimizer.step()
+            prec1, prec5 = accuracy(logits, target, topk=(1, 5))
+            objs.update(loss.item(), n)
+            top1.update(prec1.item(), n)
+            top5.update(prec5.item(), n)
+            if step % 100 == 0:
+                logging.info('Step=%03d Loss=%e Top1=%f Top5=%f', step, objs.avg, top1.avg, top5.avg)
+        scheduler.step()
+    
+    logging.info('Training Finished: Loss=%e Top1=%f Top5=%f', objs.avg, top1.avg, top5.avg)
+
+def test_clean_accuracy(model, test_queue, logger = None,  device = None, ):
+    if device is not None:
+        model.to(device)
+    else:
+        device = next(model.parameters()).device
+    top1 = AvgrageMeter()
+    top5 = AvgrageMeter()
+    for step, (input, target) in enumerate(test_queue):
+        model.eval()
+        n = input.size(0)
+        input = input.to(device)
+        target = target.to(device)
+        logits = unified_forward(model, input)
+        prec1, prec5 = accuracy(logits, target, topk=(1, 5))
+        top1.update(prec1.item() / 100.0, n)
+        top5.update(prec5.item() / 100.0, n)
+    if logger is not None:
+        logger.info('Test Accuracy: Top1=%f Top5=%f', top1.avg, top5.avg)
+    return top1.avg, top5.avg
+
+def compiled_pgd_test(target_model, surrogate_model, baseline_model, test_queue, attack_info, logger = None):
+    assert attack_info['type'] == 'PGD'
+    device = next(target_model.parameters()).device
+    acc_adv_baseline = AvgrageMeter()
+    acc_adv_surrogate = AvgrageMeter()
+
+    for step, (input, target) in enumerate(test_queue):
+        n = input.size(0)
+        input = input.to(device)
+        target = target.to(device)
+        target_model.eval()
+        baseline_model.eval()
+        surrogate_model.eval()
+
+        input_adv0 = _generate_pgd_input(baseline_model, input, target, attack_info['eps'], attack_info['alpha'], attack_info['step'])
+        # logits0, _ = target_model(input_adv0)
+        logits0 = unified_forward(target_model, input_adv0)
+        acc_adv_baseline_ = accuracy(logits0, target, topk=(1, 5))[0] / 100.0
+        acc_adv_baseline.update(acc_adv_baseline_.item(), n)
+
+        input_adv1 = _generate_pgd_input(surrogate_model, input, target, attack_info['eps'], attack_info['alpha'], attack_info['step'])
+        # logging.info("acc_adv_target_white=%.2f", acc_adv.item())
+        # logits1, _ = target_model(input_adv1)
+        logits1 = unified_forward(target_model, input_adv1)
+        acc_adv_surrogate_ = accuracy(logits1, target, topk=(1, 5))[0] / 100.0
+        acc_adv_surrogate.update(acc_adv_surrogate_.item(), n)
+    if logger is not None:
+        logger.info('PGD Test Results: acc_adv_baseline=%f acc_adv_surrogate=%.2f',\
+                acc_adv_baseline.avg, acc_adv_surrogate.avg)
+    return acc_adv_baseline.avg, acc_adv_surrogate.avg
+
+def _generate_pgd_input(generator_model, input, target, eps, alpha, steps, is_targeted=False, rand_start=True, momentum=False, mu=1, criterion=nn.CrossEntropyLoss()):
+    def _gradient_wrt_input(model, inputs, targets, criterion=nn.CrossEntropyLoss()):
+        inputs.requires_grad = True
+
+        outputs = unified_forward(model ,inputs)
+        loss = criterion(outputs, targets)
+        model.zero_grad()
+        loss.backward()
+
+        data_grad = inputs.grad.data
+        return data_grad.clone().detach()
+    generator_model.eval()
+    x_nat = input.clone().detach()
+    x_adv = None
+    if rand_start:
+        x_adv = input.clone().detach() + torch.FloatTensor(input.shape).uniform_(-eps, eps).cuda()
+    else:
+        x_adv = input.clone().detach()
+    x_adv = torch.clamp(x_adv, 0.0, 1.0)  # respect image bounds
+    g = torch.zeros_like(x_adv)
+
+    # Iteratively Perturb data
+    for i in range(int(steps)):
+        # Calculate gradient w.r.t. data
+        # print("hhhh")
+        grad = _gradient_wrt_input(generator_model, x_adv, target, criterion)
+        with torch.no_grad():
+            if momentum:
+                # Compute sample wise L1 norm of gradient
+                flat_grad = grad.view(grad.shape[0], -1)
+                l1_grad = torch.norm(flat_grad, 1, dim=1)
+                grad = grad / torch.clamp(l1_grad, min=1e-12).view(grad.shape[0], 1, 1, 1)
+                # Accumulate the gradient
+                new_grad = mu * g + grad  # calc new grad with momentum term
+                g = new_grad
+            else:
+                new_grad = grad
+            # Get the sign of the gradient
+            sign_data_grad = new_grad.sign()
+            if is_targeted:
+                x_adv = x_adv - alpha * sign_data_grad  # perturb the data to MINIMIZE loss on tgt class
+            else:
+                x_adv = x_adv + alpha * sign_data_grad  # perturb the data to MAXIMIZE loss on gt class
+            # Clip the perturbations w.r.t. the original data so we still satisfy l_infinity
+            # x_adv = torch.clamp(x_adv, x_nat-eps, x_nat+eps) # Tensor min/max not supported yet
+            x_adv = torch.max(torch.min(x_adv, x_nat + eps), x_nat - eps)
+            # Make sure we are still in bounds
+            x_adv = torch.clamp(x_adv, 0.0, 1.0)
+    return x_adv.clone().detach()
 
 class AvgrageMeter(object):
     def __init__(self):
