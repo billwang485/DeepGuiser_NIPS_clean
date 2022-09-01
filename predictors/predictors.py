@@ -3,18 +3,19 @@ import utils
 import numpy as np
 from basic_parts.basic_gates_models import GCNFlowArchEmbedder
 from scipy.stats import kendalltau
+from pygcn.layers import GraphConvolution
 
 
 class VanillaGatesPredictor(nn.Module):
 
-    TYPE = "predictor"
+    NAME = "predictor"
 
-    def __init__(self, device, op_type, loss_type = 'mse', dropout=0, mode = "high_fidelity"):
+    def __init__(self, device, op_type, loss_type = 'mse', dropout=0, mode = "high_fidelity", concat = "only_final"):
         super(VanillaGatesPredictor, self).__init__()
         self._device = device
         self._op_type = op_type
         (self.transform2gates, self.transform2nat, self.gates_op_list) = utils.primitives_translation(self._op_type)
-        self.arch_embedder = GCNFlowArchEmbedder(self.gates_op_list, node_dim=32, op_dim=32, use_bn=False, hidden_dim=32, gcn_out_dims=[64] * 4, gcn_kwargs={"residual_only": 2})
+        self.arch_embedder = GCNFlowArchEmbedder(self.gates_op_list, node_dim=32, op_dim=32, use_bn=False, hidden_dim=32, gcn_out_dims=[64] * 4, gcn_kwargs={"residual_only": 2}, mode = concat)
 
         self.fcs = nn.Sequential(
             nn.Linear(256, 64, bias=False),
@@ -57,7 +58,9 @@ class VanillaGatesPredictor(nn.Module):
             gates_arch_t = target_arch
             gates_arch_s = surrogate_arch
         x1 = self.arch_embedder(gates_arch_t)
+        torch.cuda.empty_cache()
         x2 = self.arch_embedder(gates_arch_s)
+        torch.cuda.empty_cache()
         # x = x1 - x2
         x = torch.cat((x1, x2), 1)
         score = self.fcs(x)
@@ -66,7 +69,9 @@ class VanillaGatesPredictor(nn.Module):
 
     def step_mse(self, archs, label):
         label = label.to(self._device)
-        scores = self.forward(archs["target_arch"], archs["surrogate_arch"])
+        target_arch = archs["target_arch"]
+        surrogate_arch = archs["surrogate_arch"]
+        scores = self.forward(target_arch, surrogate_arch)
         loss = self._mse_loss(scores, label) * 100
         return loss, scores
 
@@ -96,11 +101,23 @@ class VanillaGatesPredictor(nn.Module):
             loss = loss2 + 0.2 * loss1
         else:
             assert 0
-        # self.update_step(loss)
+        self.update_step(loss)
         kendall = kendalltau(label.squeeze().tolist(), scores.squeeze().tolist()).correlation
         return loss, scores, kendall
 
     def test(self, test_queue, logger):
+        def check_target_arch(target_archs):
+            assert len(target_archs) == 4
+            status = 1
+            if (all((target_archs[0] == target_archs[1]).tolist()) and 
+            all((target_archs[1] == target_archs[2]).tolist()) and 
+            all((target_archs[2] == target_archs[3]).tolist())):
+                status = 1
+            else:
+                status = 0
+                assert 0
+            return status
+
         if self.training:
             self.eval()
         avg_loss = utils.AvgrageMeter()
@@ -109,6 +126,7 @@ class VanillaGatesPredictor(nn.Module):
         count = 0
         success_count = 0
         for step, data_point in enumerate(test_queue):
+            # check_target_arch(data_point["target_arch"])
             label = data_point["label"]
             if self._loss_type == "mse":
                 loss, score = self.step_mse(data_point, label)
@@ -140,9 +158,9 @@ class VanillaGatesPredictor(nn.Module):
             patk = success_count / count
 
         kendalltau_, _ = kendalltau(reals, scores)
-        logger.info("testing predictors on %d transforms with %s mode", len(scores), self._mode)
+        logger.info("Testing Predictors on %d Transforms with %s Mode", len(scores), self._mode)
         logger.info(
-            "average loss=%.4f patk=%.2f kendalltau=%.4f",
+            "Average Loss=%.4f Patk=%.2f Kendalltau=%.4f",
             avg_loss.avg,
             patk,
             kendalltau_,

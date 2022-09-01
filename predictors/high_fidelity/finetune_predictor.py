@@ -16,9 +16,11 @@ import numpy as np
 import utils
 from predictors.predictors import VanillaGatesPredictor
 from predictors.predictor_dataset import PredictorDataSet
+from predictors.predictor_sampler import PredictorSampler
 
 parser = argparse.ArgumentParser("DeepGuiser")
-parser.add_argument('--batch_size', type=int, default=128, help='batch size')
+parser.add_argument('--batch_size', type=int, default=256, help='batch size')
+# parser.add_argument('--dataset', type=int, default=0, help='0 means build dataset from yaml data, 1 means load preprocessed dataqueue, 0 mode is princpled, 1 mode is fast')
 parser.add_argument('--report_freq', type=int, default=100, help=' ')
 parser.add_argument('--gpu', type=int, default=0, help='gpu device id')
 parser.add_argument('--epochs', type=int, default=300, help='')
@@ -66,10 +68,10 @@ def main():
     predictor_config = utils.load_yaml(args.predictor_config)
 
     model = VanillaGatesPredictor( \
-        device, predictor_config["op_type"], loss_type = predictor_config['loss_type'], dropout=predictor_config['dropout'], mode = predictor_config['mode']
+        device, predictor_config["op_type"], loss_type = predictor_config['loss_type'], dropout=predictor_config['dropout'], mode = predictor_config['mode'], concat= predictor_config['gates_concat']
     )
 
-    logging.info('Building dataset')
+    logging.info('Building Dataset')
 
     args.load_dataset = False
 
@@ -89,14 +91,14 @@ def main():
         pin_memory=True, num_workers=4
     )
     valid_queue = torch.utils.data.DataLoader(
-        train_data, args.batch_size,
-        sampler=torch.utils.data.sampler.SubsetRandomSampler(list(range(len(test_data)))),
+        test_data, 4,
+        sampler=torch.utils.data.sampler.SequentialSampler(list(range(len(test_data)))),
         pin_memory=True, num_workers=4
     )
 
-    optimizer_config = utils.load_yaml(args.optimizer_config)
+    logging.info('Building Dataset Completed: Train Set has %d pairs, Valid Set has %d pairs', len(train_data), len(test_data))
 
-    model_optimizer = utils.initialize_optimizer(model.parameters(), optimizer_config["learning_rate"], optimizer_config["momentum"], optimizer_config["weight_decay"], optimizer_config["type"])
+    
 
     shutil.copy(args.predictor_config, os.path.join(args.save, "predictor_config.yaml"))
     shutil.copy(args.optimizer_config, os.path.join(args.save, "optimzier_config.yaml"))
@@ -108,21 +110,25 @@ def main():
         model.load_state_dict(tmp, strict = False)
 
     model.to(device)
+
+    optimizer_config = utils.load_yaml(args.optimizer_config)
+
+    model_optimizer = utils.initialize_optimizer(model.parameters(), optimizer_config["learning_rate"], optimizer_config["momentum"], optimizer_config["weight_decay"], optimizer_config["type"])
     model.set_optimizer(model_optimizer)
-    data_trace = []
+    # data_trace = []
     valid_trace = []
 
     for epoch in range(args.epochs):
-        logging.info('Epoch %d starts', epoch)
+        logging.info('Epoch %d Starts', epoch)
         for step, data_point in enumerate(train_queue):
             loss, score, kendall = model.step(data_point, data_point["label"])
             data_point = utils.data_point_2_cpu(data_point)
             summaryWriter.add_scalar('train_loss', loss, epoch * len(train_queue) + step)
             summaryWriter.add_scalar('train_kendall', kendall, epoch * len(train_queue) + step)
-            data_trace.append({'data_point': data_point, 'step': step, 'loss': loss, 'kendall': kendall}) 
-            tmp = random.randint(0, args.batch_size)
+            # data_trace.append({'data_point': utils.data_point_2_cpu(data_point), 'step': step, 'loss': loss.cpu(), 'kendall': kendall}) 
+            tmp = random.randint(0, args.batch_size - 1)
             if step % args.report_freq == 0:
-                logging.info('epoch %d: step=%d loss=%.4f score=%.4f label=%.4f kendall=%.4f', epoch, step, loss.item(), score[tmp].item(), data_point["label"][tmp].item(), kendall)
+                logging.info('Epoch %d: Step=%d Loss=%.4f Score=%.4f Label=%.4f Kendall=%.4f', epoch, step, loss.item(), score[tmp].item(), data_point["label"][tmp].item(), kendall)
         if epoch % 1 == 0:
             avg_loss, patk, kendall = model.test(valid_queue, logger)
             summaryWriter.add_scalar('valid_loss', avg_loss, epoch * len(train_queue) + step)
@@ -137,7 +143,7 @@ def main():
         #     torch.save(data_trace, os.path.join(args.save, 'data_trace'))
         # logging.info('epoch %d is done', epoch)
         torch.save(valid_trace, os.path.join(args.save, 'valid_trace'))
-        torch.save(data_trace, os.path.join(args.save, 'data_trace'))
+        # torch.save(data_trace, os.path.join(args.save, 'data_trace'))
         torch.save(model.state_dict(), os.path.join(args.save, 'predictor_state_dict.pt'))
 
 if __name__ == '__main__':

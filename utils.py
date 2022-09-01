@@ -245,7 +245,7 @@ def save_predictor(model, save_path):
 
 def load_predictor(model, save_path):
     model_dict = torch.load(save_path, map_location="cpu")
-    if model.TYPE == "predictor":
+    if model.NAME == "predictor":
         model.load_state_dict(model_dict['state_dict'])
     
 
