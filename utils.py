@@ -239,6 +239,15 @@ def save_compiled_based(model, save_path):
     model_dict = {"type": "compiled_based", "weight": model.state_dict(), "genotype":"{}".format(model._genotype), "C" : model._C, "layers": model._layers, "auxiliary": model._auxiliary}
     torch.save(model_dict, save_path)
 
+def save_predictor_based_disguiser(model, save_path):
+    model_dict = {"type": "predictor_based_disguiser", "predictor_state_dict": model.predictor.state_dict(), "arch_transformer_state_dict": model.arch_transformer.state_dict()}
+    torch.save(model_dict, save_path)
+
+def load_predictor_based_disguiser(model, save_path):
+    model_dict = torch.load(save_path, map_location="cpu")
+    model.predictor.load_state_dict(model_dict["predictor_state_dict"])
+    model.arch_transformer.load_state_dict(model_dict["arch_transformer_state_dict"])
+
 def save_predictor(model, save_path):
     model_dict = {"type": "predictor", "state_dict": model.state_dict()}
     torch.save(model_dict, save_path)
@@ -517,8 +526,12 @@ def genotype_to_arch(genotype, op_type="LOOSE_END_PRIMITIVES"):
     arch_reduce = [(COMPACT_PRIMITIVES.index(op), f, t) for op, f, t in genotype.reduce]
     return arch_normal, arch_reduce
 
-def initialize_optimizer(parameter, learning_rate, momentum, weight_decay, type = "Adam"):
-    if type == "Adam" and momentum == "default":
+def initialize_scheduler(optimizer, scheduler_config):
+    if scheduler_config["type"] == "StepLR":
+        return torch.optim.lr_scheduler.StepLR(optimizer, scheduler_config["step_size"], gamma=scheduler_config["gamma"])
+
+def initialize_optimizer(parameter, learning_rate, momentum, weight_decay, _type = "Adam"):
+    if _type == "Adam" and momentum == "default":
         return torch.optim.Adam(parameter, lr=learning_rate, weight_decay=weight_decay)
     
 def str_diff_num(a, b):
@@ -633,6 +646,7 @@ def imitation_loss(label_normal, label_reduce, probs_normal, probs_reduce, devic
         loss = loss + loss_function(probs_normal[:, x].unsqueeze(dim=0), normal_mat[:, x].unsqueeze(dim=0)) + loss_function(probs_reduce[:, x].unsqueeze(dim=0), reduce_mat[:, x].unsqueeze(dim=0))
     loss = loss / 50
     return loss.to(device)
+
 
 
 def update_arch(best_pair_list, arch_normal, arch_reduce, optimized_normal, optimized_reduce, reward, acc_clean, acc_adv, optimized_acc):
@@ -967,10 +981,10 @@ def localtime_as_dirname():
     return default_EXP
 
 
-def preprocess_exp_dir(args):
+def preprocess_exp_dir(args, name = "log"):
     if not os.path.exists(args.prefix):
         os.makedirs(args.prefix)
-    log_dir = "log"
+    log_dir = name
     if args.debug:
         log_dir = os.path.join(log_dir, "debug")
     if not os.path.exists(os.path.join(args.prefix, log_dir)):
