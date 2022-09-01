@@ -1,0 +1,6 @@
+compute_reward:
+  hardware_constrain: num_changes
+  threshold: 10
+compute_loss:
+  entropy_coeff: 0.003
+

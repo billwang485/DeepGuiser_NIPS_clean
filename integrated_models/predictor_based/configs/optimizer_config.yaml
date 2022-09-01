@@ -1,0 +1,8 @@
+momentum: default
+weight_decay: 0.0003
+learning_rate: 0.0003
+type: Adam
+scheduler_info:
+  type: StepLR
+  step_size: 10000
+  gamma: 0.25
