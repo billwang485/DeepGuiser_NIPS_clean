@@ -17,13 +17,24 @@ class VanillaGatesPredictor(nn.Module):
         (self.transform2gates, self.transform2nat, self.gates_op_list) = utils.primitives_translation(self._op_type)
         self.arch_embedder = GCNFlowArchEmbedder(self.gates_op_list, node_dim=32, op_dim=32, use_bn=False, hidden_dim=32, gcn_out_dims=[64] * 4, gcn_kwargs={"residual_only": 2}, mode = concat)
 
-        self.fcs = nn.Sequential(
+        
+
+        if concat == "nat_loose_end_concat" or concat == "fully_concat":
+            self.fcs = nn.Sequential(
+            nn.Linear(1024, 64, bias=False),
+            nn.ReLU(inplace=False),
+            nn.Dropout(p=dropout),
+            nn.BatchNorm1d(64),
+            nn.Linear(64, 1, bias=False),
+            )
+        else:
+            self.fcs = nn.Sequential(
             nn.Linear(256, 64, bias=False),
             nn.ReLU(inplace=False),
             nn.Dropout(p=dropout),
-
+            nn.BatchNorm1d(64),
             nn.Linear(64, 1, bias=False),
-        )
+            )
 
         self._mode = mode
 
@@ -45,7 +56,7 @@ class VanillaGatesPredictor(nn.Module):
         self.max_grad_norm = 5.0
         self.margin_l2 = False
 
-    def forward(self, target_arch, surrogate_arch, gates_input=False):
+    def forward(self, target_arch, surrogate_arch, gates_input=False, target_concat = None, surrogate_concat = None):
         if not gates_input:
             arch_normal_t = target_arch[:,0,:,:]
             arch_reduce_t = target_arch[:,1,:,:]
@@ -57,9 +68,9 @@ class VanillaGatesPredictor(nn.Module):
         else:
             gates_arch_t = target_arch
             gates_arch_s = surrogate_arch
-        x1 = self.arch_embedder(gates_arch_t)
+        x1 = self.arch_embedder(gates_arch_t, target_concat)
         torch.cuda.empty_cache()
-        x2 = self.arch_embedder(gates_arch_s)
+        x2 = self.arch_embedder(gates_arch_s, surrogate_concat)
         torch.cuda.empty_cache()
         # x = x1 - x2
         x = torch.cat((x1, x2), 1)
@@ -67,18 +78,18 @@ class VanillaGatesPredictor(nn.Module):
         score = torch.tanh(score)
         return score
 
-    def step_mse(self, archs, label):
+    def step_mse(self, data_point, label):
         label = label.to(self._device)
-        target_arch = archs["target_arch"]
-        surrogate_arch = archs["surrogate_arch"]
-        scores = self.forward(target_arch, surrogate_arch)
+        target_arch = data_point["target_arch"]
+        surrogate_arch = data_point["surrogate_arch"]
+        scores = self.forward(target_arch, surrogate_arch, target_concat=data_point["target_concat"], surrogate_concat=data_point["surrogate_concat"])
         loss = self._mse_loss(scores, label) * 100
         return loss, scores
 
-    def step_compare(self, archs, label):
-        scores = self.forward(archs["target_arch"], archs["surrogate_arch"])
-        (arch_normal_t, arch_reduce_t) = archs["target_arch"]
-        (arch_normal_s, arch_reduce_s) = archs["surrogate_arch"]
+    def step_compare(self, data_point, label):
+        scores = self.forward(data_point["target_arch"], data_point["surrogate_arch"])
+        (arch_normal_t, arch_reduce_t) = data_point["target_arch"]
+        (arch_normal_s, arch_reduce_s) = data_point["surrogate_arch"]
         gates_arch_t = utils.nat_arch_to_gates_p(arch_normal_t, arch_reduce_t, self.transform2gates)
         gates_arch_s = utils.nat_arch_to_gates_p(arch_normal_s, arch_reduce_s, self.transform2gates)
         archs = torch.arange(gates_arch_t.shape[0])
@@ -88,16 +99,16 @@ class VanillaGatesPredictor(nn.Module):
         loss = self._pair_loss(scores1.squeeze(), scores2.squeeze(), better_list)
         return loss, scores
 
-    def step(self, archs, label):
+    def step(self, data_point, label):
         if not self.training:
             self.train()
         if self._loss_type == "mse":
-            loss, scores = self.step_mse(archs, label)
+            loss, scores = self.step_mse(data_point, label)
         elif self.loss_type == "ranking":
-            loss, scores = self.step_compare(archs, label)
+            loss, scores = self.step_compare(data_point, label)
         elif self.loss_type == "mix":
-            loss1, scores = self.step_mse(archs, label)
-            loss2, _ = self.step_compare(archs, label)
+            loss1, scores = self.step_mse(data_point, label)
+            loss2, _ = self.step_compare(data_point, label)
             loss = loss2 + 0.2 * loss1
         else:
             assert 0

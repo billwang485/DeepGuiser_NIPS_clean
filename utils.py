@@ -102,6 +102,16 @@ def accuracy(output, target, topk=(1,)):
         res.append(correct_k.mul_(100.0 / batch_size))
     return res
 
+def parse_loose_end_concat(arch, num_nodes = 4):
+    used_nodes = set()
+    for op, f, t in arch:
+        used_nodes.add(f)
+    concat = []
+    for i in range(2, num_nodes + 2):
+        if not i in used_nodes:
+            concat.append(i)
+    return concat
+    
 
 def imagewise_accuracy(output, target, pid):
 

@@ -122,7 +122,7 @@ class GCNFlowArchEmbedder(nn.Module):
                  gcn_out_dims=[64] * 4,
                  other_node_zero=False,
                  gcn_kwargs=None,
-                 dropout=0.,
+                 dropout=0.4,
                  normalize=False,
                  use_bn=False,
                  other_node_independent=False,
@@ -142,6 +142,8 @@ class GCNFlowArchEmbedder(nn.Module):
         self.gcn_out_dims = gcn_out_dims
         self.dropout = dropout
         self.use_bn = use_bn
+        # self._num_nodes = len(gcn_out_dims)
+        # assert len(gcn_out_dims) == 4
         self.other_node_independent = other_node_independent
         self.share_self_op_emb = share_self_op_emb
         # final concat only support the cell-ss that all nodes are concated
@@ -304,8 +306,24 @@ class GCNFlowArchEmbedder(nn.Module):
         x = self.x_hidden(node_embs)
         # (batch_size, num_cell_groups, num_nodes, op_hid)
         return adjs, adj_op_inds_lst, x
+    
+    def make_mask(self, y, concat):
+        mask = torch.zeros(y.shape, device = y.device)
+        for step, node in enumerate(concat[:,0,:]):
+            for i in range(self._num_nodes - 2):
+                if node[i] < 2:
+                    continue
+                else:
+                    mask[step, 0, int(node[i] - 2),:] = 1.0
+        for step, node in enumerate(concat[:,1,:]):
+            for i in range(self._num_nodes - 2):
+                if node[i] < 2:
+                    continue
+                else:
+                    mask[step, 1, int(node[i] - 2),:] = 1.0
+        return mask
 
-    def forward(self, archs):
+    def forward(self, archs, concat = None):
         # (batch_size, num_cell_groups, f, op)
         # adjs: (batch_size, num_cell_groups, num_nodes, num_nodes)
         # adj_op_inds: (batch_size, num_cell_groups, num_nodes, num_nodes)
@@ -333,6 +351,12 @@ class GCNFlowArchEmbedder(nn.Module):
             y = torch.reshape(y, [y.shape[0], y.shape[1], -1])
         elif self._mode == "old_predictor":
             y = torch.mean(y, dim=2)
+        elif self._mode == "nat_loose_end_mean":
+            y = torch.mean(y * self.make_mask(y, concat), dim = 2)
+        elif self._mode == "nat_loose_end_concat":
+            y = y * self.make_mask(y, concat)
+        elif self._mode == "fully_concat":
+            y = y 
         if self.normalize:
             y = F.normalize(y, 2, dim=-1)
         y = torch.reshape(y, [y.shape[0], -1]) # concat across cell groups, just reshape here

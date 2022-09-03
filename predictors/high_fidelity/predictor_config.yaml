@@ -3,6 +3,6 @@ pretrained_weight: null
 type: VanillaGates
 op_type: LOOSE_END_PRIMITIVES
 mode: high_fidelity
-dropout: 0
+dropout: 0.5
 loss_type: mse
-gates_concat: only_final
+gates_concat: nat_loose_end_concat

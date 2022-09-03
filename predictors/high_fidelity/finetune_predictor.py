@@ -142,9 +142,10 @@ def main():
         #     torch.save(valid_trace, os.path.join(args.save, 'valid_trace'))
         #     torch.save(data_trace, os.path.join(args.save, 'data_trace'))
         # logging.info('epoch %d is done', epoch)
-        torch.save(valid_trace, os.path.join(args.save, 'valid_trace'))
-        # torch.save(data_trace, os.path.join(args.save, 'data_trace'))
-        torch.save(model.state_dict(), os.path.join(args.save, 'predictor_state_dict.pt'))
+        if args.store:
+            torch.save(valid_trace, os.path.join(args.save, 'valid_trace'))
+            # torch.save(data_trace, os.path.join(args.save, 'data_trace'))
+            torch.save(model.state_dict(), os.path.join(args.save, 'predictor_state_dict.pt'))
 
 if __name__ == '__main__':
     main()
