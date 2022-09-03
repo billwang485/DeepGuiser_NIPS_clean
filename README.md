@@ -32,7 +32,67 @@ After training complete, copy supernet and twin supernet to ``${workspaceFolder}
 
 ### train gates integrated model
 
+```
+cd integrated_models/nat_disguiser
+```
 
+And run,
+
+```
+python net_disguiser.py --gpu [gpuid]
+```
 
 ### build transbench
+
+```
+cd transbench
+```
+
+If you want to build transbench yourself,
+
+```
+cd high_fidelity
+```
+
+And run,
+
+```
+python build_high_fidelity_transbench.py
+```
+
+The already build transbench written in ```yaml``` is in ```data/high_fidelity```
+
+### train predictor
+
+```
+cd predictors
+```
+
+If you want to train high fidelity predictor,
+
+```
+cd high_fidelity
+```
+
+```
+python finetune_predictor.py
+```
+
+The config file of predictor and the config file of optimization detail is in the two yamls.
+
+### train predictor based tansformer
+
+The code is in 
+
+```
+integrated_models/predictor_based
+```
+
+### final test
+
+The code is in 
+
+```
+final_test/compile_based
+```
 
