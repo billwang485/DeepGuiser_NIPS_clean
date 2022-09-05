@@ -21,10 +21,17 @@ class VanillaGatesPredictor(nn.Module):
 
         if concat == "nat_loose_end_concat" or concat == "fully_concat":
             self.fcs = nn.Sequential(
-            nn.Linear(1024, 64, bias=False),
-            nn.ReLU(inplace=False),
             nn.Dropout(p=dropout),
+            nn.Linear(1024, 512, bias=False),
+            nn.ReLU(inplace=False),
+            nn.BatchNorm1d(512),
+            # nn.Dropout(p=dropout),
+            
+            nn.Linear(512, 64, bias=False),
+            nn.ReLU(inplace=False),
+            
             nn.BatchNorm1d(64),
+            # nn.Dropout(p=dropout),
             nn.Linear(64, 1, bias=False),
             )
         else:
@@ -33,6 +40,7 @@ class VanillaGatesPredictor(nn.Module):
             nn.ReLU(inplace=False),
             nn.Dropout(p=dropout),
             nn.BatchNorm1d(64),
+            
             nn.Linear(64, 1, bias=False),
             )
 

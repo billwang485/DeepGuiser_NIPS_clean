@@ -122,7 +122,7 @@ class GCNFlowArchEmbedder(nn.Module):
                  gcn_out_dims=[64] * 4,
                  other_node_zero=False,
                  gcn_kwargs=None,
-                 dropout=0.4,
+                 dropout=0,
                  normalize=False,
                  use_bn=False,
                  other_node_independent=False,
