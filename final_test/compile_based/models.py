@@ -97,7 +97,7 @@ class AuxiliaryHeadImageNet(nn.Module):
 
 class NetworkCIFAR(nn.Module):
 
-    model_type = "compiled_base"
+    model_type = "compile_based"
 
     def __init__(self, C, num_classes, layers, auxiliary, genotype):
         super(NetworkCIFAR, self).__init__()
@@ -155,7 +155,7 @@ class NetworkCIFAR(nn.Module):
 
 class NetworkImageNet(nn.Module):
 
-    model_type = "compiled_base"
+    model_type = "compile_based"
     
     def __init__(self, C, num_classes, layers, auxiliary, genotype, final_dropout=0):
         super(NetworkImageNet, self).__init__()

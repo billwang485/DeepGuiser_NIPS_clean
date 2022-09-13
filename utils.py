@@ -249,6 +249,10 @@ def save_compiled_based(model, save_path):
     model_dict = {"type": "compiled_based", "weight": model.state_dict(), "genotype":"{}".format(model._genotype), "C" : model._C, "layers": model._layers, "auxiliary": model._auxiliary}
     torch.save(model_dict, save_path)
 
+def save_supernet_based(model, save_path):
+    model_dict = {"type": "supernet_based", "weight": model.state_dict(), "genotype":"{}".format(model._genotype), "C" : model._C, "layers": model._layers, "steps": model._steps, "layers": model._layers, "stem_multiplier": model._stem_multiplier, "loose_end":model._loose_end}
+    torch.save(model_dict, save_path)
+
 def save_predictor_based_disguiser(model, save_path):
     model_dict = {"type": "predictor_based_disguiser", "predictor_state_dict": model.predictor.state_dict(), "arch_transformer_state_dict": model.arch_transformer.state_dict()}
     torch.save(model_dict, save_path)
@@ -1012,9 +1016,12 @@ def initialize_logger(args):
     return logger
 
 def unified_forward(model, inputs):
-    if model.model_type == "compiled_base":
+    if model.model_type == "compile_based":
         logits, _ = model(inputs)
+    elif model.model_type == "supernet_based":
+        logits = model(inputs)
     else:
+        assert 0
         logits = model(inputs)
     
     return logits
@@ -1023,7 +1030,7 @@ def train_model(model, train_queue, device, criterion, optimizer, scheduler, epo
     model.to(device)
     for epoch in range(epochs):
         
-        lr = scheduler.get_lr()[0]
+        lr = scheduler.get_last_lr()[0]
         if logger is not None:
             logger.info('epoch %d lr %e', epoch, lr)
         top1 = AvgrageMeter()

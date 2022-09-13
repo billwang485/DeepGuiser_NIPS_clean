@@ -1,0 +1,4 @@
+target:
+  - genotype: 'genotypes.ResBlock'
+surrogate:
+  - genotype: 'genotypes.HANAG_ResBlock'

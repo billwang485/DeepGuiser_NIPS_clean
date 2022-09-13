@@ -13,7 +13,7 @@ import torch.utils
 import torch.backends.cudnn as cudnn
 import utils
 import genotypes
-from final_test.compile_based.models import NetworkCIFAR, NetworkImageNet
+from final_test.supernet_based.models import LooseEndModel
 '''
 This files tests the transferbility isotonicity on supernets and trained-from-scratch models
 '''
@@ -26,8 +26,8 @@ parser.add_argument('--momentum', type=float, default=0.9, help='momentum')
 parser.add_argument('--weight_decay', type=float, default=3e-4, help='weight decay')
 parser.add_argument('--gpu', type=int, default=4, help='gpu device id')#
 parser.add_argument('--epochs', type=int, default=100, help='number of signle model training epochs')
-parser.add_argument('--init_channels', type=int, default=20, help='number of init channels')
-parser.add_argument('--layers', type=int, default=8, help='total number of layers')
+# parser.add_argument('--init_channels', type=int, default=20, help='number of init channels')
+# parser.add_argument('--layers', type=int, default=8, help='total number of layers')
 parser.add_argument('--save', type=str, default=utils.localtime_as_dirname(), help='experiment name')
 parser.add_argument('--seed', type=int, default=1234, help='random seed')
 parser.add_argument('--prefix', type=str, default='.', help='parent save path')
@@ -77,7 +77,7 @@ def main():
     target_genotype = eval(arch_info['target'][0]['genotype'])
     surrogate_genotpye = eval(arch_info['surrogate'][0]['genotype'])
 
-    target_model = NetworkCIFAR(args.init_channels, CIFAR_CLASSES, args.layers, False, target_genotype)
+    target_model = LooseEndModel(device, CIFAR_CLASSES, target_genotype)
 
     target_model.to(device)
 
@@ -101,12 +101,12 @@ def main():
 
     utils.train_model(target_model, train_queue, device, criterion, target_optimizer, scheduler, args.epochs, logger)
 
-    utils.save_compiled_based(target_model, os.path.join(args.save, 'target_model.pt'))
+    utils.save_supernet_based(target_model, os.path.join(args.save, 'target_model.pt'))
     acc_clean_target, _ = utils.test_clean_accuracy(target_model, test_queue, logger)
 
     logging.info('training Surrogate Model')
 
-    surrogate_model = NetworkCIFAR(args.init_channels, CIFAR_CLASSES, args.layers, False, surrogate_genotpye)
+    surrogate_model = LooseEndModel(device, CIFAR_CLASSES, surrogate_genotpye)
     surrogate_optimizer = torch.optim.SGD(
         surrogate_model.model_parameters(),
         args.learning_rate,
@@ -125,13 +125,13 @@ def main():
 
     utils.train_model(surrogate_model, train_queue, device, criterion, target_optimizer, scheduler, args.epochs, logger)
 
-    utils.save_compiled_based(surrogate_model, os.path.join(args.save, 'surrogate_model.pt'))
+    utils.save_supernet_based(surrogate_model, os.path.join(args.save, 'surrogate_model.pt'))
     acc_clean_surrogate, _ = utils.test_clean_accuracy(surrogate_model, test_queue, logger)
 
 
     logging.info('training Target Baseline Model')
 
-    baseline_model = NetworkCIFAR(args.init_channels, CIFAR_CLASSES, args.layers, False, target_genotype)
+    baseline_model = LooseEndModel(device, CIFAR_CLASSES, target_genotype)
 
     target_baseline_optimizer = torch.optim.SGD(
         baseline_model.model_parameters(),
@@ -150,7 +150,7 @@ def main():
 
     utils.train_model(baseline_model, train_queue, device, criterion, target_optimizer, scheduler, args.epochs, logger)
 
-    utils.save_compiled_based(baseline_model, os.path.join(args.save, 'baseline_model.pt'))
+    utils.save_supernet_based(baseline_model, os.path.join(args.save, 'baseline_model.pt'))
     acc_clean_baseline, _ = utils.test_clean_accuracy(baseline_model, test_queue, logger)
 
     logging.info('training completed')
