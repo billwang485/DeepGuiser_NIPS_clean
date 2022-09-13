@@ -307,7 +307,7 @@ class GCNFlowArchEmbedder(nn.Module):
         # (batch_size, num_cell_groups, num_nodes, op_hid)
         return adjs, adj_op_inds_lst, x
     
-    def make_mask(self, y, concat):
+    def make_mask(self, y, concat): # shape [batchsize, 2, [4,5,-1,-1]]
         mask = torch.zeros(y.shape, device = y.device)
         for step, node in enumerate(concat[:,0,:]):
             for i in range(self._num_nodes - 2):
