@@ -13,7 +13,7 @@ import torch.utils
 import torch.backends.cudnn as cudnn
 import utils
 import genotypes
-from final_test.supernet_based.models import LooseEndModel
+from final_test.compile_based.models import NetworkCIFAR, NetworkImageNet
 '''
 This files tests the transferbility isotonicity on supernets and trained-from-scratch models
 '''
@@ -26,8 +26,8 @@ parser.add_argument('--momentum', type=float, default=0.9, help='momentum')
 parser.add_argument('--weight_decay', type=float, default=3e-4, help='weight decay')
 parser.add_argument('--gpu', type=int, default=4, help='gpu device id')#
 parser.add_argument('--epochs', type=int, default=100, help='number of signle model training epochs')
-# parser.add_argument('--init_channels', type=int, default=20, help='number of init channels')
-# parser.add_argument('--layers', type=int, default=8, help='total number of layers')
+parser.add_argument('--init_channels', type=int, default=20, help='number of init channels')
+parser.add_argument('--layers', type=int, default=8, help='total number of layers')
 parser.add_argument('--save', type=str, default=utils.localtime_as_dirname(), help='experiment name')
 parser.add_argument('--seed', type=int, default=1234, help='random seed')
 parser.add_argument('--prefix', type=str, default='.', help='parent save path')
@@ -37,6 +37,8 @@ parser.add_argument('--arch_info', type=str, default='example.yaml', help='yaml 
 parser.add_argument('--attack_info', type=str, default=os.path.join(STEM_WORK_DIR, 'final_test/attack/pgd1.yaml'), help='yaml file contains information about attack')#
 parser.add_argument('--cifar_classes', type=int, default=10, help='hidden dimension')
 parser.add_argument("--debug", action="store_true", default=False, help="debug mode")
+parser.add_argument("--pretrain", '-p', action="store_true", default=False, help="debug mode")
+parser.add_argument("--pretrained_weights", '-pws', action="store_true", default=False, help="debug mode")
 args = parser.parse_args()
 
 args.report_freq = 50
@@ -77,11 +79,21 @@ def main():
     target_genotype = eval(arch_info['target'][0]['genotype'])
     surrogate_genotpye = eval(arch_info['surrogate'][0]['genotype'])
 
-    target_model = LooseEndModel(device, CIFAR_CLASSES, target_genotype)
+    if args.pretrain:
+        pretrain = True
+        bypass_train = True
+
+    target_model = NetworkCIFAR(args.init_channels, CIFAR_CLASSES, args.layers, False, target_genotype)
+
+    if pretrain:
+        utils.load_compiled_based(target_model, os.path.join(args.pretrained_weights, 'target_model.pt'))
 
     target_model.to(device)
 
-    logging.info('training Target Model')
+    if bypass_train:
+        logging.info('training Target Model bypassed')
+    else:
+        logging.info('training Target Model')
 
     target_optimizer = torch.optim.SGD(
         target_model.model_parameters(),
@@ -98,15 +110,26 @@ def main():
         )
     else:
         assert False, "unsupported scheduler type: %s" % args.scheduler
+    
+    if not bypass_train:
 
-    utils.train_model(target_model, train_queue, device, criterion, target_optimizer, scheduler, args.epochs, logger)
+        utils.train_model(target_model, train_queue, device, criterion, target_optimizer, scheduler, args.epochs, logger)
 
-    utils.save_supernet_based(target_model, os.path.join(args.save, 'target_model.pt'))
+    utils.save_compiled_based(target_model, os.path.join(args.save, 'target_model.pt'))
     acc_clean_target, _ = utils.test_clean_accuracy(target_model, test_queue, logger)
 
-    logging.info('training Surrogate Model')
+    
 
-    surrogate_model = LooseEndModel(device, CIFAR_CLASSES, surrogate_genotpye)
+    surrogate_model = NetworkCIFAR(args.init_channels, CIFAR_CLASSES, args.layers, False, surrogate_genotpye)
+
+    if pretrain:
+        utils.load_compiled_based(surrogate_model, os.path.join(args.pretrained_weights, 'surrogate_model.pt'))
+
+    if bypass_train:
+        logging.info('training Surrogate Model bypassed')
+    else:
+        logging.info('training Surrogate Model')
+
     surrogate_optimizer = torch.optim.SGD(
         surrogate_model.model_parameters(),
         args.learning_rate,
@@ -122,16 +145,23 @@ def main():
         )
     else:
         assert False, "unsupported scheduler type: %s" % args.scheduler
+    
+    if not bypass_train:
 
-    utils.train_model(surrogate_model, train_queue, device, criterion, surrogate_optimizer, scheduler, args.epochs, logger)
+        utils.train_model(surrogate_model, train_queue, device, criterion, target_optimizer, scheduler, args.epochs, logger)
 
-    utils.save_supernet_based(surrogate_model, os.path.join(args.save, 'surrogate_model.pt'))
+    utils.save_compiled_based(surrogate_model, os.path.join(args.save, 'surrogate_model.pt'))
     acc_clean_surrogate, _ = utils.test_clean_accuracy(surrogate_model, test_queue, logger)
 
+    baseline_model = NetworkCIFAR(args.init_channels, CIFAR_CLASSES, args.layers, False, target_genotype)
 
-    logging.info('training Target Baseline Model')
+    if pretrain:
+        utils.load_compiled_based(baseline_model, os.path.join(args.pretrained_weights, 'surrogate_model.pt'))
 
-    baseline_model = LooseEndModel(device, CIFAR_CLASSES, target_genotype)
+    if bypass_train:
+        logging.info('training Baseline Model bypassed')
+    else:
+        logging.info('training Baseline Model')
 
     target_baseline_optimizer = torch.optim.SGD(
         baseline_model.model_parameters(),
@@ -147,10 +177,12 @@ def main():
         )
     else:
         assert False, "unsupported scheduler type: %s" % args.scheduler
+    
+    if not bypass_train:
 
-    utils.train_model(baseline_model, train_queue, device, criterion, target_baseline_optimizer, scheduler, args.epochs, logger)
+        utils.train_model(baseline_model, train_queue, device, criterion, target_optimizer, scheduler, args.epochs, logger)
 
-    utils.save_supernet_based(baseline_model, os.path.join(args.save, 'baseline_model.pt'))
+    utils.save_compiled_based(baseline_model, os.path.join(args.save, 'baseline_model.pt'))
     acc_clean_baseline, _ = utils.test_clean_accuracy(baseline_model, test_queue, logger)
 
     logging.info('training completed')

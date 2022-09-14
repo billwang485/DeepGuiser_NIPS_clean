@@ -253,6 +253,11 @@ def save_supernet_based(model, save_path):
     model_dict = {"type": "supernet_based", "weight": model.state_dict(), "genotype":"{}".format(model._genotype), "C" : model._C, "layers": model._layers, "steps": model._steps, "layers": model._layers, "stem_multiplier": model._stem_multiplier, "loose_end":model._loose_end}
     torch.save(model_dict, save_path)
 
+def load_compiled_based(model, save_path):
+    model_dict = torch.load(save_path, map_location="cpu")
+    model.load_state_dict(model_dict["weight"])
+    # model.arch_transformer.load_state_dict(model_dict["arch_transformer_state_dict"])
+
 def save_predictor_based_disguiser(model, save_path):
     model_dict = {"type": "predictor_based_disguiser", "predictor_state_dict": model.predictor.state_dict(), "arch_transformer_state_dict": model.arch_transformer.state_dict()}
     torch.save(model_dict, save_path)

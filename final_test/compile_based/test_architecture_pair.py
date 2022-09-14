@@ -123,7 +123,7 @@ def main():
     else:
         assert False, "unsupported scheduler type: %s" % args.scheduler
 
-    utils.train_model(surrogate_model, train_queue, device, criterion, target_optimizer, scheduler, args.epochs, logger)
+    utils.train_model(surrogate_model, train_queue, device, criterion, surrogate_optimizer, scheduler, args.epochs, logger)
 
     utils.save_compiled_based(surrogate_model, os.path.join(args.save, 'surrogate_model.pt'))
     acc_clean_surrogate, _ = utils.test_clean_accuracy(surrogate_model, test_queue, logger)
@@ -148,7 +148,7 @@ def main():
     else:
         assert False, "unsupported scheduler type: %s" % args.scheduler
 
-    utils.train_model(baseline_model, train_queue, device, criterion, target_optimizer, scheduler, args.epochs, logger)
+    utils.train_model(baseline_model, train_queue, device, criterion, target_baseline_optimizer, scheduler, args.epochs, logger)
 
     utils.save_compiled_based(baseline_model, os.path.join(args.save, 'baseline_model.pt'))
     acc_clean_baseline, _ = utils.test_clean_accuracy(baseline_model, test_queue, logger)
