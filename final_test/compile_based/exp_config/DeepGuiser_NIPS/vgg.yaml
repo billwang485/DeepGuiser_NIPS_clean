@@ -1,0 +1,6 @@
+target:
+  - genotype: 'genotypes.VGG'
+surrogate:
+  - genotype: 'genotypes.VGG_DeepGuiser_NIPS'
+name:
+  'vgg_deepguiser_nips'

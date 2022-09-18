@@ -5,4 +5,4 @@ op_type: LOOSE_END_PRIMITIVES
 mode: high_fidelity
 dropout: 0.5
 loss_type: mse
-gates_concat: nat_loose_end_concat
+gates_concat: old_predictor

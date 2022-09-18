@@ -1087,6 +1087,161 @@ RA3 = Genotype(
     ],
     reduce_concat=[5],
 )
+
+# NeurIPS genotypes:
+# NAT_D flow
+
+ResBlock_NAT_D_NIPS = Genotype(
+    normal=[
+        ("null", 0, 2),
+        ("sep_conv_3x3", 1, 2),
+        ("sep_conv_3x3", 0, 3),
+        ("conv_5x5", 2, 3),
+        ("null", 0, 4),
+        ("conv_3x3", 3, 4),
+        ("sep_conv_5x5", 2, 5),
+        ("sep_conv_3x3", 4, 5),
+    ],
+    normal_concat=[5],
+    reduce=[
+        ("sep_conv_3x3", 0, 2),
+        ("sep_conv_5x5", 1, 2),
+        ("null", 0, 3),
+        ("conv_5x5", 2, 3),
+        ("conv_3x3", 0, 4),
+        ("conv_5x5", 3, 4),
+        ("sep_conv_3x3", 2, 5),
+        ("sep_conv_5x5", 4, 5),
+    ],
+    reduce_concat=[5],
+)
+
+VGG_NAT_D_NIPS = Genotype(
+    normal=[
+        ("sep_conv_3x3", 0, 2),
+        ("sep_conv_3x3", 1, 2),
+        ("sep_conv_5x5", 0, 3),
+        ("conv_5x5", 2, 3),
+        ("null", 0, 4),
+        ("conv_3x3", 3, 4),
+        ("null", 0, 5),
+        ("sep_conv_5x5", 4, 5),
+    ],
+    normal_concat=[5],
+    reduce=[
+        ("conv_5x5", 0, 2),
+        ("conv_5x5", 1, 2),
+        ("conv_3x3", 0, 3),
+        ("conv_5x5", 2, 3),
+        ("null", 0, 4),
+        ("conv_3x3", 3, 4),
+        ("sep_conv_5x5", 0, 5),
+        ("max_pool_3x3", 4, 5),
+    ],
+    reduce_concat=[5],
+)
+
+Mobilenetv2_NAT_D_NIPS = Genotype(
+    normal=[
+        ("conv_5x5", 0, 2),
+        ("conv_1x1", 1, 2),
+        ("null", 0, 3),
+        ("sep_conv_3x3", 2, 3),
+        ("null", 0, 4),
+        ("conv_3x3", 3, 4),
+        ("sep_conv_5x5", 1, 5),
+        ("sep_conv_5x5", 4, 5),
+    ],
+    normal_concat=[5],
+    reduce=[
+        ("sep_conv_5x5", 0, 2),
+        ("conv_3x3", 1, 2),
+        ("null", 0, 3),
+        ("sep_conv_5x5", 2, 3),
+        ("conv_1x1", 0, 4),
+        ("conv_5x5", 3, 4),
+        ("sep_conv_3x3", 0, 5),
+        ("conv_3x3", 4, 5),
+    ],
+    reduce_concat=[5],
+)
+
+# ResBlock flow
+
+ResBlock_DeepGuiser_NIPS = Genotype(
+    normal=[
+        ("null", 0, 2),
+        ("sep_conv_3x3", 1, 2),
+        ("null", 0, 3),
+        ("conv_5x5", 2, 3),
+        ("null", 0, 4),
+        ("conv_5x5", 3, 4),
+        ("sep_conv_3x3", 2, 5),
+        ("skip_connect", 4, 5),
+    ],
+    normal_concat=[5],
+    reduce=[
+        ("null", 0, 2),
+        ("conv_1x1", 1, 2),
+        ("null", 0, 3),
+        ("conv_3x3", 2, 3),
+        ("null", 0, 4),
+        ("conv_3x3", 3, 4),
+        ("skip_connect", 2, 5),
+        ("skip_connect", 4, 5),
+    ],
+    reduce_concat=[5],
+)
+
+VGG_DeepGuiser_NIPS = Genotype(
+    normal=[
+        ("null", 0, 2),
+        ("sep_conv_3x3", 1, 2),
+        ("null", 0, 3),
+        ("conv_5x5", 2, 3),
+        ("null", 0, 4),
+        ("conv_5x5", 3, 4),
+        ("null", 0, 5),
+        ("skip_connect", 4, 5),
+    ],
+    normal_concat=[5],
+    reduce=[
+        ("null", 0, 2),
+        ("conv_1x1", 1, 2),
+        ("null", 0, 3),
+        ("conv_3x3", 2, 3),
+        ("null", 0, 4),
+        ("conv_3x3", 3, 4),
+        ("null", 0, 5),
+        ("max_pool_3x3", 4, 5),
+    ],
+    reduce_concat=[5],
+)
+
+Mobilenetv2_DeepGuiser_NIPS = Genotype(
+    normal=[
+        ("null", 0, 2),
+        ("conv_1x1", 1, 2),
+        ("null", 0, 3),
+        ("sep_conv_5x5", 2, 3),
+        ("null", 0, 4),
+        ("conv_1x1", 3, 4),
+        ("sep_conv_3x3", 1, 5),
+        ("skip_connect", 4, 5),
+    ],
+    normal_concat=[5],
+    reduce=[
+        ("null", 0, 2),
+        ("conv_1x1", 1, 2),
+        ("null", 0, 3),
+        ("sep_conv_3x3", 2, 3),
+        ("null", 0, 4),
+        ("conv_1x1", 3, 4),
+        ("null", 0, 5),
+        ("skip_connect", 4, 5),
+    ],
+    reduce_concat=[5],
+)
 FullyConcat_Transition_Dict = {
     "conv_5x5": [
         "conv_5x5",
@@ -1126,7 +1281,14 @@ FullyConcat_Transition_Dict = {
         "skip_connect",
         "null",
     ],
-    "sep_conv_3x3": ["sep_conv_3x3", "dil_conv_3x3", "max_pool_3x3", "avg_pool_3x3", "skip_connect", "null"],
+    "sep_conv_3x3": [
+        "sep_conv_3x3",
+        "dil_conv_3x3",
+        "max_pool_3x3",
+        "avg_pool_3x3",
+        "skip_connect",
+        "null",
+    ],
     "dil_conv_5x5": [
         "dil_conv_5x5",
         "dil_conv_3x3",
@@ -1137,10 +1299,30 @@ FullyConcat_Transition_Dict = {
         "skip_connect",
         "null",
     ],
-    "dil_conv_3x3": ["dil_conv_3x3", "max_pool_3x3", "avg_pool_3x3", "skip_connect", "null"],
-    "avg_pool_5x5": ["avg_pool_5x5", "avg_pool_3x3", "max_pool_5x5", "max_pool_3x3", "skip_connect", "null"],
+    "dil_conv_3x3": [
+        "dil_conv_3x3",
+        "max_pool_3x3",
+        "avg_pool_3x3",
+        "skip_connect",
+        "null",
+    ],
+    "avg_pool_5x5": [
+        "avg_pool_5x5",
+        "avg_pool_3x3",
+        "max_pool_5x5",
+        "max_pool_3x3",
+        "skip_connect",
+        "null",
+    ],
     "avg_pool_3x3": ["avg_pool_3x3", "max_pool_3x3", "skip_connect", "null"],
-    "max_pool_5x5": ["max_pool_5x5", "max_pool_3x3", "avg_pool_5x5", "avg_pool_3x3", "skip_connect", "null"],
+    "max_pool_5x5": [
+        "max_pool_5x5",
+        "max_pool_3x3",
+        "avg_pool_5x5",
+        "avg_pool_3x3",
+        "skip_connect",
+        "null",
+    ],
     "max_pool_3x3": ["max_pool_3x3", "avg_pool_3x3", "skip_connect", "null"],
     "skip_connect": ["skip_connect", "null"],
     "null": ["skip_connect", "null"],
@@ -1152,8 +1334,28 @@ LooseEnd_Transition_Dict = {
     "conv_1x1": ["conv_1x1", "conv_3x3", "conv_5x5"],
     "sep_conv_5x5": ["sep_conv_5x5"],
     "sep_conv_3x3": ["sep_conv_3x3", "sep_conv_5x5"],
-    "avg_pool_3x3": ["avg_pool_3x3", "sep_conv_3x3", "sep_conv_5x5", "conv_3x3", "conv_5x5"],
+    "avg_pool_3x3": [
+        "avg_pool_3x3",
+        "sep_conv_3x3",
+        "sep_conv_5x5",
+        "conv_3x3",
+        "conv_5x5",
+    ],
     "max_pool_3x3": ["max_pool_3x3"],
-    "skip_connect": ["skip_connect", "sep_conv_3x3", "sep_conv_5x5", "conv_3x3", "conv_5x5", "conv_1x1"],
-    "null": ["sep_conv_3x3", "sep_conv_5x5", "conv_3x3", "conv_5x5", "conv_1x1", "null"],
+    "skip_connect": [
+        "skip_connect",
+        "sep_conv_3x3",
+        "sep_conv_5x5",
+        "conv_3x3",
+        "conv_5x5",
+        "conv_1x1",
+    ],
+    "null": [
+        "sep_conv_3x3",
+        "sep_conv_5x5",
+        "conv_3x3",
+        "conv_5x5",
+        "conv_1x1",
+        "null",
+    ],
 }

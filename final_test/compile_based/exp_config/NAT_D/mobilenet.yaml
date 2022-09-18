@@ -1,0 +1,6 @@
+target:
+  - genotype: 'genotypes.Mobilenetv2'
+surrogate:
+  - genotype: 'genotypes.Mobilenetv2_NAT_D_NIPS'
+name:
+  'mobilenet_nat_d_nips'

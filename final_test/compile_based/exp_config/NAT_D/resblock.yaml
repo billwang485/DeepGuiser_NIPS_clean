@@ -1,0 +1,6 @@
+target:
+  - genotype: 'genotypes.ResBlock'
+surrogate:
+  - genotype: 'genotypes.ResBlock_NAT_D_NIPS'
+name:
+  'resblock_nat_d_nips'

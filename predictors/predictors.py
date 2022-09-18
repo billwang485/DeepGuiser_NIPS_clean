@@ -83,7 +83,11 @@ class VanillaGatesPredictor(nn.Module):
         # x = x1 - x2
         x = torch.cat((x1, x2), 1)
         score = self.fcs(x)
-        score = torch.tanh(score)
+        if self.training:
+            # score = torch.tanh(score) + 0.1 * (torch.rand(score.shape, device=score.device) - 0.5)
+            score = torch.tanh(score) 
+        else:
+            score = torch.tanh(score)
         return score
 
     def step_mse(self, data_point, label):
@@ -187,7 +191,13 @@ class VanillaGatesPredictor(nn.Module):
         return avg_loss.avg, patk, kendalltau_
 
     def _mse_loss(self, scores, labels):
-        return F.mse_loss(scores.squeeze(), scores.new(labels.float()))
+        # print(scores.shape)
+        # print(labels.shape)
+        zero_ = labels.new([0.0])
+        zero_.requires_grad_()
+        margin = 0.03 ** 2
+        return torch.mean(torch.max(zero_, (scores.squeeze() - labels.float()) ** 2 - margin))
+        # return F.mse_loss(scores.squeeze(), scores.new(labels.float()))
     
     def set_optimizer(self, optimizer):
         self.optimizer = optimizer

@@ -1,0 +1,6 @@
+target:
+  - genotype: 'genotypes.VGG'
+surrogate:
+  - genotype: 'genotypes.VGG_NAT_D_NIPS'
+name:
+  'vgg_nat_d_nips'

@@ -40,6 +40,25 @@ parser.add_argument("--debug", action="store_true", default=False, help="debug m
 args = parser.parse_args()
 
 args.report_freq = 50
+
+def get_dir_name(args):
+
+    import time
+    import re
+
+    localtime = time.asctime(time.localtime(time.time()))
+    x = re.split(r"[\s,(:)]", localtime)
+    default_EXP = " ".join(x[1:-1])
+
+    assert os.path.exists(args.arch_info)
+
+    arch_info = utils.load_yaml(args.arch_info)
+
+    prefix = "{}_".format(arch_info["name"])
+    default_EXP = prefix + default_EXP
+    return default_EXP
+
+args.save = get_dir_name(args)
 utils.preprocess_exp_dir(args)
 utils.create_exp_dir(args.save, scripts_to_save=glob.glob('*.py')+glob.glob('*.sh')+glob.glob('*.yml'))
 
@@ -74,81 +93,120 @@ def main():
 
     # print(arch_info['target'][0])
 
+    if arch_info["target"][0]["pretrained_weight"] != None and arch_info["surrogate"][0]["pretrained_weight"] != None and arch_info["target"][0]["pretrained_baseline_weight"] != None:
+        target_weight_path = os.path.join(STEM_WORK_DIR, arch_info["target"][0]["pretrained_weight"])
+        baseline_weight_path = os.path.join(STEM_WORK_DIR, arch_info["target"][0]["pretrained_baseline_weight"])
+        surrogate_weight_path = os.path.join(STEM_WORK_DIR, arch_info["surrogate"][0]["pretrained_weight"])
+        
+        assert os.path.exists(target_weight_path)
+        assert os.path.exists(baseline_weight_path)
+        assert os.path.exists(surrogate_weight_path)
+        bypass_training = True
+        load_pretrained_weight = True
+
     target_genotype = eval(arch_info['target'][0]['genotype'])
     surrogate_genotpye = eval(arch_info['surrogate'][0]['genotype'])
 
     target_model = NetworkCIFAR(args.init_channels, CIFAR_CLASSES, args.layers, False, target_genotype)
 
+    
+
+    if load_pretrained_weight:
+        utils.load_compiled_based(target_model, target_weight_path)
+    
     target_model.to(device)
-
-    logging.info('training Target Model')
-
-    target_optimizer = torch.optim.SGD(
-        target_model.model_parameters(),
-        args.learning_rate,
-        momentum=args.momentum,
-        weight_decay=args.weight_decay
-    )
-
-    target_model.to(device)
-
-    if args.scheduler == "naive_cosine":
-        scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(
-        target_optimizer, float(args.epochs), eta_min=args.learning_rate_min
-        )
+    
+    if bypass_training:
+        logging.info("Bypassing Target Model Training")
     else:
-        assert False, "unsupported scheduler type: %s" % args.scheduler
 
-    utils.train_model(target_model, train_queue, device, criterion, target_optimizer, scheduler, args.epochs, logger)
+        logging.info('training Target Model')
+
+        target_optimizer = torch.optim.SGD(
+            target_model.model_parameters(),
+            args.learning_rate,
+            momentum=args.momentum,
+            weight_decay=args.weight_decay
+        )
+
+        target_model.to(device)
+
+        if args.scheduler == "naive_cosine":
+            scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(
+            target_optimizer, float(args.epochs), eta_min=args.learning_rate_min
+            )
+        else:
+            assert False, "unsupported scheduler type: %s" % args.scheduler
+
+        utils.train_model(target_model, train_queue, device, criterion, target_optimizer, scheduler, args.epochs, logger)
 
     utils.save_compiled_based(target_model, os.path.join(args.save, 'target_model.pt'))
     acc_clean_target, _ = utils.test_clean_accuracy(target_model, test_queue, logger)
 
-    logging.info('training Surrogate Model')
+    
 
     surrogate_model = NetworkCIFAR(args.init_channels, CIFAR_CLASSES, args.layers, False, surrogate_genotpye)
-    surrogate_optimizer = torch.optim.SGD(
-        surrogate_model.model_parameters(),
-        args.learning_rate,
-        momentum=args.momentum,
-        weight_decay=args.weight_decay
-    )
+
+    if load_pretrained_weight:
+        utils.load_compiled_based(surrogate_model, surrogate_weight_path)
+    
+    
 
     surrogate_model.to(device)
 
-    if args.scheduler == "naive_cosine":
-        scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(
-        surrogate_optimizer, float(args.epochs), eta_min=args.learning_rate_min
-        )
+    if bypass_training:
+        logging.info("Bypassing Surrogate Model Training")
     else:
-        assert False, "unsupported scheduler type: %s" % args.scheduler
+        logging.info('training Surrogate Model')
 
-    utils.train_model(surrogate_model, train_queue, device, criterion, surrogate_optimizer, scheduler, args.epochs, logger)
+        surrogate_optimizer = torch.optim.SGD(
+            surrogate_model.model_parameters(),
+            args.learning_rate,
+            momentum=args.momentum,
+            weight_decay=args.weight_decay
+        )
+
+        if args.scheduler == "naive_cosine":
+            scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(
+            surrogate_optimizer, float(args.epochs), eta_min=args.learning_rate_min
+            )
+        else:
+            assert False, "unsupported scheduler type: %s" % args.scheduler
+
+        utils.train_model(surrogate_model, train_queue, device, criterion, surrogate_optimizer, scheduler, args.epochs, logger)
 
     utils.save_compiled_based(surrogate_model, os.path.join(args.save, 'surrogate_model.pt'))
     acc_clean_surrogate, _ = utils.test_clean_accuracy(surrogate_model, test_queue, logger)
 
 
-    logging.info('training Target Baseline Model')
-
     baseline_model = NetworkCIFAR(args.init_channels, CIFAR_CLASSES, args.layers, False, target_genotype)
 
-    target_baseline_optimizer = torch.optim.SGD(
-        baseline_model.model_parameters(),
-        args.learning_rate,
-        momentum=args.momentum,
-        weight_decay=args.weight_decay
-    )
+    if load_pretrained_weight:
+        utils.load_compiled_based(baseline_model, baseline_weight_path)
+
+    
     baseline_model.to(device)
 
-    if args.scheduler == "naive_cosine":
-        scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(
-        target_baseline_optimizer, float(args.epochs), eta_min=args.learning_rate_min
-        )
+    if bypass_training:
+        logging.info("Bypassing Surrogate Model Training")
     else:
-        assert False, "unsupported scheduler type: %s" % args.scheduler
+        logging.info('training Target Baseline Model')
 
-    utils.train_model(baseline_model, train_queue, device, criterion, target_baseline_optimizer, scheduler, args.epochs, logger)
+        target_baseline_optimizer = torch.optim.SGD(
+            baseline_model.model_parameters(),
+            args.learning_rate,
+            momentum=args.momentum,
+            weight_decay=args.weight_decay
+        )
+
+        if args.scheduler == "naive_cosine":
+            scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(
+            target_baseline_optimizer, float(args.epochs), eta_min=args.learning_rate_min
+            )
+        else:
+            assert False, "unsupported scheduler type: %s" % args.scheduler
+
+        utils.train_model(baseline_model, train_queue, device, criterion, target_baseline_optimizer, scheduler, args.epochs, logger)
 
     utils.save_compiled_based(baseline_model, os.path.join(args.save, 'baseline_model.pt'))
     acc_clean_baseline, _ = utils.test_clean_accuracy(baseline_model, test_queue, logger)

@@ -76,6 +76,10 @@ class LooseEndModel(nn.Module):
         self.pgd_step = 10
         self.tiny_imagenet = False
     
+    def set_genotype(self, genotype):
+        self._genotype = genotype
+        self._arch_normal, self._arch_reduce = utils.genotype_to_arch(self._genotype)
+    
     def model_parameters(self):
         for k, v in self.named_parameters():
             if 'arch' not in k:

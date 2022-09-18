@@ -1,4 +1,9 @@
 target:
   - genotype: 'genotypes.ResBlock'
+    pretrained_weight: None
+    pretrained_baseline_weight: None
 surrogate:
   - genotype: 'genotypes.HANAG_ResBlock'
+    pretrained_weight: None
+name:
+  'example'

@@ -1,0 +1,6 @@
+target:
+  - genotype: 'genotypes.ResBlock'
+surrogate:
+  - genotype: 'genotypes.ResBlock_DeepGuiser_NIPS'
+name:
+  'resblock_deepguiser_nips'

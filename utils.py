@@ -258,6 +258,14 @@ def load_compiled_based(model, save_path):
     model.load_state_dict(model_dict["weight"])
     # model.arch_transformer.load_state_dict(model_dict["arch_transformer_state_dict"])
 
+def load_supernet_based(model, save_path):
+    model_dict = torch.load(save_path, map_location='cpu')
+    if not "type" in model_dict.keys():
+        model.load_state_dict()
+    else:
+        assert model_dict["type"] == "supernet_based"
+        model.load_state_dict(model_dict["weight"])
+
 def save_predictor_based_disguiser(model, save_path):
     model_dict = {"type": "predictor_based_disguiser", "predictor_state_dict": model.predictor.state_dict(), "arch_transformer_state_dict": model.arch_transformer.state_dict()}
     torch.save(model_dict, save_path)
