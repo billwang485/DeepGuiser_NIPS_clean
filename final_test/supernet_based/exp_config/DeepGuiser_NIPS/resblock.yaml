@@ -1,0 +1,12 @@
+target:
+  - genotype: 'genotypes.ResBlock'
+    # pretrained_weight: "final_test/compile_based/log/resblock_deepguiser_nips_Sep 18 16 56 50/target_model.pt"
+    pretrained_weight: None
+    # pretrained_baseline_weight: "final_test/compile_based/log/resblock_deepguiser_nips_Sep 18 16 56 50/baseline_model.pt"
+    pretrained_baseline_weight: None
+surrogate:
+  - genotype: 'genotypes.ResBlock_DeepGuiser_NIPS'
+    pretrained_weight: None
+    # pretrained_weight: "final_test/compile_based/log/resblock_deepguiser_nips_Sep 18 16 56 50/surrogate_model.pt"
+name:
+  'resblock_deepguiser_nips'

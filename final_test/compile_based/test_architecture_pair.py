@@ -14,6 +14,7 @@ import torch.backends.cudnn as cudnn
 import utils
 import genotypes
 from final_test.compile_based.models import NetworkCIFAR, NetworkImageNet
+import attacks
 '''
 This files tests the transferbility isotonicity on supernets and trained-from-scratch models
 '''
@@ -54,7 +55,9 @@ def get_dir_name(args):
 
     arch_info = utils.load_yaml(args.arch_info)
 
-    prefix = "{}_".format(arch_info["name"])
+    attack_info = utils.load_yaml(args.attack_info)
+
+    prefix = "{}_seed_{}_".format(arch_info["name"], args.seed)
     default_EXP = prefix + default_EXP
     return default_EXP
 
@@ -93,7 +96,7 @@ def main():
 
     # print(arch_info['target'][0])
 
-    if arch_info["target"][0]["pretrained_weight"] != None and arch_info["surrogate"][0]["pretrained_weight"] != None and arch_info["target"][0]["pretrained_baseline_weight"] != None:
+    if arch_info["target"][0]["pretrained_weight"] != "None" and arch_info["surrogate"][0]["pretrained_weight"] != "None" and arch_info["target"][0]["pretrained_baseline_weight"] != "None":
         target_weight_path = os.path.join(STEM_WORK_DIR, arch_info["target"][0]["pretrained_weight"])
         baseline_weight_path = os.path.join(STEM_WORK_DIR, arch_info["target"][0]["pretrained_baseline_weight"])
         surrogate_weight_path = os.path.join(STEM_WORK_DIR, arch_info["surrogate"][0]["pretrained_weight"])
@@ -103,6 +106,9 @@ def main():
         assert os.path.exists(surrogate_weight_path)
         bypass_training = True
         load_pretrained_weight = True
+    else:
+        bypass_training = False
+        load_pretrained_weight = False
 
     target_genotype = eval(arch_info['target'][0]['genotype'])
     surrogate_genotpye = eval(arch_info['surrogate'][0]['genotype'])
@@ -217,7 +223,8 @@ def main():
 
     attack_info = utils.load_yaml(args.attack_info)
 
-    acc_adv_baseline, acc_adv_surrogate = utils.compiled_pgd_test(target_model, surrogate_model, baseline_model, test_queue, attack_info, logger)
+    # acc_adv_baseline, acc_adv_surrogate = utils.compiled_pgd_test(target_model, surrogate_model, baseline_model, test_queue, attack_info, logger)
+    acc_adv_baseline, acc_adv_surrogate = attacks.adversarial_test(target_model, surrogate_model, baseline_model, test_queue, attack_info, logger)
     save_dict = {}
     save_dict['target_genotype'] = '{}'.format(target_genotype)
     save_dict['surrogate_arch'] = '{}'.format(surrogate_genotpye)

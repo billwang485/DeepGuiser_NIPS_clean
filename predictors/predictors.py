@@ -5,7 +5,7 @@ from basic_parts.basic_gates_models import GCNFlowArchEmbedder
 from scipy.stats import kendalltau
 from pygcn.layers import GraphConvolution
 
-
+from predictors.predictor_dataset import real_std, real_mean, supernet_mean, supernet_std
 class VanillaGatesPredictor(nn.Module):
 
     NAME = "predictor"
@@ -16,18 +16,19 @@ class VanillaGatesPredictor(nn.Module):
         self._op_type = op_type
         (self.transform2gates, self.transform2nat, self.gates_op_list) = utils.primitives_translation(self._op_type)
         self.arch_embedder = GCNFlowArchEmbedder(self.gates_op_list, node_dim=32, op_dim=32, use_bn=False, hidden_dim=32, gcn_out_dims=[64] * 4, gcn_kwargs={"residual_only": 2}, mode = concat)
+        # self.arch_embedder1 = GCNFlowArchEmbedder(self.gates_op_list, node_dim=32, op_dim=32, use_bn=False, hidden_dim=32, gcn_out_dims=[64] * 4, gcn_kwargs={"residual_only": 2}, mode = concat)
 
         
 
         if concat == "nat_loose_end_concat" or concat == "fully_concat":
             self.fcs = nn.Sequential(
             nn.Dropout(p=dropout),
-            nn.Linear(1024, 512, bias=False),
+            nn.Linear(1024, 256, bias=False),
             nn.ReLU(inplace=False),
-            nn.BatchNorm1d(512),
+            nn.BatchNorm1d(256),
             # nn.Dropout(p=dropout),
             
-            nn.Linear(512, 64, bias=False),
+            nn.Linear(256, 64, bias=False),
             nn.ReLU(inplace=False),
             
             nn.BatchNorm1d(64),
@@ -40,10 +41,34 @@ class VanillaGatesPredictor(nn.Module):
             nn.ReLU(inplace=False),
             nn.Dropout(p=dropout),
             nn.BatchNorm1d(64),
+            # nn.ReLU(inplace=False),
+            # nn.Dropout(p=dropout),
+            # nn.BatchNorm1d(64),
             
             nn.Linear(64, 1, bias=False),
             )
-
+            # self.fcs1 = nn.Sequential(
+            # nn.Linear(256, 64, bias=False),
+            # nn.ReLU(inplace=False),
+            # nn.Dropout(p=dropout),
+            # nn.BatchNorm1d(64),
+            # # nn.ReLU(inplace=False),
+            # # nn.Dropout(p=dropout),
+            # # nn.BatchNorm1d(64),
+            
+            # nn.Linear(64, 1, bias=False),
+            # )
+            self.fcs1 = nn.Sequential(
+            nn.Linear(128, 64, bias=False),
+            nn.ReLU(inplace=False),
+            nn.Dropout(p=dropout),
+            nn.BatchNorm1d(64),
+            # nn.ReLU(inplace=False),
+            # nn.Dropout(p=dropout),
+            # nn.BatchNorm1d(64),
+            
+            nn.Linear(64, 1, bias=False),
+            )
         self._mode = mode
 
         # if self._mode == "low_fidelity":
@@ -63,6 +88,7 @@ class VanillaGatesPredictor(nn.Module):
         self.compare_margin = 0.01
         self.max_grad_norm = 5.0
         self.margin_l2 = False
+        self.multi_task = False
 
     def forward(self, target_arch, surrogate_arch, gates_input=False, target_concat = None, surrogate_concat = None):
         if not gates_input:
@@ -83,19 +109,33 @@ class VanillaGatesPredictor(nn.Module):
         # x = x1 - x2
         x = torch.cat((x1, x2), 1)
         score = self.fcs(x)
-        if self.training:
-            # score = torch.tanh(score) + 0.1 * (torch.rand(score.shape, device=score.device) - 0.5)
-            score = torch.tanh(score) 
+        # score1 = self.fcs1(x)
+        score1 = self.fcs1(x1)
+        # if self.training:
+        #     # score = torch.tanh(score) + 0.1 * (torch.rand(score.shape, device=score.device) - 0.5)
+        #     score = torch.tanh(score) 
+        # else:
+        #     score = torch.tanh(score)
+        score = torch.sigmoid(score) * 1
+        # score1 = torch.tanh(score1) * 1
+        if self.multi_task:
+            return score, score1
         else:
-            score = torch.tanh(score)
-        return score
+            return score
 
     def step_mse(self, data_point, label):
         label = label.to(self._device)
         target_arch = data_point["target_arch"]
         surrogate_arch = data_point["surrogate_arch"]
-        scores = self.forward(target_arch, surrogate_arch, target_concat=data_point["target_concat"], surrogate_concat=data_point["surrogate_concat"])
-        loss = self._mse_loss(scores, label) * 100
+        self.multi_task = True
+        if not self.multi_task:
+            scores = self.forward(target_arch, surrogate_arch, target_concat=data_point["target_concat"], surrogate_concat=data_point["surrogate_concat"])
+            loss = self._mse_loss(scores, label) * 100
+        else:
+            scores, scores1 = self.forward(target_arch, surrogate_arch, target_concat=data_point["target_concat"], surrogate_concat=data_point["surrogate_concat"])
+        # self.multi_task = False
+        loss = self._mse_loss(scores, label) * 100 + \
+            self._mse_loss(scores1, data_point["acc_adv_baseline"].cuda()) * 100 
         return loss, scores
 
     def step_compare(self, data_point, label):
@@ -125,6 +165,11 @@ class VanillaGatesPredictor(nn.Module):
         else:
             assert 0
         self.update_step(loss)
+        # if "acc_adv_supernet" in data_point.keys():
+        #     scores_ = (scores.squeeze().cpu() + (data_point["acc_adv_supernet"] - supernet_mean) / supernet_std) * real_std + real_mean
+        #     # scores_ = (scores.squeeze().cpu() + data_point["acc_adv_supernet"] * real_mean / supernet_mean)
+        #     kendall = kendalltau(data_point["acc_adv_surrogate"].squeeze().tolist(), scores_.squeeze().tolist()).correlation
+        # else:
         kendall = kendalltau(label.squeeze().tolist(), scores.squeeze().tolist()).correlation
         return loss, scores, kendall
 
@@ -161,9 +206,16 @@ class VanillaGatesPredictor(nn.Module):
                 loss = loss2 + 0.2 * loss1
             else:
                 assert 0
-            data_point = utils.data_point_2_cpu(data_point)
+            # data_point = utils.data_point_2_cpu(data_point)
             label = data_point["label"]
             torch.cuda.empty_cache()
+            # if "acc_adv_supernet" in data_point.keys():
+            #     score = (score.squeeze().cpu() + (data_point["acc_adv_supernet"] - supernet_mean) / supernet_std) * real_std + real_mean
+            #     # score = (score.squeeze().cpu() + data_point["acc_adv_supernet"] * real_mean / supernet_mean)
+            #     label = data_point["acc_adv_surrogate"]
+            # else:
+            #     print(data_point.keys())
+            #     assert 0
             scores.extend(score.squeeze().tolist())
             reals.extend(label.squeeze().tolist())
             avg_loss.update(loss.item(), 1)
@@ -179,7 +231,7 @@ class VanillaGatesPredictor(nn.Module):
         else:
             tmp = 10
             patk = success_count / count
-
+            
         kendalltau_, _ = kendalltau(reals, scores)
         logger.info("Testing Predictors on %d Transforms with %s Mode", len(scores), self._mode)
         logger.info(
@@ -193,11 +245,11 @@ class VanillaGatesPredictor(nn.Module):
     def _mse_loss(self, scores, labels):
         # print(scores.shape)
         # print(labels.shape)
-        zero_ = labels.new([0.0])
-        zero_.requires_grad_()
-        margin = 0.03 ** 2
-        return torch.mean(torch.max(zero_, (scores.squeeze() - labels.float()) ** 2 - margin))
-        # return F.mse_loss(scores.squeeze(), scores.new(labels.float()))
+        # zero_ = labels.new([0.0])
+        # zero_.requires_grad_()
+        # margin = 0.03 ** 2
+        # return torch.mean(torch.max(zero_, (scores.squeeze() - labels.float()) ** 2 - margin))
+        return F.mse_loss(scores.squeeze(), scores.new(labels.float()))
     
     def set_optimizer(self, optimizer):
         self.optimizer = optimizer

@@ -16,7 +16,7 @@ class LooseEndModel(nn.Module):
         steps = 4,
         stem_multiplier = 3,
         C = 20,
-        loose_end = False
+        loose_end = True
     ):
         super(LooseEndModel, self).__init__()
         self._C = C # Chenyu: I don't know what c means but I just keep it here
@@ -42,8 +42,10 @@ class LooseEndModel(nn.Module):
         self.cells = nn.ModuleList()
         reduction_prev = False
         _concat = None
-        reduce_concat = None
-        normal_concat = None
+        # reduce_concat = None
+        reduce_concat = [5]
+        normal_concat = [5]
+        # normal_concat = None
         for i in range(layers):
             if i in [layers // 3, 2 * layers // 3]:
                 C_curr *= 2

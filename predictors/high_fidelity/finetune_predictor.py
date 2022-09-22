@@ -76,12 +76,12 @@ def main():
     args.load_dataset = False
 
     if args.load_dataset == False:
-        train_data = PredictorDataSet(args.train_data_path)
+        train_data = PredictorDataSet(args.train_data_path, mode = predictor_config["dataset_mode"])
     else:
         assert 0
 
     if args.load_dataset == False:
-        test_data = PredictorDataSet(args.test_data_path)
+        test_data = PredictorDataSet(args.test_data_path, mode = predictor_config["dataset_mode"])
     else:
         assert 0
 

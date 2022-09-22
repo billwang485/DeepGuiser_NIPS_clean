@@ -1,0 +1,1194 @@
+- adversarial_accuracy:
+    baseline: 0.33281251415610313
+    surrogate: 0.44062500819563866
+  surrogate_genotype: Genotype(normal=[('sep_conv_5x5', 1, 2), ('conv_1x1', 1, 2),
+    ('conv_3x3', 0, 3), ('conv_1x1', 2, 3), ('sep_conv_5x5', 2, 4), ('max_pool_3x3',
+    3, 4), ('conv_5x5', 2, 5), ('conv_3x3', 4, 5)], normal_concat=[5], reduce=[('max_pool_3x3',
+    1, 2), ('skip_connect', 0, 2), ('conv_5x5', 2, 3), ('conv_5x5', 0, 3), ('sep_conv_5x5',
+    0, 4), ('conv_3x3', 1, 4), ('sep_conv_5x5', 3, 5), ('conv_5x5', 1, 5)], reduce_concat=[4,
+    5])
+  target_genotype: Genotype(normal=[('sep_conv_3x3', 0, 2), ('sep_conv_5x5', 1, 2),
+    ('conv_1x1', 2, 3), ('sep_conv_3x3', 0, 3), ('avg_pool_3x3', 0, 4), ('avg_pool_3x3',
+    2, 4), ('conv_1x1', 4, 5), ('sep_conv_5x5', 4, 5)], normal_concat=[3, 5], reduce=[('sep_conv_5x5',
+    1, 2), ('sep_conv_5x5', 0, 2), ('conv_3x3', 2, 3), ('skip_connect', 2, 3), ('sep_conv_3x3',
+    2, 4), ('sep_conv_3x3', 3, 4), ('sep_conv_5x5', 3, 5), ('conv_5x5', 4, 5)], reduce_concat=[5])
+- adversarial_accuracy:
+    baseline: 0.32968749571591616
+    surrogate: 0.3281249897554517
+  surrogate_genotype: Genotype(normal=[('max_pool_3x3', 1, 2), ('max_pool_3x3', 1,
+    2), ('conv_3x3', 2, 3), ('skip_connect', 1, 3), ('conv_3x3', 3, 4), ('conv_1x1',
+    1, 4), ('conv_5x5', 0, 5), ('conv_3x3', 1, 5)], normal_concat=[4, 5], reduce=[('sep_conv_3x3',
+    1, 2), ('conv_5x5', 1, 2), ('avg_pool_3x3', 0, 3), ('conv_5x5', 1, 3), ('conv_3x3',
+    2, 4), ('conv_3x3', 0, 4), ('conv_3x3', 0, 5), ('conv_5x5', 0, 5)], reduce_concat=[3,
+    4, 5])
+  target_genotype: Genotype(normal=[('sep_conv_3x3', 0, 2), ('sep_conv_5x5', 1, 2),
+    ('conv_1x1', 2, 3), ('sep_conv_3x3', 0, 3), ('avg_pool_3x3', 0, 4), ('avg_pool_3x3',
+    2, 4), ('conv_1x1', 4, 5), ('sep_conv_5x5', 4, 5)], normal_concat=[3, 5], reduce=[('sep_conv_5x5',
+    1, 2), ('sep_conv_5x5', 0, 2), ('conv_3x3', 2, 3), ('skip_connect', 2, 3), ('sep_conv_3x3',
+    2, 4), ('sep_conv_3x3', 3, 4), ('sep_conv_5x5', 3, 5), ('conv_5x5', 4, 5)], reduce_concat=[5])
+- adversarial_accuracy:
+    baseline: 0.3343749828636646
+    surrogate: 0.32500000670552254
+  surrogate_genotype: Genotype(normal=[('sep_conv_5x5', 0, 2), ('sep_conv_3x3', 1,
+    2), ('conv_5x5', 1, 3), ('sep_conv_5x5', 0, 3), ('sep_conv_5x5', 0, 4), ('sep_conv_3x3',
+    0, 4), ('sep_conv_3x3', 1, 5), ('conv_5x5', 4, 5)], normal_concat=[2, 3, 5], reduce=[('conv_5x5',
+    1, 2), ('conv_5x5', 1, 2), ('sep_conv_5x5', 1, 3), ('conv_5x5', 2, 3), ('conv_5x5',
+    1, 4), ('sep_conv_3x3', 0, 4), ('sep_conv_5x5', 2, 5), ('conv_1x1', 0, 5)], reduce_concat=[3,
+    4, 5])
+  target_genotype: Genotype(normal=[('sep_conv_3x3', 0, 2), ('sep_conv_5x5', 1, 2),
+    ('conv_1x1', 2, 3), ('sep_conv_3x3', 0, 3), ('avg_pool_3x3', 0, 4), ('avg_pool_3x3',
+    2, 4), ('conv_1x1', 4, 5), ('sep_conv_5x5', 4, 5)], normal_concat=[3, 5], reduce=[('sep_conv_5x5',
+    1, 2), ('sep_conv_5x5', 0, 2), ('conv_3x3', 2, 3), ('skip_connect', 2, 3), ('sep_conv_3x3',
+    2, 4), ('sep_conv_3x3', 3, 4), ('sep_conv_5x5', 3, 5), ('conv_5x5', 4, 5)], reduce_concat=[5])
+- adversarial_accuracy:
+    baseline: 0.3296875115483999
+    surrogate: 0.4078125115483999
+  surrogate_genotype: Genotype(normal=[('conv_3x3', 1, 2), ('sep_conv_3x3', 0, 2),
+    ('max_pool_3x3', 2, 3), ('conv_5x5', 1, 3), ('conv_5x5', 0, 4), ('conv_5x5', 3,
+    4), ('conv_5x5', 4, 5), ('sep_conv_5x5', 2, 5)], normal_concat=[5], reduce=[('conv_3x3',
+    1, 2), ('conv_5x5', 0, 2), ('conv_3x3', 2, 3), ('sep_conv_3x3', 0, 3), ('max_pool_3x3',
+    0, 4), ('conv_1x1', 2, 4), ('sep_conv_3x3', 0, 5), ('max_pool_3x3', 4, 5)], reduce_concat=[3,
+    5])
+  target_genotype: Genotype(normal=[('sep_conv_3x3', 0, 2), ('sep_conv_5x5', 1, 2),
+    ('conv_1x1', 2, 3), ('sep_conv_3x3', 0, 3), ('avg_pool_3x3', 0, 4), ('avg_pool_3x3',
+    2, 4), ('conv_1x1', 4, 5), ('sep_conv_5x5', 4, 5)], normal_concat=[3, 5], reduce=[('sep_conv_5x5',
+    1, 2), ('sep_conv_5x5', 0, 2), ('conv_3x3', 2, 3), ('skip_connect', 2, 3), ('sep_conv_3x3',
+    2, 4), ('sep_conv_3x3', 3, 4), ('sep_conv_5x5', 3, 5), ('conv_5x5', 4, 5)], reduce_concat=[5])
+- adversarial_accuracy:
+    baseline: 0.3328125085681677
+    surrogate: 0.3718750085681677
+  surrogate_genotype: Genotype(normal=[('conv_5x5', 0, 2), ('conv_3x3', 0, 2), ('conv_5x5',
+    1, 3), ('sep_conv_5x5', 0, 3), ('conv_5x5', 3, 4), ('conv_5x5', 2, 4), ('sep_conv_3x3',
+    3, 5), ('conv_5x5', 4, 5)], normal_concat=[5], reduce=[('conv_5x5', 1, 2), ('conv_3x3',
+    1, 2), ('conv_3x3', 2, 3), ('conv_5x5', 1, 3), ('max_pool_3x3', 3, 4), ('conv_3x3',
+    0, 4), ('sep_conv_5x5', 4, 5), ('conv_1x1', 2, 5)], reduce_concat=[5])
+  target_genotype: Genotype(normal=[('sep_conv_3x3', 0, 2), ('sep_conv_5x5', 1, 2),
+    ('conv_1x1', 2, 3), ('sep_conv_3x3', 0, 3), ('avg_pool_3x3', 0, 4), ('avg_pool_3x3',
+    2, 4), ('conv_1x1', 4, 5), ('sep_conv_5x5', 4, 5)], normal_concat=[3, 5], reduce=[('sep_conv_5x5',
+    1, 2), ('sep_conv_5x5', 0, 2), ('conv_3x3', 2, 3), ('skip_connect', 2, 3), ('sep_conv_3x3',
+    2, 4), ('sep_conv_3x3', 3, 4), ('sep_conv_5x5', 3, 5), ('conv_5x5', 4, 5)], reduce_concat=[5])
+- adversarial_accuracy:
+    baseline: 0.3406250011175871
+    surrogate: 0.3796875011175871
+  surrogate_genotype: Genotype(normal=[('sep_conv_3x3', 0, 2), ('conv_1x1', 0, 2),
+    ('sep_conv_3x3', 0, 3), ('sep_conv_5x5', 2, 3), ('sep_conv_3x3', 2, 4), ('max_pool_3x3',
+    1, 4), ('conv_5x5', 3, 5), ('sep_conv_3x3', 0, 5)], normal_concat=[4, 5], reduce=[('sep_conv_5x5',
+    0, 2), ('conv_1x1', 0, 2), ('conv_5x5', 2, 3), ('max_pool_3x3', 2, 3), ('sep_conv_5x5',
+    2, 4), ('conv_3x3', 2, 4), ('avg_pool_3x3', 4, 5), ('sep_conv_3x3', 3, 5)], reduce_concat=[5])
+  target_genotype: Genotype(normal=[('sep_conv_3x3', 0, 2), ('sep_conv_5x5', 1, 2),
+    ('conv_1x1', 2, 3), ('sep_conv_3x3', 0, 3), ('avg_pool_3x3', 0, 4), ('avg_pool_3x3',
+    2, 4), ('conv_1x1', 4, 5), ('sep_conv_5x5', 4, 5)], normal_concat=[3, 5], reduce=[('sep_conv_5x5',
+    1, 2), ('sep_conv_5x5', 0, 2), ('conv_3x3', 2, 3), ('skip_connect', 2, 3), ('sep_conv_3x3',
+    2, 4), ('sep_conv_3x3', 3, 4), ('sep_conv_5x5', 3, 5), ('conv_5x5', 4, 5)], reduce_concat=[5])
+- adversarial_accuracy:
+    baseline: 0.25156250037252903
+    surrogate: 0.270312512293458
+  surrogate_genotype: Genotype(normal=[('conv_3x3', 1, 2), ('sep_conv_5x5', 0, 2),
+    ('avg_pool_3x3', 2, 3), ('max_pool_3x3', 2, 3), ('conv_3x3', 1, 4), ('conv_1x1',
+    2, 4), ('avg_pool_3x3', 3, 5), ('conv_3x3', 3, 5)], normal_concat=[4, 5], reduce=[('sep_conv_5x5',
+    0, 2), ('conv_3x3', 0, 2), ('conv_3x3', 1, 3), ('sep_conv_5x5', 2, 3), ('max_pool_3x3',
+    0, 4), ('conv_5x5', 2, 4), ('sep_conv_5x5', 1, 5), ('conv_3x3', 3, 5)], reduce_concat=[4,
+    5])
+  target_genotype: Genotype(normal=[('skip_connect', 0, 2), ('sep_conv_3x3', 1, 2),
+    ('conv_3x3', 1, 3), ('avg_pool_3x3', 1, 3), ('sep_conv_5x5', 3, 4), ('sep_conv_5x5',
+    1, 4), ('conv_3x3', 4, 5), ('sep_conv_3x3', 0, 5)], normal_concat=[2, 5], reduce=[('conv_3x3',
+    0, 2), ('max_pool_3x3', 1, 2), ('sep_conv_5x5', 2, 3), ('sep_conv_3x3', 0, 3),
+    ('conv_3x3', 3, 4), ('sep_conv_5x5', 2, 4), ('conv_5x5', 3, 5), ('skip_connect',
+    3, 5)], reduce_concat=[4, 5])
+- adversarial_accuracy:
+    baseline: 0.2468750085681677
+    surrogate: 0.26406249962747097
+  surrogate_genotype: Genotype(normal=[('sep_conv_5x5', 0, 2), ('conv_3x3', 0, 2),
+    ('max_pool_3x3', 1, 3), ('conv_1x1', 0, 3), ('sep_conv_5x5', 2, 4), ('conv_5x5',
+    0, 4), ('sep_conv_3x3', 0, 5), ('sep_conv_3x3', 2, 5)], normal_concat=[3, 4, 5],
+    reduce=[('sep_conv_3x3', 0, 2), ('sep_conv_5x5', 0, 2), ('conv_3x3', 2, 3), ('max_pool_3x3',
+    1, 3), ('sep_conv_5x5', 1, 4), ('sep_conv_5x5', 2, 4), ('sep_conv_5x5', 4, 5),
+    ('sep_conv_5x5', 3, 5)], reduce_concat=[5])
+  target_genotype: Genotype(normal=[('skip_connect', 0, 2), ('sep_conv_3x3', 1, 2),
+    ('conv_3x3', 1, 3), ('avg_pool_3x3', 1, 3), ('sep_conv_5x5', 3, 4), ('sep_conv_5x5',
+    1, 4), ('conv_3x3', 4, 5), ('sep_conv_3x3', 0, 5)], normal_concat=[2, 5], reduce=[('conv_3x3',
+    0, 2), ('max_pool_3x3', 1, 2), ('sep_conv_5x5', 2, 3), ('sep_conv_3x3', 0, 3),
+    ('conv_3x3', 3, 4), ('sep_conv_5x5', 2, 4), ('conv_5x5', 3, 5), ('skip_connect',
+    3, 5)], reduce_concat=[4, 5])
+- adversarial_accuracy:
+    baseline: 0.26562498416751623
+    surrogate: 0.22343748714774847
+  surrogate_genotype: Genotype(normal=[('sep_conv_5x5', 0, 2), ('max_pool_3x3', 1,
+    2), ('sep_conv_5x5', 0, 3), ('conv_5x5', 1, 3), ('conv_3x3', 0, 4), ('conv_5x5',
+    0, 4), ('conv_5x5', 3, 5), ('conv_5x5', 3, 5)], normal_concat=[2, 4, 5], reduce=[('conv_5x5',
+    0, 2), ('max_pool_3x3', 0, 2), ('conv_5x5', 2, 3), ('conv_5x5', 0, 3), ('max_pool_3x3',
+    2, 4), ('avg_pool_3x3', 3, 4), ('conv_5x5', 2, 5), ('conv_5x5', 3, 5)], reduce_concat=[4,
+    5])
+  target_genotype: Genotype(normal=[('skip_connect', 0, 2), ('sep_conv_3x3', 1, 2),
+    ('conv_3x3', 1, 3), ('avg_pool_3x3', 1, 3), ('sep_conv_5x5', 3, 4), ('sep_conv_5x5',
+    1, 4), ('conv_3x3', 4, 5), ('sep_conv_3x3', 0, 5)], normal_concat=[2, 5], reduce=[('conv_3x3',
+    0, 2), ('max_pool_3x3', 1, 2), ('sep_conv_5x5', 2, 3), ('sep_conv_3x3', 0, 3),
+    ('conv_3x3', 3, 4), ('sep_conv_5x5', 2, 4), ('conv_5x5', 3, 5), ('skip_connect',
+    3, 5)], reduce_concat=[4, 5])
+- adversarial_accuracy:
+    baseline: 0.2671874910593033
+    surrogate: 0.2828124910593033
+  surrogate_genotype: Genotype(normal=[('sep_conv_3x3', 0, 2), ('conv_5x5', 0, 2),
+    ('max_pool_3x3', 2, 3), ('conv_3x3', 0, 3), ('conv_3x3', 3, 4), ('sep_conv_3x3',
+    1, 4), ('sep_conv_5x5', 1, 5), ('conv_3x3', 1, 5)], normal_concat=[4, 5], reduce=[('conv_3x3',
+    1, 2), ('conv_5x5', 1, 2), ('sep_conv_3x3', 1, 3), ('conv_3x3', 2, 3), ('sep_conv_5x5',
+    2, 4), ('sep_conv_3x3', 1, 4), ('sep_conv_5x5', 2, 5), ('conv_5x5', 0, 5)], reduce_concat=[3,
+    4, 5])
+  target_genotype: Genotype(normal=[('skip_connect', 0, 2), ('sep_conv_3x3', 1, 2),
+    ('conv_3x3', 1, 3), ('avg_pool_3x3', 1, 3), ('sep_conv_5x5', 3, 4), ('sep_conv_5x5',
+    1, 4), ('conv_3x3', 4, 5), ('sep_conv_3x3', 0, 5)], normal_concat=[2, 5], reduce=[('conv_3x3',
+    0, 2), ('max_pool_3x3', 1, 2), ('sep_conv_5x5', 2, 3), ('sep_conv_3x3', 0, 3),
+    ('conv_3x3', 3, 4), ('sep_conv_5x5', 2, 4), ('conv_5x5', 3, 5), ('skip_connect',
+    3, 5)], reduce_concat=[4, 5])
+- adversarial_accuracy:
+    baseline: 0.23749998677521944
+    surrogate: 0.2406249986961484
+  surrogate_genotype: Genotype(normal=[('max_pool_3x3', 0, 2), ('conv_3x3', 0, 2),
+    ('conv_5x5', 1, 3), ('conv_3x3', 2, 3), ('sep_conv_3x3', 0, 4), ('conv_5x5', 1,
+    4), ('max_pool_3x3', 0, 5), ('conv_1x1', 0, 5)], normal_concat=[3, 4, 5], reduce=[('sep_conv_5x5',
+    0, 2), ('conv_5x5', 0, 2), ('conv_5x5', 0, 3), ('sep_conv_5x5', 2, 3), ('sep_conv_5x5',
+    0, 4), ('conv_5x5', 1, 4), ('skip_connect', 4, 5), ('max_pool_3x3', 1, 5)], reduce_concat=[3,
+    5])
+  target_genotype: Genotype(normal=[('skip_connect', 0, 2), ('sep_conv_3x3', 1, 2),
+    ('conv_3x3', 1, 3), ('avg_pool_3x3', 1, 3), ('sep_conv_5x5', 3, 4), ('sep_conv_5x5',
+    1, 4), ('conv_3x3', 4, 5), ('sep_conv_3x3', 0, 5)], normal_concat=[2, 5], reduce=[('conv_3x3',
+    0, 2), ('max_pool_3x3', 1, 2), ('sep_conv_5x5', 2, 3), ('sep_conv_3x3', 0, 3),
+    ('conv_3x3', 3, 4), ('sep_conv_5x5', 2, 4), ('conv_5x5', 3, 5), ('skip_connect',
+    3, 5)], reduce_concat=[4, 5])
+- adversarial_accuracy:
+    baseline: 0.2593750022351742
+    surrogate: 0.2968749962747097
+  surrogate_genotype: Genotype(normal=[('sep_conv_3x3', 1, 2), ('conv_3x3', 0, 2),
+    ('sep_conv_3x3', 0, 3), ('sep_conv_5x5', 0, 3), ('sep_conv_5x5', 2, 4), ('sep_conv_5x5',
+    1, 4), ('sep_conv_5x5', 0, 5), ('sep_conv_5x5', 4, 5)], normal_concat=[3, 5],
+    reduce=[('conv_1x1', 0, 2), ('max_pool_3x3', 0, 2), ('conv_5x5', 0, 3), ('conv_5x5',
+    0, 3), ('conv_3x3', 3, 4), ('conv_5x5', 3, 4), ('sep_conv_5x5', 0, 5), ('sep_conv_5x5',
+    4, 5)], reduce_concat=[2, 5])
+  target_genotype: Genotype(normal=[('skip_connect', 0, 2), ('sep_conv_3x3', 1, 2),
+    ('conv_3x3', 1, 3), ('avg_pool_3x3', 1, 3), ('sep_conv_5x5', 3, 4), ('sep_conv_5x5',
+    1, 4), ('conv_3x3', 4, 5), ('sep_conv_3x3', 0, 5)], normal_concat=[2, 5], reduce=[('conv_3x3',
+    0, 2), ('max_pool_3x3', 1, 2), ('sep_conv_5x5', 2, 3), ('sep_conv_3x3', 0, 3),
+    ('conv_3x3', 3, 4), ('sep_conv_5x5', 2, 4), ('conv_5x5', 3, 5), ('skip_connect',
+    3, 5)], reduce_concat=[4, 5])
+- adversarial_accuracy:
+    baseline: 0.26093749701976776
+    surrogate: 0.33437497913837433
+  surrogate_genotype: Genotype(normal=[('max_pool_3x3', 0, 2), ('conv_1x1', 0, 2),
+    ('sep_conv_5x5', 2, 3), ('conv_5x5', 2, 3), ('sep_conv_5x5', 3, 4), ('conv_3x3',
+    3, 4), ('sep_conv_5x5', 1, 5), ('conv_1x1', 1, 5)], normal_concat=[4, 5], reduce=[('sep_conv_5x5',
+    1, 2), ('sep_conv_3x3', 1, 2), ('conv_5x5', 1, 3), ('sep_conv_3x3', 1, 3), ('conv_5x5',
+    1, 4), ('conv_3x3', 1, 4), ('sep_conv_5x5', 1, 5), ('sep_conv_5x5', 2, 5)], reduce_concat=[3,
+    4, 5])
+  target_genotype: Genotype(normal=[('skip_connect', 0, 2), ('sep_conv_3x3', 1, 2),
+    ('conv_3x3', 1, 3), ('avg_pool_3x3', 1, 3), ('sep_conv_5x5', 3, 4), ('sep_conv_5x5',
+    1, 4), ('conv_3x3', 4, 5), ('sep_conv_3x3', 0, 5)], normal_concat=[2, 5], reduce=[('conv_3x3',
+    0, 2), ('max_pool_3x3', 1, 2), ('sep_conv_5x5', 2, 3), ('sep_conv_3x3', 0, 3),
+    ('conv_3x3', 3, 4), ('sep_conv_5x5', 2, 4), ('conv_5x5', 3, 5), ('skip_connect',
+    3, 5)], reduce_concat=[4, 5])
+- adversarial_accuracy:
+    baseline: 0.21718749403953552
+    surrogate: 0.24687498807907104
+  surrogate_genotype: Genotype(normal=[('conv_3x3', 1, 2), ('sep_conv_5x5', 0, 2),
+    ('avg_pool_3x3', 2, 3), ('max_pool_3x3', 2, 3), ('conv_3x3', 1, 4), ('conv_1x1',
+    2, 4), ('avg_pool_3x3', 3, 5), ('conv_3x3', 3, 5)], normal_concat=[4, 5], reduce=[('sep_conv_5x5',
+    0, 2), ('conv_3x3', 0, 2), ('conv_3x3', 1, 3), ('sep_conv_5x5', 2, 3), ('max_pool_3x3',
+    0, 4), ('conv_5x5', 2, 4), ('sep_conv_5x5', 1, 5), ('conv_3x3', 3, 5)], reduce_concat=[4,
+    5])
+  target_genotype: Genotype(normal=[('conv_3x3', 1, 2), ('skip_connect', 1, 2), ('sep_conv_5x5',
+    0, 3), ('sep_conv_5x5', 0, 3), ('sep_conv_3x3', 2, 4), ('sep_conv_5x5', 3, 4),
+    ('sep_conv_5x5', 1, 5), ('conv_3x3', 0, 5)], normal_concat=[4, 5], reduce=[('sep_conv_3x3',
+    0, 2), ('conv_5x5', 0, 2), ('skip_connect', 0, 3), ('sep_conv_3x3', 0, 3), ('max_pool_3x3',
+    2, 4), ('conv_1x1', 1, 4), ('sep_conv_3x3', 3, 5), ('conv_3x3', 1, 5)], reduce_concat=[4,
+    5])
+- adversarial_accuracy:
+    baseline: 0.2218750026077032
+    surrogate: 0.24843751452863216
+  surrogate_genotype: Genotype(normal=[('sep_conv_5x5', 0, 2), ('conv_3x3', 0, 2),
+    ('max_pool_3x3', 1, 3), ('conv_1x1', 0, 3), ('sep_conv_5x5', 2, 4), ('conv_5x5',
+    0, 4), ('sep_conv_3x3', 0, 5), ('sep_conv_3x3', 2, 5)], normal_concat=[3, 4, 5],
+    reduce=[('sep_conv_3x3', 0, 2), ('sep_conv_5x5', 0, 2), ('conv_3x3', 2, 3), ('max_pool_3x3',
+    1, 3), ('sep_conv_5x5', 1, 4), ('sep_conv_5x5', 2, 4), ('sep_conv_5x5', 4, 5),
+    ('sep_conv_5x5', 3, 5)], reduce_concat=[5])
+  target_genotype: Genotype(normal=[('conv_3x3', 1, 2), ('skip_connect', 1, 2), ('sep_conv_5x5',
+    0, 3), ('sep_conv_5x5', 0, 3), ('sep_conv_3x3', 2, 4), ('sep_conv_5x5', 3, 4),
+    ('sep_conv_5x5', 1, 5), ('conv_3x3', 0, 5)], normal_concat=[4, 5], reduce=[('sep_conv_3x3',
+    0, 2), ('conv_5x5', 0, 2), ('skip_connect', 0, 3), ('sep_conv_3x3', 0, 3), ('max_pool_3x3',
+    2, 4), ('conv_1x1', 1, 4), ('sep_conv_3x3', 3, 5), ('conv_3x3', 1, 5)], reduce_concat=[4,
+    5])
+- adversarial_accuracy:
+    baseline: 0.22812500037252903
+    surrogate: 0.2140624914318323
+  surrogate_genotype: Genotype(normal=[('sep_conv_5x5', 0, 2), ('max_pool_3x3', 1,
+    2), ('sep_conv_5x5', 0, 3), ('conv_5x5', 1, 3), ('conv_3x3', 0, 4), ('conv_5x5',
+    0, 4), ('conv_5x5', 3, 5), ('conv_5x5', 3, 5)], normal_concat=[2, 4, 5], reduce=[('conv_5x5',
+    0, 2), ('max_pool_3x3', 0, 2), ('conv_5x5', 2, 3), ('conv_5x5', 0, 3), ('max_pool_3x3',
+    2, 4), ('avg_pool_3x3', 3, 4), ('conv_5x5', 2, 5), ('conv_5x5', 3, 5)], reduce_concat=[4,
+    5])
+  target_genotype: Genotype(normal=[('conv_3x3', 1, 2), ('skip_connect', 1, 2), ('sep_conv_5x5',
+    0, 3), ('sep_conv_5x5', 0, 3), ('sep_conv_3x3', 2, 4), ('sep_conv_5x5', 3, 4),
+    ('sep_conv_5x5', 1, 5), ('conv_3x3', 0, 5)], normal_concat=[4, 5], reduce=[('sep_conv_3x3',
+    0, 2), ('conv_5x5', 0, 2), ('skip_connect', 0, 3), ('sep_conv_3x3', 0, 3), ('max_pool_3x3',
+    2, 4), ('conv_1x1', 1, 4), ('sep_conv_3x3', 3, 5), ('conv_3x3', 1, 5)], reduce_concat=[4,
+    5])
+- adversarial_accuracy:
+    baseline: 0.23906248714774847
+    surrogate: 0.22343748714774847
+  surrogate_genotype: Genotype(normal=[('sep_conv_3x3', 0, 2), ('conv_5x5', 0, 2),
+    ('max_pool_3x3', 2, 3), ('conv_3x3', 0, 3), ('conv_3x3', 3, 4), ('sep_conv_3x3',
+    1, 4), ('sep_conv_5x5', 1, 5), ('conv_3x3', 1, 5)], normal_concat=[4, 5], reduce=[('conv_3x3',
+    1, 2), ('conv_5x5', 1, 2), ('sep_conv_3x3', 1, 3), ('conv_3x3', 2, 3), ('sep_conv_5x5',
+    2, 4), ('sep_conv_3x3', 1, 4), ('sep_conv_5x5', 2, 5), ('conv_5x5', 0, 5)], reduce_concat=[3,
+    4, 5])
+  target_genotype: Genotype(normal=[('conv_3x3', 1, 2), ('skip_connect', 1, 2), ('sep_conv_5x5',
+    0, 3), ('sep_conv_5x5', 0, 3), ('sep_conv_3x3', 2, 4), ('sep_conv_5x5', 3, 4),
+    ('sep_conv_5x5', 1, 5), ('conv_3x3', 0, 5)], normal_concat=[4, 5], reduce=[('sep_conv_3x3',
+    0, 2), ('conv_5x5', 0, 2), ('skip_connect', 0, 3), ('sep_conv_3x3', 0, 3), ('max_pool_3x3',
+    2, 4), ('conv_1x1', 1, 4), ('sep_conv_3x3', 3, 5), ('conv_3x3', 1, 5)], reduce_concat=[4,
+    5])
+- adversarial_accuracy:
+    baseline: 0.2437499975785613
+    surrogate: 0.21562499459832907
+  surrogate_genotype: Genotype(normal=[('max_pool_3x3', 0, 2), ('conv_3x3', 0, 2),
+    ('conv_5x5', 1, 3), ('conv_3x3', 2, 3), ('sep_conv_3x3', 0, 4), ('conv_5x5', 1,
+    4), ('max_pool_3x3', 0, 5), ('conv_1x1', 0, 5)], normal_concat=[3, 4, 5], reduce=[('sep_conv_5x5',
+    0, 2), ('conv_5x5', 0, 2), ('conv_5x5', 0, 3), ('sep_conv_5x5', 2, 3), ('sep_conv_5x5',
+    0, 4), ('conv_5x5', 1, 4), ('skip_connect', 4, 5), ('max_pool_3x3', 1, 5)], reduce_concat=[3,
+    5])
+  target_genotype: Genotype(normal=[('conv_3x3', 1, 2), ('skip_connect', 1, 2), ('sep_conv_5x5',
+    0, 3), ('sep_conv_5x5', 0, 3), ('sep_conv_3x3', 2, 4), ('sep_conv_5x5', 3, 4),
+    ('sep_conv_5x5', 1, 5), ('conv_3x3', 0, 5)], normal_concat=[4, 5], reduce=[('sep_conv_3x3',
+    0, 2), ('conv_5x5', 0, 2), ('skip_connect', 0, 3), ('sep_conv_3x3', 0, 3), ('max_pool_3x3',
+    2, 4), ('conv_1x1', 1, 4), ('sep_conv_3x3', 3, 5), ('conv_3x3', 1, 5)], reduce_concat=[4,
+    5])
+- adversarial_accuracy:
+    baseline: 0.22500000335276127
+    surrogate: 0.24999999441206455
+  surrogate_genotype: Genotype(normal=[('sep_conv_3x3', 1, 2), ('conv_3x3', 0, 2),
+    ('sep_conv_3x3', 0, 3), ('sep_conv_5x5', 0, 3), ('sep_conv_5x5', 2, 4), ('sep_conv_5x5',
+    1, 4), ('sep_conv_5x5', 0, 5), ('sep_conv_5x5', 4, 5)], normal_concat=[3, 5],
+    reduce=[('conv_1x1', 0, 2), ('max_pool_3x3', 0, 2), ('conv_5x5', 0, 3), ('conv_5x5',
+    0, 3), ('conv_3x3', 3, 4), ('conv_5x5', 3, 4), ('sep_conv_5x5', 0, 5), ('sep_conv_5x5',
+    4, 5)], reduce_concat=[2, 5])
+  target_genotype: Genotype(normal=[('conv_3x3', 1, 2), ('skip_connect', 1, 2), ('sep_conv_5x5',
+    0, 3), ('sep_conv_5x5', 0, 3), ('sep_conv_3x3', 2, 4), ('sep_conv_5x5', 3, 4),
+    ('sep_conv_5x5', 1, 5), ('conv_3x3', 0, 5)], normal_concat=[4, 5], reduce=[('sep_conv_3x3',
+    0, 2), ('conv_5x5', 0, 2), ('skip_connect', 0, 3), ('sep_conv_3x3', 0, 3), ('max_pool_3x3',
+    2, 4), ('conv_1x1', 1, 4), ('sep_conv_3x3', 3, 5), ('conv_3x3', 1, 5)], reduce_concat=[4,
+    5])
+- adversarial_accuracy:
+    baseline: 0.22812499478459358
+    surrogate: 0.25312500074505806
+  surrogate_genotype: Genotype(normal=[('max_pool_3x3', 0, 2), ('conv_1x1', 0, 2),
+    ('sep_conv_5x5', 2, 3), ('conv_5x5', 2, 3), ('sep_conv_5x5', 3, 4), ('conv_3x3',
+    3, 4), ('sep_conv_5x5', 1, 5), ('conv_1x1', 1, 5)], normal_concat=[4, 5], reduce=[('sep_conv_5x5',
+    1, 2), ('sep_conv_3x3', 1, 2), ('conv_5x5', 1, 3), ('sep_conv_3x3', 1, 3), ('conv_5x5',
+    1, 4), ('conv_3x3', 1, 4), ('sep_conv_5x5', 1, 5), ('sep_conv_5x5', 2, 5)], reduce_concat=[3,
+    4, 5])
+  target_genotype: Genotype(normal=[('conv_3x3', 1, 2), ('skip_connect', 1, 2), ('sep_conv_5x5',
+    0, 3), ('sep_conv_5x5', 0, 3), ('sep_conv_3x3', 2, 4), ('sep_conv_5x5', 3, 4),
+    ('sep_conv_5x5', 1, 5), ('conv_3x3', 0, 5)], normal_concat=[4, 5], reduce=[('sep_conv_3x3',
+    0, 2), ('conv_5x5', 0, 2), ('skip_connect', 0, 3), ('sep_conv_3x3', 0, 3), ('max_pool_3x3',
+    2, 4), ('conv_1x1', 1, 4), ('sep_conv_3x3', 3, 5), ('conv_3x3', 1, 5)], reduce_concat=[4,
+    5])
+- adversarial_accuracy:
+    baseline: 0.3296875087544322
+    surrogate: 0.28593752067536116
+  surrogate_genotype: Genotype(normal=[('conv_1x1', 0, 2), ('conv_5x5', 1, 2), ('conv_1x1',
+    1, 3), ('conv_5x5', 1, 3), ('sep_conv_5x5', 0, 4), ('max_pool_3x3', 1, 4), ('sep_conv_3x3',
+    0, 5), ('max_pool_3x3', 0, 5)], normal_concat=[2, 3, 4, 5], reduce=[('sep_conv_5x5',
+    1, 2), ('conv_5x5', 0, 2), ('sep_conv_3x3', 2, 3), ('conv_5x5', 2, 3), ('sep_conv_5x5',
+    3, 4), ('conv_3x3', 0, 4), ('sep_conv_3x3', 2, 5), ('conv_3x3', 0, 5)], reduce_concat=[4,
+    5])
+  target_genotype: Genotype(normal=[('sep_conv_5x5', 1, 2), ('avg_pool_3x3', 0, 2),
+    ('conv_1x1', 2, 3), ('conv_3x3', 0, 3), ('max_pool_3x3', 2, 4), ('max_pool_3x3',
+    1, 4), ('sep_conv_5x5', 4, 5), ('sep_conv_5x5', 3, 5)], normal_concat=[5], reduce=[('max_pool_3x3',
+    1, 2), ('conv_5x5', 0, 2), ('sep_conv_3x3', 1, 3), ('sep_conv_3x3', 1, 3), ('conv_3x3',
+    1, 4), ('conv_5x5', 0, 4), ('conv_5x5', 0, 5), ('conv_3x3', 1, 5)], reduce_concat=[2,
+    3, 4, 5])
+- adversarial_accuracy:
+    baseline: 0.31562499701976776
+    surrogate: 0.33437497913837433
+  surrogate_genotype: Genotype(normal=[('sep_conv_3x3', 1, 2), ('conv_5x5', 0, 2),
+    ('conv_3x3', 2, 3), ('sep_conv_5x5', 1, 3), ('skip_connect', 1, 4), ('conv_3x3',
+    1, 4), ('max_pool_3x3', 3, 5), ('conv_5x5', 1, 5)], normal_concat=[4, 5], reduce=[('conv_3x3',
+    0, 2), ('sep_conv_5x5', 1, 2), ('sep_conv_5x5', 1, 3), ('sep_conv_5x5', 1, 3),
+    ('conv_5x5', 1, 4), ('max_pool_3x3', 2, 4), ('conv_5x5', 0, 5), ('max_pool_3x3',
+    0, 5)], reduce_concat=[3, 4, 5])
+  target_genotype: Genotype(normal=[('sep_conv_5x5', 1, 2), ('avg_pool_3x3', 0, 2),
+    ('conv_1x1', 2, 3), ('conv_3x3', 0, 3), ('max_pool_3x3', 2, 4), ('max_pool_3x3',
+    1, 4), ('sep_conv_5x5', 4, 5), ('sep_conv_5x5', 3, 5)], normal_concat=[5], reduce=[('max_pool_3x3',
+    1, 2), ('conv_5x5', 0, 2), ('sep_conv_3x3', 1, 3), ('sep_conv_3x3', 1, 3), ('conv_3x3',
+    1, 4), ('conv_5x5', 0, 4), ('conv_5x5', 0, 5), ('conv_3x3', 1, 5)], reduce_concat=[2,
+    3, 4, 5])
+- adversarial_accuracy:
+    baseline: 0.3375000022351742
+    surrogate: 0.2968749962747097
+  surrogate_genotype: Genotype(normal=[('sep_conv_3x3', 0, 2), ('sep_conv_3x3', 1,
+    2), ('conv_5x5', 0, 3), ('sep_conv_5x5', 0, 3), ('sep_conv_5x5', 2, 4), ('conv_5x5',
+    0, 4), ('max_pool_3x3', 1, 5), ('conv_5x5', 1, 5)], normal_concat=[3, 4, 5], reduce=[('sep_conv_3x3',
+    0, 2), ('conv_3x3', 1, 2), ('conv_3x3', 2, 3), ('sep_conv_5x5', 0, 3), ('sep_conv_5x5',
+    0, 4), ('conv_5x5', 0, 4), ('conv_1x1', 1, 5), ('conv_3x3', 0, 5)], reduce_concat=[3,
+    4, 5])
+  target_genotype: Genotype(normal=[('sep_conv_5x5', 1, 2), ('avg_pool_3x3', 0, 2),
+    ('conv_1x1', 2, 3), ('conv_3x3', 0, 3), ('max_pool_3x3', 2, 4), ('max_pool_3x3',
+    1, 4), ('sep_conv_5x5', 4, 5), ('sep_conv_5x5', 3, 5)], normal_concat=[5], reduce=[('max_pool_3x3',
+    1, 2), ('conv_5x5', 0, 2), ('sep_conv_3x3', 1, 3), ('sep_conv_3x3', 1, 3), ('conv_3x3',
+    1, 4), ('conv_5x5', 0, 4), ('conv_5x5', 0, 5), ('conv_3x3', 1, 5)], reduce_concat=[2,
+    3, 4, 5])
+- adversarial_accuracy:
+    baseline: 0.32343750540167093
+    surrogate: 0.3499999875202775
+  surrogate_genotype: Genotype(normal=[('sep_conv_5x5', 1, 2), ('max_pool_3x3', 1,
+    2), ('conv_5x5', 0, 3), ('conv_5x5', 0, 3), ('sep_conv_3x3', 0, 4), ('conv_5x5',
+    3, 4), ('conv_5x5', 3, 5), ('sep_conv_5x5', 3, 5)], normal_concat=[2, 4, 5], reduce=[('sep_conv_3x3',
+    1, 2), ('sep_conv_5x5', 0, 2), ('conv_5x5', 1, 3), ('sep_conv_5x5', 2, 3), ('sep_conv_5x5',
+    0, 4), ('conv_5x5', 2, 4), ('conv_5x5', 2, 5), ('sep_conv_3x3', 4, 5)], reduce_concat=[3,
+    5])
+  target_genotype: Genotype(normal=[('sep_conv_5x5', 1, 2), ('avg_pool_3x3', 0, 2),
+    ('conv_1x1', 2, 3), ('conv_3x3', 0, 3), ('max_pool_3x3', 2, 4), ('max_pool_3x3',
+    1, 4), ('sep_conv_5x5', 4, 5), ('sep_conv_5x5', 3, 5)], normal_concat=[5], reduce=[('max_pool_3x3',
+    1, 2), ('conv_5x5', 0, 2), ('sep_conv_3x3', 1, 3), ('sep_conv_3x3', 1, 3), ('conv_3x3',
+    1, 4), ('conv_5x5', 0, 4), ('conv_5x5', 0, 5), ('conv_3x3', 1, 5)], reduce_concat=[2,
+    3, 4, 5])
+- adversarial_accuracy:
+    baseline: 0.33749998826533556
+    surrogate: 0.3359374823048711
+  surrogate_genotype: Genotype(normal=[('max_pool_3x3', 1, 2), ('conv_1x1', 1, 2),
+    ('conv_5x5', 0, 3), ('sep_conv_5x5', 2, 3), ('sep_conv_5x5', 3, 4), ('max_pool_3x3',
+    0, 4), ('sep_conv_5x5', 0, 5), ('skip_connect', 2, 5)], normal_concat=[4, 5],
+    reduce=[('sep_conv_5x5', 0, 2), ('sep_conv_5x5', 0, 2), ('conv_3x3', 0, 3), ('sep_conv_5x5',
+    1, 3), ('conv_3x3', 1, 4), ('max_pool_3x3', 3, 4), ('sep_conv_5x5', 4, 5), ('conv_5x5',
+    0, 5)], reduce_concat=[2, 5])
+  target_genotype: Genotype(normal=[('sep_conv_5x5', 1, 2), ('avg_pool_3x3', 0, 2),
+    ('conv_1x1', 2, 3), ('conv_3x3', 0, 3), ('max_pool_3x3', 2, 4), ('max_pool_3x3',
+    1, 4), ('sep_conv_5x5', 4, 5), ('sep_conv_5x5', 3, 5)], normal_concat=[5], reduce=[('max_pool_3x3',
+    1, 2), ('conv_5x5', 0, 2), ('sep_conv_3x3', 1, 3), ('sep_conv_3x3', 1, 3), ('conv_3x3',
+    1, 4), ('conv_5x5', 0, 4), ('conv_5x5', 0, 5), ('conv_3x3', 1, 5)], reduce_concat=[2,
+    3, 4, 5])
+- adversarial_accuracy:
+    baseline: 0.36406251415610313
+    surrogate: 0.3687500022351742
+  surrogate_genotype: Genotype(normal=[('sep_conv_5x5', 0, 2), ('sep_conv_5x5', 1,
+    2), ('conv_5x5', 0, 3), ('sep_conv_5x5', 2, 3), ('sep_conv_3x3', 0, 4), ('conv_3x3',
+    2, 4), ('conv_5x5', 1, 5), ('conv_5x5', 4, 5)], normal_concat=[3, 5], reduce=[('conv_3x3',
+    0, 2), ('conv_5x5', 0, 2), ('sep_conv_5x5', 0, 3), ('max_pool_3x3', 1, 3), ('sep_conv_5x5',
+    0, 4), ('conv_5x5', 2, 4), ('conv_1x1', 2, 5), ('conv_1x1', 2, 5)], reduce_concat=[3,
+    4, 5])
+  target_genotype: Genotype(normal=[('sep_conv_5x5', 1, 2), ('avg_pool_3x3', 0, 2),
+    ('conv_1x1', 2, 3), ('conv_3x3', 0, 3), ('max_pool_3x3', 2, 4), ('max_pool_3x3',
+    1, 4), ('sep_conv_5x5', 4, 5), ('sep_conv_5x5', 3, 5)], normal_concat=[5], reduce=[('max_pool_3x3',
+    1, 2), ('conv_5x5', 0, 2), ('sep_conv_3x3', 1, 3), ('sep_conv_3x3', 1, 3), ('conv_3x3',
+    1, 4), ('conv_5x5', 0, 4), ('conv_5x5', 0, 5), ('conv_3x3', 1, 5)], reduce_concat=[2,
+    3, 4, 5])
+- adversarial_accuracy:
+    baseline: 0.31718751788139343
+    surrogate: 0.3187499940395355
+  surrogate_genotype: Genotype(normal=[('conv_5x5', 1, 2), ('conv_1x1', 0, 2), ('max_pool_3x3',
+    1, 3), ('conv_3x3', 0, 3), ('conv_3x3', 3, 4), ('conv_5x5', 3, 4), ('conv_3x3',
+    4, 5), ('conv_1x1', 2, 5)], normal_concat=[5], reduce=[('conv_3x3', 1, 2), ('conv_5x5',
+    0, 2), ('sep_conv_5x5', 2, 3), ('sep_conv_3x3', 1, 3), ('conv_5x5', 2, 4), ('max_pool_3x3',
+    1, 4), ('conv_3x3', 0, 5), ('conv_1x1', 1, 5)], reduce_concat=[3, 4, 5])
+  target_genotype: Genotype(normal=[('sep_conv_5x5', 1, 2), ('avg_pool_3x3', 0, 2),
+    ('conv_1x1', 2, 3), ('conv_3x3', 0, 3), ('max_pool_3x3', 2, 4), ('max_pool_3x3',
+    1, 4), ('sep_conv_5x5', 4, 5), ('sep_conv_5x5', 3, 5)], normal_concat=[5], reduce=[('max_pool_3x3',
+    1, 2), ('conv_5x5', 0, 2), ('sep_conv_3x3', 1, 3), ('sep_conv_3x3', 1, 3), ('conv_3x3',
+    1, 4), ('conv_5x5', 0, 4), ('conv_5x5', 0, 5), ('conv_3x3', 1, 5)], reduce_concat=[2,
+    3, 4, 5])
+- adversarial_accuracy:
+    baseline: 0.3484375039115548
+    surrogate: 0.30624999199062586
+  surrogate_genotype: Genotype(normal=[('sep_conv_5x5', 1, 2), ('conv_5x5', 0, 2),
+    ('sep_conv_5x5', 0, 3), ('sep_conv_3x3', 2, 3), ('max_pool_3x3', 0, 4), ('sep_conv_5x5',
+    3, 4), ('conv_5x5', 0, 5), ('max_pool_3x3', 2, 5)], normal_concat=[4, 5], reduce=[('max_pool_3x3',
+    0, 2), ('conv_3x3', 0, 2), ('conv_1x1', 2, 3), ('sep_conv_5x5', 0, 3), ('max_pool_3x3',
+    1, 4), ('max_pool_3x3', 0, 4), ('sep_conv_3x3', 1, 5), ('sep_conv_5x5', 1, 5)],
+    reduce_concat=[3, 4, 5])
+  target_genotype: Genotype(normal=[('sep_conv_5x5', 1, 2), ('avg_pool_3x3', 0, 2),
+    ('conv_1x1', 2, 3), ('conv_3x3', 0, 3), ('max_pool_3x3', 2, 4), ('max_pool_3x3',
+    1, 4), ('sep_conv_5x5', 4, 5), ('sep_conv_5x5', 3, 5)], normal_concat=[5], reduce=[('max_pool_3x3',
+    1, 2), ('conv_5x5', 0, 2), ('sep_conv_3x3', 1, 3), ('sep_conv_3x3', 1, 3), ('conv_3x3',
+    1, 4), ('conv_5x5', 0, 4), ('conv_5x5', 0, 5), ('conv_3x3', 1, 5)], reduce_concat=[2,
+    3, 4, 5])
+- adversarial_accuracy:
+    baseline: 0.32343750074505806
+    surrogate: 0.3765624947845936
+  surrogate_genotype: Genotype(normal=[('conv_3x3', 1, 2), ('sep_conv_3x3', 1, 2),
+    ('sep_conv_3x3', 0, 3), ('conv_1x1', 1, 3), ('sep_conv_5x5', 3, 4), ('conv_5x5',
+    2, 4), ('max_pool_3x3', 3, 5), ('conv_5x5', 2, 5)], normal_concat=[4, 5], reduce=[('sep_conv_5x5',
+    1, 2), ('sep_conv_5x5', 1, 2), ('max_pool_3x3', 0, 3), ('conv_3x3', 2, 3), ('sep_conv_3x3',
+    0, 4), ('conv_3x3', 2, 4), ('sep_conv_5x5', 4, 5), ('conv_1x1', 1, 5)], reduce_concat=[3,
+    5])
+  target_genotype: Genotype(normal=[('sep_conv_5x5', 1, 2), ('avg_pool_3x3', 0, 2),
+    ('conv_1x1', 2, 3), ('conv_3x3', 0, 3), ('max_pool_3x3', 2, 4), ('max_pool_3x3',
+    1, 4), ('sep_conv_5x5', 4, 5), ('sep_conv_5x5', 3, 5)], normal_concat=[5], reduce=[('max_pool_3x3',
+    1, 2), ('conv_5x5', 0, 2), ('sep_conv_3x3', 1, 3), ('sep_conv_3x3', 1, 3), ('conv_3x3',
+    1, 4), ('conv_5x5', 0, 4), ('conv_5x5', 0, 5), ('conv_3x3', 1, 5)], reduce_concat=[2,
+    3, 4, 5])
+- adversarial_accuracy:
+    baseline: 0.34374997206032276
+    surrogate: 0.3968749660998583
+  surrogate_genotype: Genotype(normal=[('conv_5x5', 1, 2), ('conv_5x5', 0, 2), ('conv_1x1',
+    1, 3), ('conv_3x3', 0, 3), ('sep_conv_5x5', 3, 4), ('max_pool_3x3', 2, 4), ('sep_conv_5x5',
+    0, 5), ('sep_conv_5x5', 4, 5)], normal_concat=[5], reduce=[('conv_1x1', 0, 2),
+    ('conv_3x3', 1, 2), ('conv_5x5', 0, 3), ('max_pool_3x3', 0, 3), ('sep_conv_5x5',
+    2, 4), ('conv_5x5', 3, 4), ('conv_5x5', 4, 5), ('conv_5x5', 2, 5)], reduce_concat=[5])
+  target_genotype: Genotype(normal=[('sep_conv_5x5', 1, 2), ('avg_pool_3x3', 0, 2),
+    ('conv_1x1', 2, 3), ('conv_3x3', 0, 3), ('max_pool_3x3', 2, 4), ('max_pool_3x3',
+    1, 4), ('sep_conv_5x5', 4, 5), ('sep_conv_5x5', 3, 5)], normal_concat=[5], reduce=[('max_pool_3x3',
+    1, 2), ('conv_5x5', 0, 2), ('sep_conv_3x3', 1, 3), ('sep_conv_3x3', 1, 3), ('conv_3x3',
+    1, 4), ('conv_5x5', 0, 4), ('conv_5x5', 0, 5), ('conv_3x3', 1, 5)], reduce_concat=[2,
+    3, 4, 5])
+- adversarial_accuracy:
+    baseline: 0.23906249273568392
+    surrogate: 0.2562499837949872
+  surrogate_genotype: Genotype(normal=[('sep_conv_5x5', 0, 2), ('max_pool_3x3', 0,
+    2), ('skip_connect', 1, 3), ('conv_5x5', 0, 3), ('sep_conv_3x3', 2, 4), ('conv_5x5',
+    2, 4), ('max_pool_3x3', 2, 5), ('conv_5x5', 4, 5)], normal_concat=[3, 5], reduce=[('max_pool_3x3',
+    1, 2), ('avg_pool_3x3', 1, 2), ('sep_conv_5x5', 2, 3), ('conv_5x5', 1, 3), ('conv_5x5',
+    1, 4), ('conv_5x5', 1, 4), ('sep_conv_5x5', 3, 5), ('sep_conv_5x5', 0, 5)], reduce_concat=[4,
+    5])
+  target_genotype: Genotype(normal=[('skip_connect', 0, 2), ('sep_conv_5x5', 1, 2),
+    ('sep_conv_3x3', 1, 3), ('skip_connect', 2, 3), ('skip_connect', 3, 4), ('skip_connect',
+    0, 4), ('conv_1x1', 2, 5), ('avg_pool_3x3', 3, 5)], normal_concat=[4, 5], reduce=[('avg_pool_3x3',
+    1, 2), ('max_pool_3x3', 1, 2), ('conv_1x1', 2, 3), ('skip_connect', 2, 3), ('sep_conv_3x3',
+    0, 4), ('max_pool_3x3', 1, 4), ('sep_conv_5x5', 4, 5), ('skip_connect', 4, 5)],
+    reduce_concat=[3, 5])
+- adversarial_accuracy:
+    baseline: 0.24062499310821295
+    surrogate: 0.22343748714774847
+  surrogate_genotype: Genotype(normal=[('conv_1x1', 0, 2), ('sep_conv_5x5', 0, 2),
+    ('conv_5x5', 0, 3), ('conv_5x5', 1, 3), ('conv_5x5', 1, 4), ('conv_5x5', 1, 4),
+    ('sep_conv_3x3', 0, 5), ('conv_5x5', 3, 5)], normal_concat=[2, 4, 5], reduce=[('sep_conv_3x3',
+    1, 2), ('max_pool_3x3', 0, 2), ('sep_conv_5x5', 2, 3), ('conv_5x5', 1, 3), ('conv_5x5',
+    0, 4), ('sep_conv_3x3', 2, 4), ('sep_conv_3x3', 1, 5), ('sep_conv_3x3', 2, 5)],
+    reduce_concat=[3, 4, 5])
+  target_genotype: Genotype(normal=[('skip_connect', 0, 2), ('sep_conv_5x5', 1, 2),
+    ('sep_conv_3x3', 1, 3), ('skip_connect', 2, 3), ('skip_connect', 3, 4), ('skip_connect',
+    0, 4), ('conv_1x1', 2, 5), ('avg_pool_3x3', 3, 5)], normal_concat=[4, 5], reduce=[('avg_pool_3x3',
+    1, 2), ('max_pool_3x3', 1, 2), ('conv_1x1', 2, 3), ('skip_connect', 2, 3), ('sep_conv_3x3',
+    0, 4), ('max_pool_3x3', 1, 4), ('sep_conv_5x5', 4, 5), ('skip_connect', 4, 5)],
+    reduce_concat=[3, 5])
+- adversarial_accuracy:
+    baseline: 0.2343750037252903
+    surrogate: 0.20156251266598701
+  surrogate_genotype: Genotype(normal=[('sep_conv_5x5', 0, 2), ('conv_5x5', 0, 2),
+    ('conv_5x5', 0, 3), ('sep_conv_3x3', 1, 3), ('sep_conv_5x5', 1, 4), ('conv_1x1',
+    3, 4), ('max_pool_3x3', 1, 5), ('conv_5x5', 0, 5)], normal_concat=[2, 4, 5], reduce=[('conv_3x3',
+    1, 2), ('sep_conv_3x3', 0, 2), ('sep_conv_5x5', 0, 3), ('conv_3x3', 2, 3), ('skip_connect',
+    2, 4), ('max_pool_3x3', 0, 4), ('sep_conv_5x5', 4, 5), ('sep_conv_5x5', 0, 5)],
+    reduce_concat=[3, 5])
+  target_genotype: Genotype(normal=[('skip_connect', 0, 2), ('sep_conv_5x5', 1, 2),
+    ('sep_conv_3x3', 1, 3), ('skip_connect', 2, 3), ('skip_connect', 3, 4), ('skip_connect',
+    0, 4), ('conv_1x1', 2, 5), ('avg_pool_3x3', 3, 5)], normal_concat=[4, 5], reduce=[('avg_pool_3x3',
+    1, 2), ('max_pool_3x3', 1, 2), ('conv_1x1', 2, 3), ('skip_connect', 2, 3), ('sep_conv_3x3',
+    0, 4), ('max_pool_3x3', 1, 4), ('sep_conv_5x5', 4, 5), ('skip_connect', 4, 5)],
+    reduce_concat=[3, 5])
+- adversarial_accuracy:
+    baseline: 0.2562499800696969
+    surrogate: 0.30624999199062586
+  surrogate_genotype: Genotype(normal=[('sep_conv_5x5', 0, 2), ('conv_5x5', 0, 2),
+    ('sep_conv_5x5', 0, 3), ('conv_3x3', 2, 3), ('sep_conv_5x5', 3, 4), ('sep_conv_5x5',
+    3, 4), ('conv_5x5', 2, 5), ('conv_5x5', 2, 5)], normal_concat=[4, 5], reduce=[('max_pool_3x3',
+    0, 2), ('conv_5x5', 1, 2), ('conv_5x5', 0, 3), ('sep_conv_5x5', 2, 3), ('conv_5x5',
+    2, 4), ('conv_3x3', 2, 4), ('max_pool_3x3', 4, 5), ('conv_5x5', 1, 5)], reduce_concat=[3,
+    5])
+  target_genotype: Genotype(normal=[('skip_connect', 0, 2), ('sep_conv_5x5', 1, 2),
+    ('sep_conv_3x3', 1, 3), ('skip_connect', 2, 3), ('skip_connect', 3, 4), ('skip_connect',
+    0, 4), ('conv_1x1', 2, 5), ('avg_pool_3x3', 3, 5)], normal_concat=[4, 5], reduce=[('avg_pool_3x3',
+    1, 2), ('max_pool_3x3', 1, 2), ('conv_1x1', 2, 3), ('skip_connect', 2, 3), ('sep_conv_3x3',
+    0, 4), ('max_pool_3x3', 1, 4), ('sep_conv_5x5', 4, 5), ('skip_connect', 4, 5)],
+    reduce_concat=[3, 5])
+- adversarial_accuracy:
+    baseline: 0.2562499810010195
+    surrogate: 0.2781250048428774
+  surrogate_genotype: Genotype(normal=[('sep_conv_5x5', 0, 2), ('conv_3x3', 1, 2),
+    ('conv_3x3', 1, 3), ('conv_3x3', 1, 3), ('sep_conv_5x5', 2, 4), ('sep_conv_5x5',
+    3, 4), ('conv_3x3', 4, 5), ('sep_conv_5x5', 0, 5)], normal_concat=[5], reduce=[('conv_5x5',
+    0, 2), ('conv_5x5', 0, 2), ('conv_3x3', 2, 3), ('conv_3x3', 2, 3), ('sep_conv_3x3',
+    2, 4), ('conv_5x5', 2, 4), ('max_pool_3x3', 2, 5), ('sep_conv_5x5', 4, 5)], reduce_concat=[3,
+    5])
+  target_genotype: Genotype(normal=[('skip_connect', 0, 2), ('sep_conv_5x5', 1, 2),
+    ('sep_conv_3x3', 1, 3), ('skip_connect', 2, 3), ('skip_connect', 3, 4), ('skip_connect',
+    0, 4), ('conv_1x1', 2, 5), ('avg_pool_3x3', 3, 5)], normal_concat=[4, 5], reduce=[('avg_pool_3x3',
+    1, 2), ('max_pool_3x3', 1, 2), ('conv_1x1', 2, 3), ('skip_connect', 2, 3), ('sep_conv_3x3',
+    0, 4), ('max_pool_3x3', 1, 4), ('sep_conv_5x5', 4, 5), ('skip_connect', 4, 5)],
+    reduce_concat=[3, 5])
+- adversarial_accuracy:
+    baseline: 0.24218749441206455
+    surrogate: 0.24999999441206455
+  surrogate_genotype: Genotype(normal=[('sep_conv_5x5', 0, 2), ('conv_5x5', 1, 2),
+    ('sep_conv_3x3', 2, 3), ('conv_1x1', 0, 3), ('max_pool_3x3', 0, 4), ('conv_3x3',
+    1, 4), ('conv_5x5', 2, 5), ('max_pool_3x3', 0, 5)], normal_concat=[3, 4, 5], reduce=[('conv_5x5',
+    0, 2), ('conv_5x5', 0, 2), ('conv_3x3', 2, 3), ('sep_conv_5x5', 0, 3), ('conv_3x3',
+    1, 4), ('sep_conv_3x3', 1, 4), ('conv_1x1', 4, 5), ('conv_5x5', 2, 5)], reduce_concat=[3,
+    5])
+  target_genotype: Genotype(normal=[('skip_connect', 0, 2), ('sep_conv_5x5', 1, 2),
+    ('sep_conv_3x3', 1, 3), ('skip_connect', 2, 3), ('skip_connect', 3, 4), ('skip_connect',
+    0, 4), ('conv_1x1', 2, 5), ('avg_pool_3x3', 3, 5)], normal_concat=[4, 5], reduce=[('avg_pool_3x3',
+    1, 2), ('max_pool_3x3', 1, 2), ('conv_1x1', 2, 3), ('skip_connect', 2, 3), ('sep_conv_3x3',
+    0, 4), ('max_pool_3x3', 1, 4), ('sep_conv_5x5', 4, 5), ('skip_connect', 4, 5)],
+    reduce_concat=[3, 5])
+- adversarial_accuracy:
+    baseline: 0.26875000540167093
+    surrogate: 0.22656249348074198
+  surrogate_genotype: Genotype(normal=[('conv_5x5', 0, 2), ('conv_5x5', 0, 2), ('sep_conv_5x5',
+    0, 3), ('conv_1x1', 0, 3), ('max_pool_3x3', 1, 4), ('conv_5x5', 1, 4), ('max_pool_3x3',
+    0, 5), ('conv_3x3', 0, 5)], normal_concat=[2, 3, 4, 5], reduce=[('avg_pool_3x3',
+    0, 2), ('conv_3x3', 0, 2), ('sep_conv_5x5', 1, 3), ('sep_conv_3x3', 2, 3), ('conv_1x1',
+    0, 4), ('conv_3x3', 1, 4), ('conv_3x3', 4, 5), ('conv_5x5', 0, 5)], reduce_concat=[3,
+    5])
+  target_genotype: Genotype(normal=[('skip_connect', 0, 2), ('sep_conv_5x5', 1, 2),
+    ('sep_conv_3x3', 1, 3), ('skip_connect', 2, 3), ('skip_connect', 3, 4), ('skip_connect',
+    0, 4), ('conv_1x1', 2, 5), ('avg_pool_3x3', 3, 5)], normal_concat=[4, 5], reduce=[('avg_pool_3x3',
+    1, 2), ('max_pool_3x3', 1, 2), ('conv_1x1', 2, 3), ('skip_connect', 2, 3), ('sep_conv_3x3',
+    0, 4), ('max_pool_3x3', 1, 4), ('sep_conv_5x5', 4, 5), ('skip_connect', 4, 5)],
+    reduce_concat=[3, 5])
+- adversarial_accuracy:
+    baseline: 0.25156249571591616
+    surrogate: 0.2562499837949872
+  surrogate_genotype: Genotype(normal=[('conv_5x5', 0, 2), ('conv_5x5', 1, 2), ('conv_3x3',
+    0, 3), ('avg_pool_3x3', 1, 3), ('sep_conv_3x3', 3, 4), ('max_pool_3x3', 2, 4),
+    ('conv_5x5', 0, 5), ('max_pool_3x3', 0, 5)], normal_concat=[4, 5], reduce=[('conv_5x5',
+    0, 2), ('conv_5x5', 1, 2), ('conv_5x5', 2, 3), ('conv_1x1', 2, 3), ('conv_1x1',
+    2, 4), ('sep_conv_5x5', 2, 4), ('max_pool_3x3', 1, 5), ('conv_3x3', 0, 5)], reduce_concat=[3,
+    4, 5])
+  target_genotype: Genotype(normal=[('skip_connect', 0, 2), ('sep_conv_5x5', 1, 2),
+    ('sep_conv_3x3', 1, 3), ('skip_connect', 2, 3), ('skip_connect', 3, 4), ('skip_connect',
+    0, 4), ('conv_1x1', 2, 5), ('avg_pool_3x3', 3, 5)], normal_concat=[4, 5], reduce=[('avg_pool_3x3',
+    1, 2), ('max_pool_3x3', 1, 2), ('conv_1x1', 2, 3), ('skip_connect', 2, 3), ('sep_conv_3x3',
+    0, 4), ('max_pool_3x3', 1, 4), ('sep_conv_5x5', 4, 5), ('skip_connect', 4, 5)],
+    reduce_concat=[3, 5])
+- adversarial_accuracy:
+    baseline: 0.25624998193234205
+    surrogate: 0.353124993853271
+  surrogate_genotype: Genotype(normal=[('max_pool_3x3', 1, 2), ('avg_pool_3x3', 0,
+    2), ('sep_conv_3x3', 2, 3), ('max_pool_3x3', 0, 3), ('max_pool_3x3', 3, 4), ('conv_5x5',
+    2, 4), ('conv_5x5', 3, 5), ('sep_conv_5x5', 4, 5)], normal_concat=[5], reduce=[('conv_5x5',
+    1, 2), ('skip_connect', 1, 2), ('conv_5x5', 0, 3), ('conv_3x3', 1, 3), ('conv_5x5',
+    1, 4), ('sep_conv_3x3', 2, 4), ('conv_5x5', 0, 5), ('avg_pool_3x3', 4, 5)], reduce_concat=[3,
+    5])
+  target_genotype: Genotype(normal=[('skip_connect', 0, 2), ('sep_conv_5x5', 1, 2),
+    ('sep_conv_3x3', 1, 3), ('skip_connect', 2, 3), ('skip_connect', 3, 4), ('skip_connect',
+    0, 4), ('conv_1x1', 2, 5), ('avg_pool_3x3', 3, 5)], normal_concat=[4, 5], reduce=[('avg_pool_3x3',
+    1, 2), ('max_pool_3x3', 1, 2), ('conv_1x1', 2, 3), ('skip_connect', 2, 3), ('sep_conv_3x3',
+    0, 4), ('max_pool_3x3', 1, 4), ('sep_conv_5x5', 4, 5), ('skip_connect', 4, 5)],
+    reduce_concat=[3, 5])
+- adversarial_accuracy:
+    baseline: 0.371875018812716
+    surrogate: 0.36250001285225153
+  surrogate_genotype: Genotype(normal=[('conv_5x5', 1, 2), ('conv_5x5', 1, 2), ('sep_conv_5x5',
+    1, 3), ('conv_5x5', 2, 3), ('conv_5x5', 0, 4), ('conv_3x3', 1, 4), ('sep_conv_5x5',
+    3, 5), ('conv_5x5', 4, 5)], normal_concat=[5], reduce=[('conv_3x3', 0, 2), ('skip_connect',
+    0, 2), ('conv_5x5', 1, 3), ('conv_5x5', 0, 3), ('conv_3x3', 2, 4), ('conv_5x5',
+    0, 4), ('sep_conv_5x5', 2, 5), ('sep_conv_5x5', 0, 5)], reduce_concat=[3, 4, 5])
+  target_genotype: Genotype(normal=[('conv_5x5', 0, 2), ('max_pool_3x3', 1, 2), ('avg_pool_3x3',
+    0, 3), ('conv_1x1', 2, 3), ('conv_1x1', 2, 4), ('conv_5x5', 0, 4), ('sep_conv_3x3',
+    0, 5), ('conv_5x5', 3, 5)], normal_concat=[4, 5], reduce=[('conv_5x5', 0, 2),
+    ('skip_connect', 1, 2), ('sep_conv_3x3', 2, 3), ('conv_3x3', 1, 3), ('conv_5x5',
+    1, 4), ('conv_5x5', 1, 4), ('sep_conv_5x5', 3, 5), ('sep_conv_5x5', 4, 5)], reduce_concat=[5])
+- adversarial_accuracy:
+    baseline: 0.3437499850988388
+    surrogate: 0.35468749701976776
+  surrogate_genotype: Genotype(normal=[('sep_conv_5x5', 1, 2), ('sep_conv_3x3', 0,
+    2), ('sep_conv_3x3', 2, 3), ('sep_conv_5x5', 2, 3), ('sep_conv_5x5', 0, 4), ('conv_5x5',
+    2, 4), ('conv_3x3', 1, 5), ('conv_3x3', 4, 5)], normal_concat=[3, 5], reduce=[('conv_3x3',
+    0, 2), ('conv_1x1', 0, 2), ('conv_3x3', 2, 3), ('conv_5x5', 0, 3), ('conv_5x5',
+    0, 4), ('conv_3x3', 3, 4), ('sep_conv_5x5', 0, 5), ('sep_conv_5x5', 1, 5)], reduce_concat=[4,
+    5])
+  target_genotype: Genotype(normal=[('conv_5x5', 0, 2), ('max_pool_3x3', 1, 2), ('avg_pool_3x3',
+    0, 3), ('conv_1x1', 2, 3), ('conv_1x1', 2, 4), ('conv_5x5', 0, 4), ('sep_conv_3x3',
+    0, 5), ('conv_5x5', 3, 5)], normal_concat=[4, 5], reduce=[('conv_5x5', 0, 2),
+    ('skip_connect', 1, 2), ('sep_conv_3x3', 2, 3), ('conv_3x3', 1, 3), ('conv_5x5',
+    1, 4), ('conv_5x5', 1, 4), ('sep_conv_5x5', 3, 5), ('sep_conv_5x5', 4, 5)], reduce_concat=[5])
+- adversarial_accuracy:
+    baseline: 0.3749999897554517
+    surrogate: 0.3484375076368451
+  surrogate_genotype: Genotype(normal=[('conv_1x1', 0, 2), ('conv_5x5', 1, 2), ('conv_1x1',
+    1, 3), ('conv_5x5', 1, 3), ('sep_conv_5x5', 0, 4), ('max_pool_3x3', 1, 4), ('sep_conv_3x3',
+    0, 5), ('max_pool_3x3', 0, 5)], normal_concat=[2, 3, 4, 5], reduce=[('sep_conv_5x5',
+    1, 2), ('conv_5x5', 0, 2), ('sep_conv_3x3', 2, 3), ('conv_5x5', 2, 3), ('sep_conv_5x5',
+    3, 4), ('conv_3x3', 0, 4), ('sep_conv_3x3', 2, 5), ('conv_3x3', 0, 5)], reduce_concat=[4,
+    5])
+  target_genotype: Genotype(normal=[('conv_5x5', 0, 2), ('max_pool_3x3', 1, 2), ('avg_pool_3x3',
+    0, 3), ('conv_1x1', 2, 3), ('conv_1x1', 2, 4), ('conv_5x5', 0, 4), ('sep_conv_3x3',
+    0, 5), ('conv_5x5', 3, 5)], normal_concat=[4, 5], reduce=[('conv_5x5', 0, 2),
+    ('skip_connect', 1, 2), ('sep_conv_3x3', 2, 3), ('conv_3x3', 1, 3), ('conv_5x5',
+    1, 4), ('conv_5x5', 1, 4), ('sep_conv_5x5', 3, 5), ('sep_conv_5x5', 4, 5)], reduce_concat=[5])
+- adversarial_accuracy:
+    baseline: 0.3640625011175871
+    surrogate: 0.35937498323619366
+  surrogate_genotype: Genotype(normal=[('sep_conv_3x3', 1, 2), ('conv_5x5', 0, 2),
+    ('conv_3x3', 2, 3), ('sep_conv_5x5', 1, 3), ('skip_connect', 1, 4), ('conv_3x3',
+    1, 4), ('max_pool_3x3', 3, 5), ('conv_5x5', 1, 5)], normal_concat=[4, 5], reduce=[('conv_3x3',
+    0, 2), ('sep_conv_5x5', 1, 2), ('sep_conv_5x5', 1, 3), ('sep_conv_5x5', 1, 3),
+    ('conv_5x5', 1, 4), ('max_pool_3x3', 2, 4), ('conv_5x5', 0, 5), ('max_pool_3x3',
+    0, 5)], reduce_concat=[3, 4, 5])
+  target_genotype: Genotype(normal=[('conv_5x5', 0, 2), ('max_pool_3x3', 1, 2), ('avg_pool_3x3',
+    0, 3), ('conv_1x1', 2, 3), ('conv_1x1', 2, 4), ('conv_5x5', 0, 4), ('sep_conv_3x3',
+    0, 5), ('conv_5x5', 3, 5)], normal_concat=[4, 5], reduce=[('conv_5x5', 0, 2),
+    ('skip_connect', 1, 2), ('sep_conv_3x3', 2, 3), ('conv_3x3', 1, 3), ('conv_5x5',
+    1, 4), ('conv_5x5', 1, 4), ('sep_conv_5x5', 3, 5), ('sep_conv_5x5', 4, 5)], reduce_concat=[5])
+- adversarial_accuracy:
+    baseline: 0.3656249977648258
+    surrogate: 0.30937502160668373
+  surrogate_genotype: Genotype(normal=[('sep_conv_3x3', 0, 2), ('sep_conv_3x3', 1,
+    2), ('conv_5x5', 0, 3), ('sep_conv_5x5', 0, 3), ('sep_conv_5x5', 2, 4), ('conv_5x5',
+    0, 4), ('max_pool_3x3', 1, 5), ('conv_5x5', 1, 5)], normal_concat=[3, 4, 5], reduce=[('sep_conv_3x3',
+    0, 2), ('conv_3x3', 1, 2), ('conv_3x3', 2, 3), ('sep_conv_5x5', 0, 3), ('sep_conv_5x5',
+    0, 4), ('conv_5x5', 0, 4), ('conv_1x1', 1, 5), ('conv_3x3', 0, 5)], reduce_concat=[3,
+    4, 5])
+  target_genotype: Genotype(normal=[('conv_5x5', 0, 2), ('max_pool_3x3', 1, 2), ('avg_pool_3x3',
+    0, 3), ('conv_1x1', 2, 3), ('conv_1x1', 2, 4), ('conv_5x5', 0, 4), ('sep_conv_3x3',
+    0, 5), ('conv_5x5', 3, 5)], normal_concat=[4, 5], reduce=[('conv_5x5', 0, 2),
+    ('skip_connect', 1, 2), ('sep_conv_3x3', 2, 3), ('conv_3x3', 1, 3), ('conv_5x5',
+    1, 4), ('conv_5x5', 1, 4), ('sep_conv_5x5', 3, 5), ('sep_conv_5x5', 4, 5)], reduce_concat=[5])
+- adversarial_accuracy:
+    baseline: 0.3578124921768904
+    surrogate: 0.34374999813735485
+  surrogate_genotype: Genotype(normal=[('sep_conv_5x5', 1, 2), ('max_pool_3x3', 1,
+    2), ('conv_5x5', 0, 3), ('conv_5x5', 0, 3), ('sep_conv_3x3', 0, 4), ('conv_5x5',
+    3, 4), ('conv_5x5', 3, 5), ('sep_conv_5x5', 3, 5)], normal_concat=[2, 4, 5], reduce=[('sep_conv_3x3',
+    1, 2), ('sep_conv_5x5', 0, 2), ('conv_5x5', 1, 3), ('sep_conv_5x5', 2, 3), ('sep_conv_5x5',
+    0, 4), ('conv_5x5', 2, 4), ('conv_5x5', 2, 5), ('sep_conv_3x3', 4, 5)], reduce_concat=[3,
+    5])
+  target_genotype: Genotype(normal=[('conv_5x5', 0, 2), ('max_pool_3x3', 1, 2), ('avg_pool_3x3',
+    0, 3), ('conv_1x1', 2, 3), ('conv_1x1', 2, 4), ('conv_5x5', 0, 4), ('sep_conv_3x3',
+    0, 5), ('conv_5x5', 3, 5)], normal_concat=[4, 5], reduce=[('conv_5x5', 0, 2),
+    ('skip_connect', 1, 2), ('sep_conv_3x3', 2, 3), ('conv_3x3', 1, 3), ('conv_5x5',
+    1, 4), ('conv_5x5', 1, 4), ('sep_conv_5x5', 3, 5), ('sep_conv_5x5', 4, 5)], reduce_concat=[5])
+- adversarial_accuracy:
+    baseline: 0.3624999988824129
+    surrogate: 0.3812499810010195
+  surrogate_genotype: Genotype(normal=[('max_pool_3x3', 1, 2), ('conv_1x1', 1, 2),
+    ('conv_5x5', 0, 3), ('sep_conv_5x5', 2, 3), ('sep_conv_5x5', 3, 4), ('max_pool_3x3',
+    0, 4), ('sep_conv_5x5', 0, 5), ('skip_connect', 2, 5)], normal_concat=[4, 5],
+    reduce=[('sep_conv_5x5', 0, 2), ('sep_conv_5x5', 0, 2), ('conv_3x3', 0, 3), ('sep_conv_5x5',
+    1, 3), ('conv_3x3', 1, 4), ('max_pool_3x3', 3, 4), ('sep_conv_5x5', 4, 5), ('conv_5x5',
+    0, 5)], reduce_concat=[2, 5])
+  target_genotype: Genotype(normal=[('conv_5x5', 0, 2), ('max_pool_3x3', 1, 2), ('avg_pool_3x3',
+    0, 3), ('conv_1x1', 2, 3), ('conv_1x1', 2, 4), ('conv_5x5', 0, 4), ('sep_conv_3x3',
+    0, 5), ('conv_5x5', 3, 5)], normal_concat=[4, 5], reduce=[('conv_5x5', 0, 2),
+    ('skip_connect', 1, 2), ('sep_conv_3x3', 2, 3), ('conv_3x3', 1, 3), ('conv_5x5',
+    1, 4), ('conv_5x5', 1, 4), ('sep_conv_5x5', 3, 5), ('sep_conv_5x5', 4, 5)], reduce_concat=[5])
+- adversarial_accuracy:
+    baseline: 0.351562493480742
+    surrogate: 0.37031250540167093
+  surrogate_genotype: Genotype(normal=[('sep_conv_5x5', 0, 2), ('sep_conv_5x5', 1,
+    2), ('conv_5x5', 0, 3), ('sep_conv_5x5', 2, 3), ('sep_conv_3x3', 0, 4), ('conv_3x3',
+    2, 4), ('conv_5x5', 1, 5), ('conv_5x5', 4, 5)], normal_concat=[3, 5], reduce=[('conv_3x3',
+    0, 2), ('conv_5x5', 0, 2), ('sep_conv_5x5', 0, 3), ('max_pool_3x3', 1, 3), ('sep_conv_5x5',
+    0, 4), ('conv_5x5', 2, 4), ('conv_1x1', 2, 5), ('conv_1x1', 2, 5)], reduce_concat=[3,
+    4, 5])
+  target_genotype: Genotype(normal=[('conv_5x5', 0, 2), ('max_pool_3x3', 1, 2), ('avg_pool_3x3',
+    0, 3), ('conv_1x1', 2, 3), ('conv_1x1', 2, 4), ('conv_5x5', 0, 4), ('sep_conv_3x3',
+    0, 5), ('conv_5x5', 3, 5)], normal_concat=[4, 5], reduce=[('conv_5x5', 0, 2),
+    ('skip_connect', 1, 2), ('sep_conv_3x3', 2, 3), ('conv_3x3', 1, 3), ('conv_5x5',
+    1, 4), ('conv_5x5', 1, 4), ('sep_conv_5x5', 3, 5), ('sep_conv_5x5', 4, 5)], reduce_concat=[5])
+- adversarial_accuracy:
+    baseline: 0.36718748696148396
+    surrogate: 0.3812499810010195
+  surrogate_genotype: Genotype(normal=[('conv_5x5', 1, 2), ('conv_1x1', 0, 2), ('max_pool_3x3',
+    1, 3), ('conv_3x3', 0, 3), ('conv_3x3', 3, 4), ('conv_5x5', 3, 4), ('conv_3x3',
+    4, 5), ('conv_1x1', 2, 5)], normal_concat=[5], reduce=[('conv_3x3', 1, 2), ('conv_5x5',
+    0, 2), ('sep_conv_5x5', 2, 3), ('sep_conv_3x3', 1, 3), ('conv_5x5', 2, 4), ('max_pool_3x3',
+    1, 4), ('conv_3x3', 0, 5), ('conv_1x1', 1, 5)], reduce_concat=[3, 4, 5])
+  target_genotype: Genotype(normal=[('conv_5x5', 0, 2), ('max_pool_3x3', 1, 2), ('avg_pool_3x3',
+    0, 3), ('conv_1x1', 2, 3), ('conv_1x1', 2, 4), ('conv_5x5', 0, 4), ('sep_conv_3x3',
+    0, 5), ('conv_5x5', 3, 5)], normal_concat=[4, 5], reduce=[('conv_5x5', 0, 2),
+    ('skip_connect', 1, 2), ('sep_conv_3x3', 2, 3), ('conv_3x3', 1, 3), ('conv_5x5',
+    1, 4), ('conv_5x5', 1, 4), ('sep_conv_5x5', 3, 5), ('sep_conv_5x5', 4, 5)], reduce_concat=[5])
+- adversarial_accuracy:
+    baseline: 0.3796875011175871
+    surrogate: 0.35937498323619366
+  surrogate_genotype: Genotype(normal=[('sep_conv_5x5', 1, 2), ('conv_5x5', 0, 2),
+    ('sep_conv_5x5', 0, 3), ('sep_conv_3x3', 2, 3), ('max_pool_3x3', 0, 4), ('sep_conv_5x5',
+    3, 4), ('conv_5x5', 0, 5), ('max_pool_3x3', 2, 5)], normal_concat=[4, 5], reduce=[('max_pool_3x3',
+    0, 2), ('conv_3x3', 0, 2), ('conv_1x1', 2, 3), ('sep_conv_5x5', 0, 3), ('max_pool_3x3',
+    1, 4), ('max_pool_3x3', 0, 4), ('sep_conv_3x3', 1, 5), ('sep_conv_5x5', 1, 5)],
+    reduce_concat=[3, 4, 5])
+  target_genotype: Genotype(normal=[('conv_5x5', 0, 2), ('max_pool_3x3', 1, 2), ('avg_pool_3x3',
+    0, 3), ('conv_1x1', 2, 3), ('conv_1x1', 2, 4), ('conv_5x5', 0, 4), ('sep_conv_3x3',
+    0, 5), ('conv_5x5', 3, 5)], normal_concat=[4, 5], reduce=[('conv_5x5', 0, 2),
+    ('skip_connect', 1, 2), ('sep_conv_3x3', 2, 3), ('conv_3x3', 1, 3), ('conv_5x5',
+    1, 4), ('conv_5x5', 1, 4), ('sep_conv_5x5', 3, 5), ('sep_conv_5x5', 4, 5)], reduce_concat=[5])
+- adversarial_accuracy:
+    baseline: 0.19218749273568392
+    surrogate: 0.27656250167638063
+  surrogate_genotype: Genotype(normal=[('conv_5x5', 1, 2), ('conv_5x5', 0, 2), ('max_pool_3x3',
+    2, 3), ('conv_5x5', 2, 3), ('conv_5x5', 3, 4), ('conv_5x5', 2, 4), ('conv_5x5',
+    2, 5), ('max_pool_3x3', 3, 5)], normal_concat=[4, 5], reduce=[('sep_conv_5x5',
+    1, 2), ('conv_3x3', 1, 2), ('conv_3x3', 2, 3), ('sep_conv_3x3', 2, 3), ('conv_3x3',
+    3, 4), ('conv_5x5', 0, 4), ('conv_5x5', 4, 5), ('skip_connect', 4, 5)], reduce_concat=[5])
+  target_genotype: Genotype(normal=[('conv_5x5', 1, 2), ('avg_pool_3x3', 0, 2), ('sep_conv_5x5',
+    2, 3), ('sep_conv_3x3', 0, 3), ('max_pool_3x3', 1, 4), ('conv_3x3', 1, 4), ('conv_3x3',
+    1, 5), ('conv_1x1', 0, 5)], normal_concat=[3, 4, 5], reduce=[('sep_conv_5x5',
+    1, 2), ('conv_5x5', 0, 2), ('conv_3x3', 0, 3), ('conv_1x1', 0, 3), ('sep_conv_5x5',
+    1, 4), ('sep_conv_3x3', 1, 4), ('max_pool_3x3', 1, 5), ('skip_connect', 2, 5)],
+    reduce_concat=[3, 4, 5])
+- adversarial_accuracy:
+    baseline: 0.20156249962747097
+    surrogate: 0.3000000026077032
+  surrogate_genotype: Genotype(normal=[('max_pool_3x3', 1, 2), ('sep_conv_3x3', 1,
+    2), ('conv_5x5', 0, 3), ('sep_conv_5x5', 2, 3), ('sep_conv_5x5', 3, 4), ('max_pool_3x3',
+    0, 4), ('sep_conv_5x5', 0, 5), ('sep_conv_5x5', 2, 5)], normal_concat=[4, 5],
+    reduce=[('sep_conv_5x5', 0, 2), ('conv_5x5', 0, 2), ('conv_1x1', 0, 3), ('conv_5x5',
+    1, 3), ('sep_conv_3x3', 1, 4), ('max_pool_3x3', 3, 4), ('sep_conv_3x3', 4, 5),
+    ('conv_5x5', 0, 5)], reduce_concat=[2, 5])
+  target_genotype: Genotype(normal=[('conv_5x5', 1, 2), ('avg_pool_3x3', 0, 2), ('sep_conv_5x5',
+    2, 3), ('sep_conv_3x3', 0, 3), ('max_pool_3x3', 1, 4), ('conv_3x3', 1, 4), ('conv_3x3',
+    1, 5), ('conv_1x1', 0, 5)], normal_concat=[3, 4, 5], reduce=[('sep_conv_5x5',
+    1, 2), ('conv_5x5', 0, 2), ('conv_3x3', 0, 3), ('conv_1x1', 0, 3), ('sep_conv_5x5',
+    1, 4), ('sep_conv_3x3', 1, 4), ('max_pool_3x3', 1, 5), ('skip_connect', 2, 5)],
+    reduce_concat=[3, 4, 5])
+- adversarial_accuracy:
+    baseline: 0.19999999646097422
+    surrogate: 0.37031250540167093
+  surrogate_genotype: Genotype(normal=[('sep_conv_5x5', 1, 2), ('sep_conv_5x5', 1,
+    2), ('sep_conv_5x5', 1, 3), ('conv_5x5', 2, 3), ('conv_1x1', 0, 4), ('max_pool_3x3',
+    1, 4), ('conv_5x5', 2, 5), ('sep_conv_5x5', 3, 5)], normal_concat=[4, 5], reduce=[('sep_conv_5x5',
+    1, 2), ('max_pool_3x3', 0, 2), ('avg_pool_3x3', 2, 3), ('conv_5x5', 2, 3), ('sep_conv_5x5',
+    2, 4), ('max_pool_3x3', 0, 4), ('sep_conv_5x5', 4, 5), ('sep_conv_5x5', 3, 5)],
+    reduce_concat=[5])
+  target_genotype: Genotype(normal=[('conv_5x5', 1, 2), ('avg_pool_3x3', 0, 2), ('sep_conv_5x5',
+    2, 3), ('sep_conv_3x3', 0, 3), ('max_pool_3x3', 1, 4), ('conv_3x3', 1, 4), ('conv_3x3',
+    1, 5), ('conv_1x1', 0, 5)], normal_concat=[3, 4, 5], reduce=[('sep_conv_5x5',
+    1, 2), ('conv_5x5', 0, 2), ('conv_3x3', 0, 3), ('conv_1x1', 0, 3), ('sep_conv_5x5',
+    1, 4), ('sep_conv_3x3', 1, 4), ('max_pool_3x3', 1, 5), ('skip_connect', 2, 5)],
+    reduce_concat=[3, 4, 5])
+- adversarial_accuracy:
+    baseline: 0.196874993853271
+    surrogate: 0.2453124849125743
+  surrogate_genotype: Genotype(normal=[('max_pool_3x3', 0, 2), ('sep_conv_5x5', 0,
+    2), ('conv_5x5', 0, 3), ('conv_3x3', 1, 3), ('conv_5x5', 1, 4), ('conv_5x5', 1,
+    4), ('sep_conv_5x5', 2, 5), ('conv_1x1', 4, 5)], normal_concat=[3, 5], reduce=[('sep_conv_5x5',
+    0, 2), ('sep_conv_3x3', 1, 2), ('avg_pool_3x3', 1, 3), ('sep_conv_5x5', 1, 3),
+    ('sep_conv_5x5', 0, 4), ('max_pool_3x3', 0, 4), ('conv_3x3', 3, 5), ('sep_conv_5x5',
+    2, 5)], reduce_concat=[4, 5])
+  target_genotype: Genotype(normal=[('conv_5x5', 1, 2), ('avg_pool_3x3', 0, 2), ('sep_conv_5x5',
+    2, 3), ('sep_conv_3x3', 0, 3), ('max_pool_3x3', 1, 4), ('conv_3x3', 1, 4), ('conv_3x3',
+    1, 5), ('conv_1x1', 0, 5)], normal_concat=[3, 4, 5], reduce=[('sep_conv_5x5',
+    1, 2), ('conv_5x5', 0, 2), ('conv_3x3', 0, 3), ('conv_1x1', 0, 3), ('sep_conv_5x5',
+    1, 4), ('sep_conv_3x3', 1, 4), ('max_pool_3x3', 1, 5), ('skip_connect', 2, 5)],
+    reduce_concat=[3, 4, 5])
+- adversarial_accuracy:
+    baseline: 0.2078124936670065
+    surrogate: 0.2796874847263098
+  surrogate_genotype: Genotype(normal=[('conv_3x3', 0, 2), ('conv_1x1', 1, 2), ('sep_conv_5x5',
+    1, 3), ('sep_conv_5x5', 0, 3), ('sep_conv_5x5', 3, 4), ('conv_3x3', 3, 4), ('conv_5x5',
+    4, 5), ('sep_conv_5x5', 3, 5)], normal_concat=[2, 5], reduce=[('max_pool_3x3',
+    1, 2), ('conv_5x5', 1, 2), ('sep_conv_5x5', 1, 3), ('conv_5x5', 2, 3), ('conv_3x3',
+    1, 4), ('conv_5x5', 3, 4), ('sep_conv_5x5', 1, 5), ('sep_conv_5x5', 4, 5)], reduce_concat=[5])
+  target_genotype: Genotype(normal=[('conv_5x5', 1, 2), ('avg_pool_3x3', 0, 2), ('sep_conv_5x5',
+    2, 3), ('sep_conv_3x3', 0, 3), ('max_pool_3x3', 1, 4), ('conv_3x3', 1, 4), ('conv_3x3',
+    1, 5), ('conv_1x1', 0, 5)], normal_concat=[3, 4, 5], reduce=[('sep_conv_5x5',
+    1, 2), ('conv_5x5', 0, 2), ('conv_3x3', 0, 3), ('conv_1x1', 0, 3), ('sep_conv_5x5',
+    1, 4), ('sep_conv_3x3', 1, 4), ('max_pool_3x3', 1, 5), ('skip_connect', 2, 5)],
+    reduce_concat=[3, 4, 5])
+- adversarial_accuracy:
+    baseline: 0.18906249664723873
+    surrogate: 0.3000000026077032
+  surrogate_genotype: Genotype(normal=[('conv_5x5', 1, 2), ('max_pool_3x3', 1, 2),
+    ('conv_1x1', 2, 3), ('sep_conv_5x5', 1, 3), ('conv_5x5', 0, 4), ('max_pool_3x3',
+    1, 4), ('max_pool_3x3', 0, 5), ('sep_conv_5x5', 4, 5)], normal_concat=[3, 5],
+    reduce=[('max_pool_3x3', 1, 2), ('sep_conv_3x3', 0, 2), ('skip_connect', 2, 3),
+    ('max_pool_3x3', 2, 3), ('conv_5x5', 3, 4), ('conv_3x3', 0, 4), ('conv_1x1', 4,
+    5), ('sep_conv_5x5', 1, 5)], reduce_concat=[5])
+  target_genotype: Genotype(normal=[('conv_5x5', 1, 2), ('avg_pool_3x3', 0, 2), ('sep_conv_5x5',
+    2, 3), ('sep_conv_3x3', 0, 3), ('max_pool_3x3', 1, 4), ('conv_3x3', 1, 4), ('conv_3x3',
+    1, 5), ('conv_1x1', 0, 5)], normal_concat=[3, 4, 5], reduce=[('sep_conv_5x5',
+    1, 2), ('conv_5x5', 0, 2), ('conv_3x3', 0, 3), ('conv_1x1', 0, 3), ('sep_conv_5x5',
+    1, 4), ('sep_conv_3x3', 1, 4), ('max_pool_3x3', 1, 5), ('skip_connect', 2, 5)],
+    reduce_concat=[3, 4, 5])
+- adversarial_accuracy:
+    baseline: 0.18750000558793545
+    surrogate: 0.21250001154839993
+  surrogate_genotype: Genotype(normal=[('conv_3x3', 1, 2), ('sep_conv_5x5', 0, 2),
+    ('avg_pool_3x3', 2, 3), ('max_pool_3x3', 2, 3), ('conv_3x3', 1, 4), ('conv_1x1',
+    2, 4), ('avg_pool_3x3', 3, 5), ('conv_3x3', 3, 5)], normal_concat=[4, 5], reduce=[('sep_conv_5x5',
+    0, 2), ('conv_3x3', 0, 2), ('conv_3x3', 1, 3), ('sep_conv_5x5', 2, 3), ('max_pool_3x3',
+    0, 4), ('conv_5x5', 2, 4), ('sep_conv_5x5', 1, 5), ('conv_3x3', 3, 5)], reduce_concat=[4,
+    5])
+  target_genotype: Genotype(normal=[('conv_5x5', 1, 2), ('avg_pool_3x3', 0, 2), ('sep_conv_5x5',
+    2, 3), ('sep_conv_3x3', 0, 3), ('max_pool_3x3', 1, 4), ('conv_3x3', 1, 4), ('conv_3x3',
+    1, 5), ('conv_1x1', 0, 5)], normal_concat=[3, 4, 5], reduce=[('sep_conv_5x5',
+    1, 2), ('conv_5x5', 0, 2), ('conv_3x3', 0, 3), ('conv_1x1', 0, 3), ('sep_conv_5x5',
+    1, 4), ('sep_conv_3x3', 1, 4), ('max_pool_3x3', 1, 5), ('skip_connect', 2, 5)],
+    reduce_concat=[3, 4, 5])
+- adversarial_accuracy:
+    baseline: 0.21718748938292265
+    surrogate: 0.3609374864026904
+  surrogate_genotype: Genotype(normal=[('conv_5x5', 1, 2), ('conv_5x5', 0, 2), ('conv_1x1',
+    1, 3), ('conv_3x3', 0, 3), ('sep_conv_5x5', 3, 4), ('max_pool_3x3', 2, 4), ('sep_conv_5x5',
+    0, 5), ('sep_conv_5x5', 4, 5)], normal_concat=[5], reduce=[('conv_1x1', 0, 2),
+    ('conv_3x3', 1, 2), ('conv_5x5', 0, 3), ('max_pool_3x3', 0, 3), ('sep_conv_5x5',
+    2, 4), ('conv_5x5', 3, 4), ('conv_5x5', 4, 5), ('conv_5x5', 2, 5)], reduce_concat=[5])
+  target_genotype: Genotype(normal=[('sep_conv_3x3', 1, 2), ('conv_3x3', 0, 2), ('conv_3x3',
+    2, 3), ('avg_pool_3x3', 2, 3), ('conv_5x5', 1, 4), ('skip_connect', 3, 4), ('conv_3x3',
+    1, 5), ('conv_5x5', 0, 5)], normal_concat=[4, 5], reduce=[('sep_conv_5x5', 0,
+    2), ('sep_conv_5x5', 1, 2), ('avg_pool_3x3', 2, 3), ('skip_connect', 1, 3), ('max_pool_3x3',
+    2, 4), ('conv_5x5', 0, 4), ('sep_conv_5x5', 1, 5), ('skip_connect', 2, 5)], reduce_concat=[3,
+    4, 5])
+- adversarial_accuracy:
+    baseline: 0.2046875013038516
+    surrogate: 0.2734374953433871
+  surrogate_genotype: Genotype(normal=[('conv_5x5', 1, 2), ('conv_3x3', 0, 2), ('conv_5x5',
+    2, 3), ('conv_3x3', 2, 3), ('sep_conv_5x5', 2, 4), ('conv_5x5', 1, 4), ('sep_conv_5x5',
+    2, 5), ('conv_5x5', 3, 5)], normal_concat=[4, 5], reduce=[('conv_3x3', 0, 2),
+    ('sep_conv_5x5', 1, 2), ('conv_3x3', 2, 3), ('max_pool_3x3', 2, 3), ('conv_5x5',
+    3, 4), ('conv_5x5', 1, 4), ('max_pool_3x3', 1, 5), ('max_pool_3x3', 2, 5)], reduce_concat=[4,
+    5])
+  target_genotype: Genotype(normal=[('sep_conv_3x3', 1, 2), ('conv_3x3', 0, 2), ('conv_3x3',
+    2, 3), ('avg_pool_3x3', 2, 3), ('conv_5x5', 1, 4), ('skip_connect', 3, 4), ('conv_3x3',
+    1, 5), ('conv_5x5', 0, 5)], normal_concat=[4, 5], reduce=[('sep_conv_5x5', 0,
+    2), ('sep_conv_5x5', 1, 2), ('avg_pool_3x3', 2, 3), ('skip_connect', 1, 3), ('max_pool_3x3',
+    2, 4), ('conv_5x5', 0, 4), ('sep_conv_5x5', 1, 5), ('skip_connect', 2, 5)], reduce_concat=[3,
+    4, 5])
+- adversarial_accuracy:
+    baseline: 0.2265624925494194
+    surrogate: 0.34687500447034836
+  surrogate_genotype: Genotype(normal=[('conv_5x5', 1, 2), ('conv_1x1', 1, 2), ('conv_5x5',
+    1, 3), ('sep_conv_3x3', 1, 3), ('sep_conv_5x5', 2, 4), ('conv_3x3', 2, 4), ('conv_5x5',
+    4, 5), ('conv_1x1', 3, 5)], normal_concat=[5], reduce=[('sep_conv_3x3', 0, 2),
+    ('sep_conv_5x5', 0, 2), ('conv_5x5', 1, 3), ('conv_3x3', 1, 3), ('conv_5x5', 1,
+    4), ('conv_5x5', 0, 4), ('sep_conv_3x3', 2, 5), ('sep_conv_5x5', 1, 5)], reduce_concat=[3,
+    4, 5])
+  target_genotype: Genotype(normal=[('sep_conv_3x3', 1, 2), ('conv_3x3', 0, 2), ('conv_3x3',
+    2, 3), ('avg_pool_3x3', 2, 3), ('conv_5x5', 1, 4), ('skip_connect', 3, 4), ('conv_3x3',
+    1, 5), ('conv_5x5', 0, 5)], normal_concat=[4, 5], reduce=[('sep_conv_5x5', 0,
+    2), ('sep_conv_5x5', 1, 2), ('avg_pool_3x3', 2, 3), ('skip_connect', 1, 3), ('max_pool_3x3',
+    2, 4), ('conv_5x5', 0, 4), ('sep_conv_5x5', 1, 5), ('skip_connect', 2, 5)], reduce_concat=[3,
+    4, 5])
+- adversarial_accuracy:
+    baseline: 0.21249999199062586
+    surrogate: 0.23437498603016138
+  surrogate_genotype: Genotype(normal=[('skip_connect', 1, 2), ('conv_1x1', 1, 2),
+    ('conv_5x5', 0, 3), ('max_pool_3x3', 0, 3), ('conv_5x5', 2, 4), ('conv_3x3', 3,
+    4), ('conv_5x5', 3, 5), ('conv_5x5', 1, 5)], normal_concat=[4, 5], reduce=[('conv_5x5',
+    1, 2), ('conv_5x5', 1, 2), ('conv_5x5', 2, 3), ('conv_5x5', 2, 3), ('sep_conv_5x5',
+    2, 4), ('conv_1x1', 3, 4), ('conv_5x5', 0, 5), ('sep_conv_5x5', 1, 5)], reduce_concat=[4,
+    5])
+  target_genotype: Genotype(normal=[('sep_conv_3x3', 1, 2), ('conv_3x3', 0, 2), ('conv_3x3',
+    2, 3), ('avg_pool_3x3', 2, 3), ('conv_5x5', 1, 4), ('skip_connect', 3, 4), ('conv_3x3',
+    1, 5), ('conv_5x5', 0, 5)], normal_concat=[4, 5], reduce=[('sep_conv_5x5', 0,
+    2), ('sep_conv_5x5', 1, 2), ('avg_pool_3x3', 2, 3), ('skip_connect', 1, 3), ('max_pool_3x3',
+    2, 4), ('conv_5x5', 0, 4), ('sep_conv_5x5', 1, 5), ('skip_connect', 2, 5)], reduce_concat=[3,
+    4, 5])
+- adversarial_accuracy:
+    baseline: 0.21562498807907104
+    surrogate: 0.24687498807907104
+  surrogate_genotype: Genotype(normal=[('conv_5x5', 0, 2), ('conv_3x3', 1, 2), ('max_pool_3x3',
+    1, 3), ('conv_1x1', 1, 3), ('sep_conv_3x3', 3, 4), ('conv_5x5', 1, 4), ('sep_conv_5x5',
+    0, 5), ('conv_1x1', 3, 5)], normal_concat=[2, 4, 5], reduce=[('sep_conv_3x3',
+    1, 2), ('conv_1x1', 1, 2), ('conv_1x1', 0, 3), ('conv_5x5', 0, 3), ('conv_1x1',
+    0, 4), ('conv_5x5', 0, 4), ('conv_3x3', 4, 5), ('sep_conv_5x5', 3, 5)], reduce_concat=[2,
+    5])
+  target_genotype: Genotype(normal=[('sep_conv_3x3', 1, 2), ('conv_3x3', 0, 2), ('conv_3x3',
+    2, 3), ('avg_pool_3x3', 2, 3), ('conv_5x5', 1, 4), ('skip_connect', 3, 4), ('conv_3x3',
+    1, 5), ('conv_5x5', 0, 5)], normal_concat=[4, 5], reduce=[('sep_conv_5x5', 0,
+    2), ('sep_conv_5x5', 1, 2), ('avg_pool_3x3', 2, 3), ('skip_connect', 1, 3), ('max_pool_3x3',
+    2, 4), ('conv_5x5', 0, 4), ('sep_conv_5x5', 1, 5), ('skip_connect', 2, 5)], reduce_concat=[3,
+    4, 5])
+- adversarial_accuracy:
+    baseline: 0.23749998025596142
+    surrogate: 0.3078124951571226
+  surrogate_genotype: Genotype(normal=[('sep_conv_5x5', 0, 2), ('conv_5x5', 0, 2),
+    ('avg_pool_3x3', 0, 3), ('conv_5x5', 2, 3), ('conv_5x5', 0, 4), ('sep_conv_5x5',
+    0, 4), ('sep_conv_3x3', 1, 5), ('max_pool_3x3', 3, 5)], normal_concat=[4, 5],
+    reduce=[('sep_conv_5x5', 0, 2), ('sep_conv_5x5', 0, 2), ('conv_5x5', 2, 3), ('max_pool_3x3',
+    2, 3), ('conv_3x3', 0, 4), ('sep_conv_5x5', 0, 4), ('skip_connect', 0, 5), ('sep_conv_5x5',
+    1, 5)], reduce_concat=[3, 4, 5])
+  target_genotype: Genotype(normal=[('sep_conv_3x3', 1, 2), ('conv_3x3', 0, 2), ('conv_3x3',
+    2, 3), ('avg_pool_3x3', 2, 3), ('conv_5x5', 1, 4), ('skip_connect', 3, 4), ('conv_3x3',
+    1, 5), ('conv_5x5', 0, 5)], normal_concat=[4, 5], reduce=[('sep_conv_5x5', 0,
+    2), ('sep_conv_5x5', 1, 2), ('avg_pool_3x3', 2, 3), ('skip_connect', 1, 3), ('max_pool_3x3',
+    2, 4), ('conv_5x5', 0, 4), ('sep_conv_5x5', 1, 5), ('skip_connect', 2, 5)], reduce_concat=[3,
+    4, 5])
+- adversarial_accuracy:
+    baseline: 0.22031250782310963
+    surrogate: 0.2625000197440386
+  surrogate_genotype: Genotype(normal=[('conv_5x5', 1, 2), ('conv_3x3', 0, 2), ('sep_conv_5x5',
+    2, 3), ('conv_5x5', 1, 3), ('max_pool_3x3', 2, 4), ('conv_5x5', 0, 4), ('sep_conv_5x5',
+    3, 5), ('sep_conv_5x5', 0, 5)], normal_concat=[4, 5], reduce=[('conv_5x5', 1,
+    2), ('conv_5x5', 1, 2), ('skip_connect', 0, 3), ('conv_5x5', 0, 3), ('conv_3x3',
+    2, 4), ('conv_3x3', 2, 4), ('sep_conv_5x5', 0, 5), ('conv_3x3', 1, 5)], reduce_concat=[3,
+    4, 5])
+  target_genotype: Genotype(normal=[('sep_conv_3x3', 1, 2), ('conv_3x3', 0, 2), ('conv_3x3',
+    2, 3), ('avg_pool_3x3', 2, 3), ('conv_5x5', 1, 4), ('skip_connect', 3, 4), ('conv_3x3',
+    1, 5), ('conv_5x5', 0, 5)], normal_concat=[4, 5], reduce=[('sep_conv_5x5', 0,
+    2), ('sep_conv_5x5', 1, 2), ('avg_pool_3x3', 2, 3), ('skip_connect', 1, 3), ('max_pool_3x3',
+    2, 4), ('conv_5x5', 0, 4), ('sep_conv_5x5', 1, 5), ('skip_connect', 2, 5)], reduce_concat=[3,
+    4, 5])
+- adversarial_accuracy:
+    baseline: 0.2203125050291419
+    surrogate: 0.3156250109896064
+  surrogate_genotype: Genotype(normal=[('sep_conv_5x5', 0, 2), ('sep_conv_5x5', 0,
+    2), ('sep_conv_3x3', 1, 3), ('sep_conv_5x5', 1, 3), ('conv_5x5', 2, 4), ('sep_conv_5x5',
+    2, 4), ('max_pool_3x3', 1, 5), ('conv_5x5', 3, 5)], normal_concat=[4, 5], reduce=[('conv_1x1',
+    0, 2), ('skip_connect', 0, 2), ('conv_5x5', 2, 3), ('conv_3x3', 2, 3), ('sep_conv_5x5',
+    0, 4), ('sep_conv_5x5', 0, 4), ('conv_3x3', 1, 5), ('conv_5x5', 0, 5)], reduce_concat=[3,
+    4, 5])
+  target_genotype: Genotype(normal=[('sep_conv_3x3', 1, 2), ('conv_3x3', 0, 2), ('conv_3x3',
+    2, 3), ('avg_pool_3x3', 2, 3), ('conv_5x5', 1, 4), ('skip_connect', 3, 4), ('conv_3x3',
+    1, 5), ('conv_5x5', 0, 5)], normal_concat=[4, 5], reduce=[('sep_conv_5x5', 0,
+    2), ('sep_conv_5x5', 1, 2), ('avg_pool_3x3', 2, 3), ('skip_connect', 1, 3), ('max_pool_3x3',
+    2, 4), ('conv_5x5', 0, 4), ('sep_conv_5x5', 1, 5), ('skip_connect', 2, 5)], reduce_concat=[3,
+    4, 5])
+- adversarial_accuracy:
+    baseline: 0.23593747802078724
+    surrogate: 0.3968749660998583
+  surrogate_genotype: Genotype(normal=[('conv_5x5', 0, 2), ('max_pool_3x3', 1, 2),
+    ('conv_1x1', 2, 3), ('conv_5x5', 2, 3), ('max_pool_3x3', 1, 4), ('sep_conv_3x3',
+    0, 4), ('max_pool_3x3', 3, 5), ('conv_5x5', 1, 5)], normal_concat=[4, 5], reduce=[('sep_conv_5x5',
+    1, 2), ('max_pool_3x3', 0, 2), ('sep_conv_5x5', 2, 3), ('sep_conv_5x5', 2, 3),
+    ('conv_1x1', 0, 4), ('conv_3x3', 1, 4), ('conv_3x3', 1, 5), ('max_pool_3x3', 2,
+    5)], reduce_concat=[3, 4, 5])
+  target_genotype: Genotype(normal=[('sep_conv_3x3', 1, 2), ('conv_3x3', 0, 2), ('conv_3x3',
+    2, 3), ('avg_pool_3x3', 2, 3), ('conv_5x5', 1, 4), ('skip_connect', 3, 4), ('conv_3x3',
+    1, 5), ('conv_5x5', 0, 5)], normal_concat=[4, 5], reduce=[('sep_conv_5x5', 0,
+    2), ('sep_conv_5x5', 1, 2), ('avg_pool_3x3', 2, 3), ('skip_connect', 1, 3), ('max_pool_3x3',
+    2, 4), ('conv_5x5', 0, 4), ('sep_conv_5x5', 1, 5), ('skip_connect', 2, 5)], reduce_concat=[3,
+    4, 5])
+- adversarial_accuracy:
+    baseline: 0.3781249951571226
+    surrogate: 0.35937498323619366
+  surrogate_genotype: Genotype(normal=[('sep_conv_5x5', 0, 2), ('max_pool_3x3', 0,
+    2), ('skip_connect', 1, 3), ('conv_5x5', 0, 3), ('sep_conv_3x3', 2, 4), ('conv_5x5',
+    2, 4), ('max_pool_3x3', 2, 5), ('conv_5x5', 4, 5)], normal_concat=[3, 5], reduce=[('max_pool_3x3',
+    1, 2), ('avg_pool_3x3', 1, 2), ('sep_conv_5x5', 2, 3), ('conv_5x5', 1, 3), ('conv_5x5',
+    1, 4), ('conv_5x5', 1, 4), ('sep_conv_5x5', 3, 5), ('sep_conv_5x5', 0, 5)], reduce_concat=[4,
+    5])
+  target_genotype: Genotype(normal=[('avg_pool_3x3', 0, 2), ('conv_5x5', 1, 2), ('max_pool_3x3',
+    0, 3), ('skip_connect', 2, 3), ('avg_pool_3x3', 1, 4), ('max_pool_3x3', 1, 4),
+    ('conv_1x1', 4, 5), ('conv_1x1', 3, 5)], normal_concat=[5], reduce=[('avg_pool_3x3',
+    1, 2), ('sep_conv_3x3', 0, 2), ('max_pool_3x3', 1, 3), ('conv_5x5', 2, 3), ('sep_conv_5x5',
+    1, 4), ('conv_1x1', 2, 4), ('conv_5x5', 3, 5), ('max_pool_3x3', 4, 5)], reduce_concat=[5])
+- adversarial_accuracy:
+    baseline: 0.3687499947845936
+    surrogate: 0.4281249828636646
+  surrogate_genotype: Genotype(normal=[('conv_1x1', 0, 2), ('sep_conv_5x5', 0, 2),
+    ('conv_5x5', 0, 3), ('conv_5x5', 1, 3), ('conv_5x5', 1, 4), ('conv_5x5', 1, 4),
+    ('sep_conv_3x3', 0, 5), ('conv_5x5', 3, 5)], normal_concat=[2, 4, 5], reduce=[('sep_conv_3x3',
+    1, 2), ('max_pool_3x3', 0, 2), ('sep_conv_5x5', 2, 3), ('conv_5x5', 1, 3), ('conv_5x5',
+    0, 4), ('sep_conv_3x3', 2, 4), ('sep_conv_3x3', 1, 5), ('sep_conv_3x3', 2, 5)],
+    reduce_concat=[3, 4, 5])
+  target_genotype: Genotype(normal=[('avg_pool_3x3', 0, 2), ('conv_5x5', 1, 2), ('max_pool_3x3',
+    0, 3), ('skip_connect', 2, 3), ('avg_pool_3x3', 1, 4), ('max_pool_3x3', 1, 4),
+    ('conv_1x1', 4, 5), ('conv_1x1', 3, 5)], normal_concat=[5], reduce=[('avg_pool_3x3',
+    1, 2), ('sep_conv_3x3', 0, 2), ('max_pool_3x3', 1, 3), ('conv_5x5', 2, 3), ('sep_conv_5x5',
+    1, 4), ('conv_1x1', 2, 4), ('conv_5x5', 3, 5), ('max_pool_3x3', 4, 5)], reduce_concat=[5])
+- adversarial_accuracy:
+    baseline: 0.38750002160668373
+    surrogate: 0.4124999977648258
+  surrogate_genotype: Genotype(normal=[('sep_conv_5x5', 0, 2), ('conv_5x5', 0, 2),
+    ('conv_5x5', 0, 3), ('sep_conv_3x3', 1, 3), ('sep_conv_5x5', 1, 4), ('conv_1x1',
+    3, 4), ('max_pool_3x3', 1, 5), ('conv_5x5', 0, 5)], normal_concat=[2, 4, 5], reduce=[('conv_3x3',
+    1, 2), ('sep_conv_3x3', 0, 2), ('sep_conv_5x5', 0, 3), ('conv_3x3', 2, 3), ('skip_connect',
+    2, 4), ('max_pool_3x3', 0, 4), ('sep_conv_5x5', 4, 5), ('sep_conv_5x5', 0, 5)],
+    reduce_concat=[3, 5])
+  target_genotype: Genotype(normal=[('avg_pool_3x3', 0, 2), ('conv_5x5', 1, 2), ('max_pool_3x3',
+    0, 3), ('skip_connect', 2, 3), ('avg_pool_3x3', 1, 4), ('max_pool_3x3', 1, 4),
+    ('conv_1x1', 4, 5), ('conv_1x1', 3, 5)], normal_concat=[5], reduce=[('avg_pool_3x3',
+    1, 2), ('sep_conv_3x3', 0, 2), ('max_pool_3x3', 1, 3), ('conv_5x5', 2, 3), ('sep_conv_5x5',
+    1, 4), ('conv_1x1', 2, 4), ('conv_5x5', 3, 5), ('max_pool_3x3', 4, 5)], reduce_concat=[5])
+- adversarial_accuracy:
+    baseline: 0.3734374903142452
+    surrogate: 0.4203124903142452
+  surrogate_genotype: Genotype(normal=[('sep_conv_5x5', 0, 2), ('conv_5x5', 0, 2),
+    ('sep_conv_5x5', 0, 3), ('conv_3x3', 2, 3), ('sep_conv_5x5', 3, 4), ('sep_conv_5x5',
+    3, 4), ('conv_5x5', 2, 5), ('conv_5x5', 2, 5)], normal_concat=[4, 5], reduce=[('max_pool_3x3',
+    0, 2), ('conv_5x5', 1, 2), ('conv_5x5', 0, 3), ('sep_conv_5x5', 2, 3), ('conv_5x5',
+    2, 4), ('conv_3x3', 2, 4), ('max_pool_3x3', 4, 5), ('conv_5x5', 1, 5)], reduce_concat=[3,
+    5])
+  target_genotype: Genotype(normal=[('avg_pool_3x3', 0, 2), ('conv_5x5', 1, 2), ('max_pool_3x3',
+    0, 3), ('skip_connect', 2, 3), ('avg_pool_3x3', 1, 4), ('max_pool_3x3', 1, 4),
+    ('conv_1x1', 4, 5), ('conv_1x1', 3, 5)], normal_concat=[5], reduce=[('avg_pool_3x3',
+    1, 2), ('sep_conv_3x3', 0, 2), ('max_pool_3x3', 1, 3), ('conv_5x5', 2, 3), ('sep_conv_5x5',
+    1, 4), ('conv_1x1', 2, 4), ('conv_5x5', 3, 5), ('max_pool_3x3', 4, 5)], reduce_concat=[5])
+- adversarial_accuracy:
+    baseline: 0.3812500052154064
+    surrogate: 0.42500002309679985
+  surrogate_genotype: Genotype(normal=[('sep_conv_5x5', 0, 2), ('conv_3x3', 1, 2),
+    ('conv_3x3', 1, 3), ('conv_3x3', 1, 3), ('sep_conv_5x5', 2, 4), ('sep_conv_5x5',
+    3, 4), ('conv_3x3', 4, 5), ('sep_conv_5x5', 0, 5)], normal_concat=[5], reduce=[('conv_5x5',
+    0, 2), ('conv_5x5', 0, 2), ('conv_3x3', 2, 3), ('conv_3x3', 2, 3), ('sep_conv_3x3',
+    2, 4), ('conv_5x5', 2, 4), ('max_pool_3x3', 2, 5), ('sep_conv_5x5', 4, 5)], reduce_concat=[3,
+    5])
+  target_genotype: Genotype(normal=[('avg_pool_3x3', 0, 2), ('conv_5x5', 1, 2), ('max_pool_3x3',
+    0, 3), ('skip_connect', 2, 3), ('avg_pool_3x3', 1, 4), ('max_pool_3x3', 1, 4),
+    ('conv_1x1', 4, 5), ('conv_1x1', 3, 5)], normal_concat=[5], reduce=[('avg_pool_3x3',
+    1, 2), ('sep_conv_3x3', 0, 2), ('max_pool_3x3', 1, 3), ('conv_5x5', 2, 3), ('sep_conv_5x5',
+    1, 4), ('conv_1x1', 2, 4), ('conv_5x5', 3, 5), ('max_pool_3x3', 4, 5)], reduce_concat=[5])
+- adversarial_accuracy:
+    baseline: 0.36718750558793545
+    surrogate: 0.4078125115483999
+  surrogate_genotype: Genotype(normal=[('sep_conv_5x5', 0, 2), ('conv_5x5', 1, 2),
+    ('sep_conv_3x3', 2, 3), ('conv_1x1', 0, 3), ('max_pool_3x3', 0, 4), ('conv_3x3',
+    1, 4), ('conv_5x5', 2, 5), ('max_pool_3x3', 0, 5)], normal_concat=[3, 4, 5], reduce=[('conv_5x5',
+    0, 2), ('conv_5x5', 0, 2), ('conv_3x3', 2, 3), ('sep_conv_5x5', 0, 3), ('conv_3x3',
+    1, 4), ('sep_conv_3x3', 1, 4), ('conv_1x1', 4, 5), ('conv_5x5', 2, 5)], reduce_concat=[3,
+    5])
+  target_genotype: Genotype(normal=[('avg_pool_3x3', 0, 2), ('conv_5x5', 1, 2), ('max_pool_3x3',
+    0, 3), ('skip_connect', 2, 3), ('avg_pool_3x3', 1, 4), ('max_pool_3x3', 1, 4),
+    ('conv_1x1', 4, 5), ('conv_1x1', 3, 5)], normal_concat=[5], reduce=[('avg_pool_3x3',
+    1, 2), ('sep_conv_3x3', 0, 2), ('max_pool_3x3', 1, 3), ('conv_5x5', 2, 3), ('sep_conv_5x5',
+    1, 4), ('conv_1x1', 2, 4), ('conv_5x5', 3, 5), ('max_pool_3x3', 4, 5)], reduce_concat=[5])
+- adversarial_accuracy:
+    baseline: 0.3734374865889549
+    surrogate: 0.41875001043081284
+  surrogate_genotype: Genotype(normal=[('conv_5x5', 0, 2), ('conv_5x5', 0, 2), ('sep_conv_5x5',
+    0, 3), ('conv_1x1', 0, 3), ('max_pool_3x3', 1, 4), ('conv_5x5', 1, 4), ('max_pool_3x3',
+    0, 5), ('conv_3x3', 0, 5)], normal_concat=[2, 3, 4, 5], reduce=[('avg_pool_3x3',
+    0, 2), ('conv_3x3', 0, 2), ('sep_conv_5x5', 1, 3), ('sep_conv_3x3', 2, 3), ('conv_1x1',
+    0, 4), ('conv_3x3', 1, 4), ('conv_3x3', 4, 5), ('conv_5x5', 0, 5)], reduce_concat=[3,
+    5])
+  target_genotype: Genotype(normal=[('avg_pool_3x3', 0, 2), ('conv_5x5', 1, 2), ('max_pool_3x3',
+    0, 3), ('skip_connect', 2, 3), ('avg_pool_3x3', 1, 4), ('max_pool_3x3', 1, 4),
+    ('conv_1x1', 4, 5), ('conv_1x1', 3, 5)], normal_concat=[5], reduce=[('avg_pool_3x3',
+    1, 2), ('sep_conv_3x3', 0, 2), ('max_pool_3x3', 1, 3), ('conv_5x5', 2, 3), ('sep_conv_5x5',
+    1, 4), ('conv_1x1', 2, 4), ('conv_5x5', 3, 5), ('max_pool_3x3', 4, 5)], reduce_concat=[5])
+- adversarial_accuracy:
+    baseline: 0.3578125052154064
+    surrogate: 0.42500002309679985
+  surrogate_genotype: Genotype(normal=[('conv_5x5', 0, 2), ('conv_5x5', 1, 2), ('conv_3x3',
+    0, 3), ('avg_pool_3x3', 1, 3), ('sep_conv_3x3', 3, 4), ('max_pool_3x3', 2, 4),
+    ('conv_5x5', 0, 5), ('max_pool_3x3', 0, 5)], normal_concat=[4, 5], reduce=[('conv_5x5',
+    0, 2), ('conv_5x5', 1, 2), ('conv_5x5', 2, 3), ('conv_1x1', 2, 3), ('conv_1x1',
+    2, 4), ('sep_conv_5x5', 2, 4), ('max_pool_3x3', 1, 5), ('conv_3x3', 0, 5)], reduce_concat=[3,
+    4, 5])
+  target_genotype: Genotype(normal=[('avg_pool_3x3', 0, 2), ('conv_5x5', 1, 2), ('max_pool_3x3',
+    0, 3), ('skip_connect', 2, 3), ('avg_pool_3x3', 1, 4), ('max_pool_3x3', 1, 4),
+    ('conv_1x1', 4, 5), ('conv_1x1', 3, 5)], normal_concat=[5], reduce=[('avg_pool_3x3',
+    1, 2), ('sep_conv_3x3', 0, 2), ('max_pool_3x3', 1, 3), ('conv_5x5', 2, 3), ('sep_conv_5x5',
+    1, 4), ('conv_1x1', 2, 4), ('conv_5x5', 3, 5), ('max_pool_3x3', 4, 5)], reduce_concat=[5])
+- adversarial_accuracy:
+    baseline: 0.3546875100582838
+    surrogate: 0.41562500409781933
+  surrogate_genotype: Genotype(normal=[('max_pool_3x3', 1, 2), ('avg_pool_3x3', 0,
+    2), ('sep_conv_3x3', 2, 3), ('max_pool_3x3', 0, 3), ('max_pool_3x3', 3, 4), ('conv_5x5',
+    2, 4), ('conv_5x5', 3, 5), ('sep_conv_5x5', 4, 5)], normal_concat=[5], reduce=[('conv_5x5',
+    1, 2), ('skip_connect', 1, 2), ('conv_5x5', 0, 3), ('conv_3x3', 1, 3), ('conv_5x5',
+    1, 4), ('sep_conv_3x3', 2, 4), ('conv_5x5', 0, 5), ('avg_pool_3x3', 4, 5)], reduce_concat=[3,
+    5])
+  target_genotype: Genotype(normal=[('avg_pool_3x3', 0, 2), ('conv_5x5', 1, 2), ('max_pool_3x3',
+    0, 3), ('skip_connect', 2, 3), ('avg_pool_3x3', 1, 4), ('max_pool_3x3', 1, 4),
+    ('conv_1x1', 4, 5), ('conv_1x1', 3, 5)], normal_concat=[5], reduce=[('avg_pool_3x3',
+    1, 2), ('sep_conv_3x3', 0, 2), ('max_pool_3x3', 1, 3), ('conv_5x5', 2, 3), ('sep_conv_5x5',
+    1, 4), ('conv_1x1', 2, 4), ('conv_5x5', 3, 5), ('max_pool_3x3', 4, 5)], reduce_concat=[5])
+- adversarial_accuracy:
+    baseline: 0.27343749068677425
+    surrogate: 0.3000000026077032
+  surrogate_genotype: Genotype(normal=[('conv_5x5', 0, 2), ('max_pool_3x3', 0, 2),
+    ('conv_3x3', 0, 3), ('conv_5x5', 2, 3), ('conv_5x5', 3, 4), ('sep_conv_3x3', 2,
+    4), ('conv_3x3', 1, 5), ('conv_5x5', 1, 5)], normal_concat=[4, 5], reduce=[('avg_pool_3x3',
+    1, 2), ('conv_5x5', 0, 2), ('conv_5x5', 0, 3), ('conv_5x5', 2, 3), ('sep_conv_5x5',
+    3, 4), ('sep_conv_3x3', 1, 4), ('conv_5x5', 1, 5), ('max_pool_3x3', 0, 5)], reduce_concat=[4,
+    5])
+  target_genotype: Genotype(normal=[('max_pool_3x3', 1, 2), ('conv_3x3', 1, 2), ('conv_1x1',
+    0, 3), ('conv_1x1', 1, 3), ('avg_pool_3x3', 3, 4), ('conv_1x1', 1, 4), ('conv_3x3',
+    3, 5), ('skip_connect', 3, 5)], normal_concat=[2, 4, 5], reduce=[('sep_conv_5x5',
+    0, 2), ('sep_conv_5x5', 0, 2), ('max_pool_3x3', 2, 3), ('conv_3x3', 1, 3), ('conv_3x3',
+    3, 4), ('conv_5x5', 3, 4), ('conv_1x1', 2, 5), ('conv_3x3', 2, 5)], reduce_concat=[4,
+    5])
+- adversarial_accuracy:
+    baseline: 0.31874999962747097
+    surrogate: 0.4078125115483999
+  surrogate_genotype: Genotype(normal=[('conv_5x5', 0, 2), ('max_pool_3x3', 1, 2),
+    ('conv_1x1', 2, 3), ('conv_5x5', 2, 3), ('max_pool_3x3', 1, 4), ('sep_conv_3x3',
+    0, 4), ('max_pool_3x3', 3, 5), ('conv_5x5', 1, 5)], normal_concat=[4, 5], reduce=[('sep_conv_5x5',
+    1, 2), ('max_pool_3x3', 0, 2), ('sep_conv_5x5', 2, 3), ('sep_conv_5x5', 2, 3),
+    ('conv_1x1', 0, 4), ('conv_3x3', 1, 4), ('conv_3x3', 1, 5), ('max_pool_3x3', 2,
+    5)], reduce_concat=[3, 4, 5])
+  target_genotype: Genotype(normal=[('max_pool_3x3', 1, 2), ('conv_3x3', 1, 2), ('conv_1x1',
+    0, 3), ('conv_1x1', 1, 3), ('avg_pool_3x3', 3, 4), ('conv_1x1', 1, 4), ('conv_3x3',
+    3, 5), ('skip_connect', 3, 5)], normal_concat=[2, 4, 5], reduce=[('sep_conv_5x5',
+    0, 2), ('sep_conv_5x5', 0, 2), ('max_pool_3x3', 2, 3), ('conv_3x3', 1, 3), ('conv_3x3',
+    3, 4), ('conv_5x5', 3, 4), ('conv_1x1', 2, 5), ('conv_3x3', 2, 5)], reduce_concat=[4,
+    5])
+- adversarial_accuracy:
+    baseline: 0.2687499960884452
+    surrogate: 0.31093747820705175
+  surrogate_genotype: Genotype(normal=[('sep_conv_5x5', 1, 2), ('conv_3x3', 0, 2),
+    ('conv_5x5', 0, 3), ('conv_5x5', 0, 3), ('sep_conv_3x3', 1, 4), ('sep_conv_5x5',
+    0, 4), ('conv_5x5', 2, 5), ('conv_5x5', 3, 5)], normal_concat=[4, 5], reduce=[('sep_conv_5x5',
+    0, 2), ('sep_conv_3x3', 0, 2), ('sep_conv_5x5', 1, 3), ('sep_conv_5x5', 2, 3),
+    ('conv_3x3', 0, 4), ('max_pool_3x3', 3, 4), ('sep_conv_5x5', 3, 5), ('sep_conv_5x5',
+    0, 5)], reduce_concat=[4, 5])
+  target_genotype: Genotype(normal=[('max_pool_3x3', 1, 2), ('conv_3x3', 1, 2), ('conv_1x1',
+    0, 3), ('conv_1x1', 1, 3), ('avg_pool_3x3', 3, 4), ('conv_1x1', 1, 4), ('conv_3x3',
+    3, 5), ('skip_connect', 3, 5)], normal_concat=[2, 4, 5], reduce=[('sep_conv_5x5',
+    0, 2), ('sep_conv_5x5', 0, 2), ('max_pool_3x3', 2, 3), ('conv_3x3', 1, 3), ('conv_3x3',
+    3, 4), ('conv_5x5', 3, 4), ('conv_1x1', 2, 5), ('conv_3x3', 2, 5)], reduce_concat=[4,
+    5])
+- adversarial_accuracy:
+    baseline: 0.2703125048428774
+    surrogate: 0.32968749292194843
+  surrogate_genotype: Genotype(normal=[('sep_conv_3x3', 1, 2), ('sep_conv_5x5', 1,
+    2), ('sep_conv_5x5', 1, 3), ('sep_conv_3x3', 0, 3), ('sep_conv_5x5', 2, 4), ('conv_5x5',
+    3, 4), ('conv_3x3', 4, 5), ('sep_conv_3x3', 0, 5)], normal_concat=[5], reduce=[('sep_conv_3x3',
+    1, 2), ('conv_5x5', 0, 2), ('conv_5x5', 2, 3), ('max_pool_3x3', 0, 3), ('conv_3x3',
+    0, 4), ('conv_5x5', 3, 4), ('sep_conv_3x3', 4, 5), ('conv_5x5', 0, 5)], reduce_concat=[5])
+  target_genotype: Genotype(normal=[('max_pool_3x3', 1, 2), ('conv_3x3', 1, 2), ('conv_1x1',
+    0, 3), ('conv_1x1', 1, 3), ('avg_pool_3x3', 3, 4), ('conv_1x1', 1, 4), ('conv_3x3',
+    3, 5), ('skip_connect', 3, 5)], normal_concat=[2, 4, 5], reduce=[('sep_conv_5x5',
+    0, 2), ('sep_conv_5x5', 0, 2), ('max_pool_3x3', 2, 3), ('conv_3x3', 1, 3), ('conv_3x3',
+    3, 4), ('conv_5x5', 3, 4), ('conv_1x1', 2, 5), ('conv_3x3', 2, 5)], reduce_concat=[4,
+    5])
+- adversarial_accuracy:
+    baseline: 0.26250001788139343
+    surrogate: 0.3187499940395355
+  surrogate_genotype: Genotype(normal=[('conv_3x3', 1, 2), ('conv_5x5', 1, 2), ('sep_conv_5x5',
+    1, 3), ('sep_conv_3x3', 0, 3), ('sep_conv_5x5', 2, 4), ('max_pool_3x3', 0, 4),
+    ('conv_5x5', 4, 5), ('skip_connect', 3, 5)], normal_concat=[5], reduce=[('conv_5x5',
+    1, 2), ('sep_conv_5x5', 0, 2), ('conv_3x3', 2, 3), ('conv_1x1', 0, 3), ('sep_conv_5x5',
+    3, 4), ('conv_3x3', 1, 4), ('conv_3x3', 1, 5), ('conv_3x3', 1, 5)], reduce_concat=[4,
+    5])
+  target_genotype: Genotype(normal=[('max_pool_3x3', 1, 2), ('conv_3x3', 1, 2), ('conv_1x1',
+    0, 3), ('conv_1x1', 1, 3), ('avg_pool_3x3', 3, 4), ('conv_1x1', 1, 4), ('conv_3x3',
+    3, 5), ('skip_connect', 3, 5)], normal_concat=[2, 4, 5], reduce=[('sep_conv_5x5',
+    0, 2), ('sep_conv_5x5', 0, 2), ('max_pool_3x3', 2, 3), ('conv_3x3', 1, 3), ('conv_3x3',
+    3, 4), ('conv_5x5', 3, 4), ('conv_1x1', 2, 5), ('conv_3x3', 2, 5)], reduce_concat=[4,
+    5])
+- adversarial_accuracy:
+    baseline: 0.2796874772757292
+    surrogate: 0.23593748919665813
+  surrogate_genotype: Genotype(normal=[('conv_1x1', 0, 2), ('sep_conv_3x3', 1, 2),
+    ('sep_conv_5x5', 1, 3), ('sep_conv_5x5', 1, 3), ('conv_1x1', 1, 4), ('sep_conv_3x3',
+    0, 4), ('sep_conv_5x5', 0, 5), ('sep_conv_5x5', 4, 5)], normal_concat=[2, 3, 5],
+    reduce=[('sep_conv_5x5', 0, 2), ('conv_1x1', 1, 2), ('sep_conv_5x5', 2, 3), ('sep_conv_5x5',
+    0, 3), ('avg_pool_3x3', 2, 4), ('conv_1x1', 3, 4), ('sep_conv_3x3', 3, 5), ('conv_5x5',
+    4, 5)], reduce_concat=[5])
+  target_genotype: Genotype(normal=[('max_pool_3x3', 1, 2), ('conv_3x3', 1, 2), ('conv_1x1',
+    0, 3), ('conv_1x1', 1, 3), ('avg_pool_3x3', 3, 4), ('conv_1x1', 1, 4), ('conv_3x3',
+    3, 5), ('skip_connect', 3, 5)], normal_concat=[2, 4, 5], reduce=[('sep_conv_5x5',
+    0, 2), ('sep_conv_5x5', 0, 2), ('max_pool_3x3', 2, 3), ('conv_3x3', 1, 3), ('conv_3x3',
+    3, 4), ('conv_5x5', 3, 4), ('conv_1x1', 2, 5), ('conv_3x3', 2, 5)], reduce_concat=[4,
+    5])
+- adversarial_accuracy:
+    baseline: 0.27656249422580004
+    surrogate: 0.3359374823048711
+  surrogate_genotype: Genotype(normal=[('sep_conv_5x5', 0, 2), ('sep_conv_5x5', 0,
+    2), ('conv_3x3', 2, 3), ('sep_conv_5x5', 0, 3), ('max_pool_3x3', 0, 4), ('conv_3x3',
+    0, 4), ('sep_conv_3x3', 2, 5), ('sep_conv_5x5', 2, 5)], normal_concat=[3, 4, 5],
+    reduce=[('max_pool_3x3', 0, 2), ('sep_conv_5x5', 0, 2), ('conv_5x5', 1, 3), ('max_pool_3x3',
+    1, 3), ('conv_5x5', 1, 4), ('conv_3x3', 2, 4), ('conv_5x5', 2, 5), ('max_pool_3x3',
+    3, 5)], reduce_concat=[4, 5])
+  target_genotype: Genotype(normal=[('max_pool_3x3', 1, 2), ('conv_3x3', 1, 2), ('conv_1x1',
+    0, 3), ('conv_1x1', 1, 3), ('avg_pool_3x3', 3, 4), ('conv_1x1', 1, 4), ('conv_3x3',
+    3, 5), ('skip_connect', 3, 5)], normal_concat=[2, 4, 5], reduce=[('sep_conv_5x5',
+    0, 2), ('sep_conv_5x5', 0, 2), ('max_pool_3x3', 2, 3), ('conv_3x3', 1, 3), ('conv_3x3',
+    3, 4), ('conv_5x5', 3, 4), ('conv_1x1', 2, 5), ('conv_3x3', 2, 5)], reduce_concat=[4,
+    5])
+- adversarial_accuracy:
+    baseline: 0.27187497541308403
+    surrogate: 0.3124999813735485
+  surrogate_genotype: Genotype(normal=[('conv_5x5', 1, 2), ('conv_5x5', 1, 2), ('sep_conv_5x5',
+    1, 3), ('conv_5x5', 2, 3), ('conv_5x5', 0, 4), ('conv_3x3', 1, 4), ('sep_conv_5x5',
+    3, 5), ('conv_5x5', 4, 5)], normal_concat=[5], reduce=[('conv_3x3', 0, 2), ('skip_connect',
+    0, 2), ('conv_5x5', 1, 3), ('conv_5x5', 0, 3), ('conv_3x3', 2, 4), ('conv_5x5',
+    0, 4), ('sep_conv_5x5', 2, 5), ('sep_conv_5x5', 0, 5)], reduce_concat=[3, 4, 5])
+  target_genotype: Genotype(normal=[('max_pool_3x3', 1, 2), ('conv_3x3', 1, 2), ('conv_1x1',
+    0, 3), ('conv_1x1', 1, 3), ('avg_pool_3x3', 3, 4), ('conv_1x1', 1, 4), ('conv_3x3',
+    3, 5), ('skip_connect', 3, 5)], normal_concat=[2, 4, 5], reduce=[('sep_conv_5x5',
+    0, 2), ('sep_conv_5x5', 0, 2), ('max_pool_3x3', 2, 3), ('conv_3x3', 1, 3), ('conv_3x3',
+    3, 4), ('conv_5x5', 3, 4), ('conv_1x1', 2, 5), ('conv_3x3', 2, 5)], reduce_concat=[4,
+    5])

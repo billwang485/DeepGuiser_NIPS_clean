@@ -31,7 +31,7 @@ parser.add_argument('--report_freq', type=int, default=50, help='report frequenc
 parser.add_argument('--test_freq', type=int, default=10, help='test frequency')
 parser.add_argument('--test_archs', type=int, default=100, help='how many archs to test supernet')
 parser.add_argument('--gpu', type=int, default=0, help='gpu device id')
-parser.add_argument('--epochs', type=int, default=1, help='number of training epochs')
+parser.add_argument('--epochs', type=int, default=1000, help='number of training epochs')
 parser.add_argument('--init_channels', type=int, default=20, help='number of init channels')
 parser.add_argument('--layers', type=int, default=8, help='total number of layers')
 parser.add_argument('--save', type=str, default=utils.localtime_as_dirname(), help='experiment name')
@@ -94,6 +94,14 @@ def main():
     model = Network(
         args.init_channels, CIFAR_CLASSES, args.layers, criterion, device, steps=args.num_nodes, controller_hid=args.controller_hid, entropy_coeff=args.entropy_coeff, edge_hid = args.edge_hid, transformer_nfeat = args.transformer_nfeat, transformer_nhid = args.transformer_nhid, transformer_dropout = args.transformer_dropout, transformer_normalize = args.transformer_normalize, loose_end = args.loose_end, op_type=args.op_type
     )
+    
+
+    train_queue, test_queue, _ = utils.get_cifar_data_queue(args)
+
+    
+
+    model.to(device)
+
     model_optimizer = torch.optim.SGD(
         model.model_parameters(),
         args.learning_rate,
@@ -101,16 +109,12 @@ def main():
         weight_decay=args.weight_decay
     )
 
-    train_queue, test_queue, _ = utils.get_cifar_data_queue(args)
-
     if args.scheduler == "naive_cosine":
         scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(
             model_optimizer, float(args.epochs), eta_min=args.learning_rate_min
         )
     else:
         assert False, "unsupported scheduler type: %s" % args.scheduler
-
-    model.to(device)
 
     normal_list = []
     reduce_list = []

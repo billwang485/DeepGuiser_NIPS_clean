@@ -6,3 +6,4 @@ mode: high_fidelity
 dropout: 0.5
 loss_type: mse
 gates_concat: old_predictor
+dataset_mode: acc_adv_surrogate

@@ -1,0 +1,4 @@
+type: PGD
+step: 10
+eps: 0.02
+alpha: 0.002

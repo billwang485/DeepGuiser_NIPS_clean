@@ -1,0 +1,12 @@
+target:
+  - genotype: 'genotypes.ResBlock'
+    # pretrained_weight: "final_test/compile_based/log/resblock_nat_d_nips_Sep 18 16 28 59/target_model.pt"
+    pretrained_weight: None
+    pretrained_baseline_weight: None
+    # pretrained_baseline_weight: "final_test/compile_based/log/resblock_nat_d_nips_Sep 18 16 28 59/baseline_model.pt"
+surrogate:
+  - genotype: 'genotypes.ResBlock_NAT_D_NIPS'
+    pretrained_weight: None
+    # pretrained_weight: "final_test/compile_based/log/resblock_nat_d_nips_Sep 18 16 28 59/surrogate_model.pt"
+name:
+  'resblock_nat_d_nips'

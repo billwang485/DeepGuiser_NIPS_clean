@@ -1,0 +1,12 @@
+target:
+  - genotype: 'genotypes.Mobilenetv2'
+    pretrained_weight: None
+    # pretrained_weight: "final_test/compile_based/log/mobilenet_deepguiser_nips_Sep 18 17 00 37/target_model.pt"
+    pretrained_baseline_weight: None
+    # pretrained_baseline_weight: "final_test/compile_based/log/mobilenet_deepguiser_nips_Sep 18 17 00 37/baseline_model.pt"
+surrogate:
+  - genotype: 'genotypes.Mobilenetv2_DeepGuiser_NIPS'
+    pretrained_weight: None
+    # pretrained_weight: "final_test/compile_based/log/mobilenet_deepguiser_nips_Sep 18 17 00 37/surrogate_model.pt"
+name:
+  'mobilenet_deepguiser_nips'

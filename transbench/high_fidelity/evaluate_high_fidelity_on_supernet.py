@@ -1,4 +1,5 @@
 import os
+import re
 import sys
 STEM_WORK_DIR = os.path.join(os.getcwd(), "../..")
 sys.path.append(STEM_WORK_DIR)
@@ -13,6 +14,7 @@ import torch.utils
 import torch.backends.cudnn as cudnn
 from torch.utils.tensorboard import SummaryWriter
 import utils
+from genotypes import Genotype
 from basic_parts.basic_integrated_model import NASNetwork as Network
 
 
@@ -38,13 +40,25 @@ parser.add_argument('--save', type=str, default=utils.localtime_as_dirname(), he
 parser.add_argument('--seed', type=int, default=1234, help='random seed')
 parser.add_argument('--n_archs', type=int, default=1, help='number of candidate archs')
 parser.add_argument('--prefix', type=str, default='.', help='parent save path')
-parser.add_argument('--evaluate_dataset', type=str, default='.', help='parent save path')
 parser.add_argument('--controller_hid', type=int, default=100, help='controller hidden dimension')
 parser.add_argument('--entropy_coeff', nargs='+', type=float, default=[0.003, 0.003], help='coefficient for entropy: [normal, reduce]')
 parser.add_argument('--gamma', type=float, default=0.99, help='time decay for baseline update')
 parser.add_argument('--controller_start_training', type=int, default=0, help='Epoch that the training of controller starts')
+parser.add_argument('--scheduler', type=str, default='naive_cosine', help='type of LR scheduler')
+parser.add_argument('--learning_rate_min', type=float, default=0.01, help='min learning rate')
+parser.add_argument('--store', type=int, default=1, help='Whether to store the model')
+parser.add_argument('--edge_hid', type=int, default=100, help='edge hidden dimension')
+parser.add_argument('--transformer_learning_rate', type=float, default=3e-4, help='learning rate for pruner')
+parser.add_argument('--transformer_weight_decay', type=float, default=5e-4, help='learning rate for pruner')
+parser.add_argument('--transformer_nfeat', type=int, default=1024, help='feature dimension of each node')
+parser.add_argument('--transformer_nhid', type=int, default=100, help='hidden dimension')
+parser.add_argument('--transformer_dropout', type=float, default=0, help='dropout rate for transformer')
+parser.add_argument('--transformer_normalize', action='store_true', default=False, help='use normalize in GCN')
+parser.add_argument('--num_nodes', type=int, default=4, help='number of intermediate nodes')
 parser.add_argument('--op_type', type=str, default='LOOSE_END_PRIMITIVES', help='LOOSE_END_PRIMITIVES | FULLY_CONCAT_PRIMITIVES')
+parser.add_argument('--transfer', action='store_true', default=True, help='eval the transferability')
 parser.add_argument('--debug', action='store_true', default=False, help='debud mode')
+parser.add_argument('--evaluate_dataset', "-ed", type=str, default=' ', help='parent save path')
 args = parser.parse_args()
 
 if args.op_type=='LOOSE_END_PRIMITIVES':
@@ -53,6 +67,8 @@ else:
     args.loose_end = False
 args.cutout = False
 
+NAME = args.evaluate_dataset.split(".")[-2]
+args.save = NAME + "_" + args.save 
 utils.preprocess_exp_dir(args)
 utils.create_exp_dir(args.save, scripts_to_save=glob.glob('*.py')+glob.glob('*.sh')+glob.glob('*.yml'))
 
@@ -103,6 +119,9 @@ def main():
         acc_adv_baseline = utils.AvgrageMeter()
         acc_adv_surrogate = utils.AvgrageMeter()
         for step, (input, target) in enumerate(valid_queue):
+            n = input.size(0)
+            input = input.to(device)
+            target = target.to(device)
             if step >= 10:
                 break
             input_adv = utils.linf_pgd(model_twin, optimized_normal, optimized_reduce, input, target, eps=EPS, alpha=EPS / STEPS, steps=STEPS, rand_start=False)
@@ -110,18 +129,20 @@ def main():
 
             logits = model._inner_forward(input_adv, arch_normal, arch_reduce)
             acc_adv_surrogate_ = utils.accuracy(logits, target, topk=(1, 5))[0] / 100.0
-            acc_adv_surrogate.update(acc_adv_surrogate_.item(), 1)
+            # print(utils.accuracy(logits, target, topk=(1, 5))[0])
+            acc_adv_surrogate.update(acc_adv_surrogate_.item(), n)
 
             logits = model._inner_forward(input_adv_, arch_normal, arch_reduce)
             acc_adv_baseline_ = utils.accuracy(logits, target, topk=(1, 5))[0] / 100.0
-            acc_adv_baseline.update(acc_adv_baseline_.item(), 1)
+            acc_adv_baseline.update(acc_adv_baseline_.item(), n)
 
         old_dataset[num]["supernet"] = {}
         old_dataset[num]["supernet"]["adversarial_accuracy"] = {}
         old_dataset[num]["supernet"]["adversarial_accuracy"]["baseline"] = acc_adv_baseline.avg
         old_dataset[num]["supernet"]["adversarial_accuracy"]["surrogate"] = acc_adv_surrogate.avg
+        logging.info(old_dataset[num]["supernet"]["adversarial_accuracy"])
     
-    utils.save_yaml(old_dataset, "new_dataset.yaml")
+    utils.save_yaml(old_dataset, "{}_new.yaml".format(NAME))
 
     # save model
    

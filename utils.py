@@ -1,3 +1,4 @@
+from email.policy import strict
 import os
 import re
 import sys
@@ -292,11 +293,14 @@ def save_supernet(integrated_model, save_path):
 
 def load_supernet(integrated_model, model_path):
     model_dict = torch.load(model_path, map_location="cpu")
-    assert model_dict['type'] == 'supernet'
-    assert hasattr(integrated_model, 'stem')
-    integrated_model.stem.load_state_dict(model_dict['stem'])
-    assert hasattr(integrated_model, 'cells')
-    integrated_model.cells.load_state_dict(model_dict['cells'])
+    if 'type' in model_dict.keys():
+        assert model_dict["type"] == "supernet"
+        assert hasattr(integrated_model, 'stem')
+        integrated_model.stem.load_state_dict(model_dict['stem'])
+        assert hasattr(integrated_model, 'cells')
+        integrated_model.cells.load_state_dict(model_dict['cells'])
+    elif "state_dict" in model_dict.keys():
+        integrated_model.load_state_dict(model_dict["state_dict"], strict = False)
 
 def save_nat_disguiser(integrated_model, save_path):
     supernet_dict = {"type":"supernet", "stem": integrated_model.stem.state_dict(), "cells": integrated_model.cells.state_dict()}
@@ -810,7 +814,7 @@ def get_final_test_data(args, CIFAR_CLASSES=10, seed=1234):
     random.shuffle(indices_test)
     random.seed(args.seed)
 
-    test_queue = torch.utils.data.DataLoader(test_data, batch_size=args.batch_size, sampler=torch.utils.data.sampler.SubsetRandomSampler(indices_test), pin_memory=True, num_workers=2)
+    test_queue = torch.utils.data.DataLoader(test_data, batch_size=args.batch_size, sampler=torch.utils.data.sampler.SubsetRandomSampler(indices_test), pin_memory=True, num_workers=4)
 
     train_queue = torch.utils.data.DataLoader(
         train_data,
@@ -818,7 +822,7 @@ def get_final_test_data(args, CIFAR_CLASSES=10, seed=1234):
         sampler=torch.utils.data.sampler.SubsetRandomSampler(indices),
         # shuffle= False,
         pin_memory=True,
-        num_workers=2,
+        num_workers=4,
     )
     return train_queue, test_queue
 
@@ -1122,6 +1126,8 @@ def compiled_pgd_test(target_model, surrogate_model, baseline_model, test_queue,
     return acc_adv_baseline.avg, acc_adv_surrogate.avg
 
 def _generate_pgd_input(generator_model, input, target, eps, alpha, steps, is_targeted=False, rand_start=True, momentum=False, mu=1, criterion=nn.CrossEntropyLoss()):
+    
+    
     def _gradient_wrt_input(model, inputs, targets, criterion=nn.CrossEntropyLoss()):
         inputs.requires_grad = True
 

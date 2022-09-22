@@ -35,10 +35,31 @@ parser.add_argument('--scheduler', type=str, default='naive_cosine', help='type 
 parser.add_argument('--learning_rate_min', type=float, default=0.001, help='min learning rate')
 parser.add_argument('--arch_info', type=str, default='example.yaml', help='yaml file contains information about archs be tested')#
 parser.add_argument('--pretrained_weight', '-pw', type=str, default=' ', help='pretrained weight file dir')#
-parser.add_argument('--attack_info', type=str, default=os.path.join(STEM_WORK_DIR, 'final_test/attack/pgd1.yaml'), help='yaml file contains information about attack')#
+parser.add_argument('--attack_info', type=str, default=os.path.join(STEM_WORK_DIR, 'final_test/attack_config/pgd1.yaml'), help='yaml file contains information about attack')#
 parser.add_argument('--cifar_classes', type=int, default=10, help='hidden dimension')
 parser.add_argument("--debug", action="store_true", default=False, help="debug mode")
 args = parser.parse_args()
+
+def get_dir_name(args):
+    
+    import time
+    import re
+
+    localtime = time.asctime(time.localtime(time.time()))
+    x = re.split(r"[\s,(:)]", localtime)
+    default_EXP = " ".join(x[1:-1])
+
+    assert os.path.exists(args.arch_info)
+
+    arch_info = utils.load_yaml(args.arch_info)
+
+    attack_info = utils.load_yaml(args.attack_info)
+
+    prefix = "{}_seed_{}_".format(arch_info["name"], args.seed)
+    default_EXP = prefix + default_EXP
+    return default_EXP
+
+args.save = get_dir_name(args)
 
 args.report_freq = 50
 utils.preprocess_exp_dir(args)
@@ -67,14 +88,6 @@ def main():
     criterion = nn.CrossEntropyLoss()
     criterion = criterion.to(device)
 
-    if args.pretrained_weight != " ":
-        if not os.path.exists(args.pretrained_weight):
-            assert 0
-        else:
-            bypass_training = True
-            load_pretrained_weight = True
-        
-
 
     train_queue, test_queue = utils.get_final_test_data(args, CIFAR_CLASSES)
 
@@ -82,21 +95,36 @@ def main():
 
     arch_info = utils.load_yaml(args.arch_info)
 
+    if arch_info["target"][0]["pretrained_weight"] != "None" and arch_info["surrogate"][0]["pretrained_weight"] != "None" and arch_info["target"][0]["pretrained_baseline_weight"] != "None":
+        target_weight_path = os.path.join(STEM_WORK_DIR, arch_info["target"][0]["pretrained_weight"])
+        baseline_weight_path = os.path.join(STEM_WORK_DIR, arch_info["target"][0]["pretrained_baseline_weight"])
+        surrogate_weight_path = os.path.join(STEM_WORK_DIR, arch_info["surrogate"][0]["pretrained_weight"])
+        
+        assert os.path.exists(target_weight_path)
+        assert os.path.exists(baseline_weight_path)
+        assert os.path.exists(surrogate_weight_path)
+        bypass_training = True
+        load_pretrained_weight = True
+    else:
+        bypass_training = False
+        load_pretrained_weight = False
+
     target_genotype = eval(arch_info['target'][0]['genotype'])
     surrogate_genotpye = eval(arch_info['surrogate'][0]['genotype'])
 
     target_model = LooseEndModel(device, CIFAR_CLASSES, target_genotype)
 
-    assert 0
+    # assert 0
 
-    # if load_pretrained_weight:
-    #     utils.load_supernet()
-
+    if load_pretrained_weight:
+        utils.load_supernet_based(target_model, target_weight_path)
     target_model.to(device)
 
-    logging.info('training Target Model')
+    if bypass_training:
+        logging.info('Bypassing Target Model Training')
+    else:
 
-    if not bypass_training:
+        logging.info('training Target Model')
 
         target_optimizer = torch.optim.SGD(
             target_model.model_parameters(),
@@ -122,23 +150,34 @@ def main():
     logging.info('training Surrogate Model')
 
     surrogate_model = LooseEndModel(device, CIFAR_CLASSES, surrogate_genotpye)
-    surrogate_optimizer = torch.optim.SGD(
-        surrogate_model.model_parameters(),
-        args.learning_rate,
-        momentum=args.momentum,
-        weight_decay=args.weight_decay
-    )
 
+    if load_pretrained_weight:
+        utils.load_supernet_based(surrogate_model, surrogate_weight_path)
     surrogate_model.to(device)
 
-    if args.scheduler == "naive_cosine":
-        scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(
-        surrogate_optimizer, float(args.epochs), eta_min=args.learning_rate_min
-        )
+    if bypass_training:
+        logging.info("Bypassing Surrogate Model Training")
     else:
-        assert False, "unsupported scheduler type: %s" % args.scheduler
+        logging.info('training Surrogate Model')
 
-    utils.train_model(surrogate_model, train_queue, device, criterion, surrogate_optimizer, scheduler, args.epochs, logger)
+    
+        surrogate_optimizer = torch.optim.SGD(
+            surrogate_model.model_parameters(),
+            args.learning_rate,
+            momentum=args.momentum,
+            weight_decay=args.weight_decay
+        )
+
+        surrogate_model.to(device)
+
+        if args.scheduler == "naive_cosine":
+            scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(
+            surrogate_optimizer, float(args.epochs), eta_min=args.learning_rate_min
+            )
+        else:
+            assert False, "unsupported scheduler type: %s" % args.scheduler
+
+        utils.train_model(surrogate_model, train_queue, device, criterion, surrogate_optimizer, scheduler, args.epochs, logger)
 
     utils.save_supernet_based(surrogate_model, os.path.join(args.save, 'surrogate_model.pt'))
     acc_clean_surrogate, _ = utils.test_clean_accuracy(surrogate_model, test_queue, logger)
@@ -148,22 +187,34 @@ def main():
 
     baseline_model = LooseEndModel(device, CIFAR_CLASSES, target_genotype)
 
-    target_baseline_optimizer = torch.optim.SGD(
-        baseline_model.model_parameters(),
-        args.learning_rate,
-        momentum=args.momentum,
-        weight_decay=args.weight_decay
-    )
+    
+   
+
+    if load_pretrained_weight:
+        utils.load_compiled_based(baseline_model, baseline_weight_path)
+
     baseline_model.to(device)
 
-    if args.scheduler == "naive_cosine":
-        scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(
-        target_baseline_optimizer, float(args.epochs), eta_min=args.learning_rate_min
-        )
+    if bypass_training:
+        logging.info("Bypassing Surrogate Model Training")
     else:
-        assert False, "unsupported scheduler type: %s" % args.scheduler
+        logging.info('training Target Baseline Model')
 
-    utils.train_model(baseline_model, train_queue, device, criterion, target_baseline_optimizer, scheduler, args.epochs, logger)
+        target_baseline_optimizer = torch.optim.SGD(
+            baseline_model.model_parameters(),
+            args.learning_rate,
+            momentum=args.momentum,
+            weight_decay=args.weight_decay
+        )
+
+        if args.scheduler == "naive_cosine":
+            scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(
+            target_baseline_optimizer, float(args.epochs), eta_min=args.learning_rate_min
+            )
+        else:
+            assert False, "unsupported scheduler type: %s" % args.scheduler
+
+        utils.train_model(baseline_model, train_queue, device, criterion, target_baseline_optimizer, scheduler, args.epochs, logger)
 
     utils.save_supernet_based(baseline_model, os.path.join(args.save, 'baseline_model.pt'))
     acc_clean_baseline, _ = utils.test_clean_accuracy(baseline_model, test_queue, logger)

@@ -1,6 +1,6 @@
 from operations import *
 from utils import drop_path
-
+import utils
 
 class Cell(nn.Module):
     def __init__(self, genotype, C_prev_prev, C_prev, C, reduction, reduction_prev):
@@ -133,6 +133,10 @@ class NetworkCIFAR(nn.Module):
             self.auxiliary_head = AuxiliaryHeadCIFAR(C_to_auxiliary, num_classes)
         self.global_pooling = nn.AdaptiveAvgPool2d(1)
         self.classifier = nn.Linear(C_prev, num_classes)
+        cifar_mean = torch.tensor([0.4914, 0.4822, 0.4465], dtype=torch.float32).cuda()
+        cifar_std = torch.tensor([0.2023, 0.1994, 0.2010], dtype=torch.float32).cuda()
+        self.cifar_normalizer = utils.NormalizeByChannelMeanStd(mean=cifar_mean, std=cifar_std)
+
 
     def model_parameters(self):
         for k, v in self.named_parameters():
@@ -140,6 +144,7 @@ class NetworkCIFAR(nn.Module):
                 yield v
 
     def forward(self, input, drop_path_prob=0):
+        input = self.cifar_normalizer(input)
         self.drop_path_prob = drop_path_prob
         logits_aux = None
         s0 = s1 = self.stem(input)
