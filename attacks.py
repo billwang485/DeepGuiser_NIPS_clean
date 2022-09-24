@@ -14,6 +14,8 @@ def adversarial_test(target_model, surrogate_model, baseline_model, test_queue, 
     acc_adv_surrogate = utils.AvgrageMeter()
 
     for step, (input, target) in enumerate(test_queue):
+        if step > 1:
+            break
         n = input.size(0)
         input = input.to(device)
         target = target.to(device)
@@ -65,7 +67,7 @@ def carlini_wagner_attack(model, inputs, labels):
     assert model.model_type == "compiled_based" or model.model_type == "supernet_based"
     x_adv = CarliniWagnerL2Attack(model, 10).perturb(inputs, labels)
 
-    return torch.tensor(x_adv)
+    return x_adv
 
 def classic_pgd_attack(generator_model, input, target, eps, alpha, steps, is_targeted=False, rand_start=True, momentum=False, mu=1, criterion=nn.CrossEntropyLoss()):
     
