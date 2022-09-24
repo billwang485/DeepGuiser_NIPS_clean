@@ -223,8 +223,8 @@ def main():
 
     attack_info = utils.load_yaml(args.attack_info)
 
-    # acc_adv_baseline, acc_adv_surrogate = utils.compiled_pgd_test(target_model, surrogate_model, baseline_model, test_queue, attack_info, logger)
-    acc_adv_baseline, acc_adv_surrogate = attacks.adversarial_test(target_model, surrogate_model, baseline_model, test_queue, attack_info, logger)
+    acc_adv_baseline, acc_adv_surrogate = utils.compiled_pgd_test(target_model, surrogate_model, baseline_model, test_queue, attack_info, logger)
+    # acc_adv_baseline, acc_adv_surrogate = attacks.adversarial_test(target_model, surrogate_model, baseline_model, test_queue, attack_info, logger)
     save_dict = {}
     save_dict['target_genotype'] = '{}'.format(target_genotype)
     save_dict['surrogate_arch'] = '{}'.format(surrogate_genotpye)

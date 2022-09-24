@@ -1,12 +1,12 @@
 target:
   - genotype: 'genotypes.VGG'
-    # pretrained_weight: "final_test/compile_based/log/vgg_nat_d_nips_Sep 18 16 26 35/target_model.pt"
-    pretrained_weight: None
-    # pretrained_baseline_weight: "final_test/compile_based/log/vgg_nat_d_nips_Sep 18 16 26 35/baseline_model.pt"
-    pretrained_baseline_weight: None
+    pretrained_weight: "experiments/cifar_ten_models/vgg/target_model.pt"
+    # pretrained_weight: None
+    pretrained_baseline_weight: "experiments/cifar_ten_models/vgg/baseline_model.pt"
+    # pretrained_baseline_weight: None
 surrogate:
   - genotype: 'genotypes.VGG_NAT_D_NIPS'
-    pretrained_weight: None
-    # pretrained_weight: "final_test/compile_based/log/vgg_nat_d_nips_Sep 18 16 26 35/surrogate_model.pt"
+    # pretrained_weight: None
+    pretrained_weight: "final_test/supernet_based/log/vgg_nat_d_nips_seed_1234_Sep 22 16 05 57/surrogate_model.pt"
 name:
   'vgg_nat_d_nips'

@@ -1,4 +1,5 @@
 import os
+import shutil
 import sys
 STEM_WORK_DIR = os.path.join(os.getcwd(), "..", "..")
 sys.path.append(STEM_WORK_DIR)
@@ -12,12 +13,13 @@ import torch.nn as nn
 import torch.utils
 import torch.backends.cudnn as cudnn
 import utils
+import attacks
 import genotypes
 from final_test.supernet_based.models import LooseEndModel
 '''
 This files tests the transferbility isotonicity on supernets and trained-from-scratch models
 '''
-
+# sys.stdout = open(os.devnull, 'w'
 parser = argparse.ArgumentParser("DeepGuiser")
 parser.add_argument('--data', type=str, default=os.path.join(STEM_WORK_DIR, '../data'), help='location of the data corpus')
 parser.add_argument('--batch_size', type=int, default=64, help='batch size')
@@ -55,7 +57,7 @@ def get_dir_name(args):
 
     attack_info = utils.load_yaml(args.attack_info)
 
-    prefix = "{}_seed_{}_".format(arch_info["name"], args.seed)
+    prefix = "{}_seed_{}_eps_{}_type_{}_".format(arch_info["name"], args.seed, attack_info["eps"], attack_info["type"])
     default_EXP = prefix + default_EXP
     return default_EXP
 
@@ -94,6 +96,7 @@ def main():
     assert os.path.exists(args.arch_info)
 
     arch_info = utils.load_yaml(args.arch_info)
+    shutil.copy(args.arch_info, os.path.join(args.save, "exp_config.yaml"))
 
     if arch_info["target"][0]["pretrained_weight"] != "None" and arch_info["surrogate"][0]["pretrained_weight"] != "None" and arch_info["target"][0]["pretrained_baseline_weight"] != "None":
         target_weight_path = os.path.join(STEM_WORK_DIR, arch_info["target"][0]["pretrained_weight"])
@@ -225,7 +228,9 @@ def main():
 
     attack_info = utils.load_yaml(args.attack_info)
 
-    acc_adv_baseline, acc_adv_surrogate = utils.compiled_pgd_test(target_model, surrogate_model, baseline_model, test_queue, attack_info, logger)
+    # acc_adv_baseline, acc_adv_surrogate = utils.compiled_pgd_test(target_model, surrogate_model, baseline_model, test_queue, attack_info, logger)
+    acc_adv_baseline, acc_adv_surrogate = attacks.adversarial_test(target_model, surrogate_model, baseline_model, test_queue, attack_info, logger)
+
     save_dict = {}
     save_dict['target_genotype'] = '{}'.format(target_genotype)
     save_dict['surrogate_arch'] = '{}'.format(surrogate_genotpye)

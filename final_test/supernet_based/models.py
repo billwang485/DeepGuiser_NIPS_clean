@@ -77,6 +77,8 @@ class LooseEndModel(nn.Module):
         self.acc_clean = utils.AvgrageMeter()
         self.pgd_step = 10
         self.tiny_imagenet = False
+        self.image_size = 32
+        self.num_channels = 3
     
     def set_genotype(self, genotype):
         self._genotype = genotype

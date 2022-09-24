@@ -2,12 +2,12 @@
 
 from this import d
 from autoattack import AutoAttack
-from nn_robust_attacks.li_attack import CarliniLi
-import tensorflow as tf
 import torch
 import torch.nn as nn
 import utils
-
+import sys
+import os
+from advertorch.attacks.carlini_wagner import CarliniWagnerL2Attack
 def adversarial_test(target_model, surrogate_model, baseline_model, test_queue, attack_info, logger):
     device = next(target_model.parameters()).device
     acc_adv_baseline = utils.AvgrageMeter()
@@ -20,8 +20,10 @@ def adversarial_test(target_model, surrogate_model, baseline_model, test_queue, 
         target_model.eval()
         baseline_model.eval()
         surrogate_model.eval()
+        # sys.stdout = open(os.devnull, 'w')
 
         input_adv0 = unified_adversarial_generation(baseline_model, input, target, attack_info)
+        # sys.stdout = sys.__stdout__
         # logits0, _ = target_model(input_adv0)
         logits0 = utils.unified_forward(target_model, input_adv0)
         acc_adv_baseline_ = utils.accuracy(logits0, target, topk=(1, 5))[0] / 100.0
@@ -44,6 +46,7 @@ def unified_adversarial_generation(generate_model, input, target, attack_info):
         x_adv =  classic_pgd_attack(generate_model, input, target, attack_info['eps'], attack_info['alpha'], attack_info['step'])
     elif attack_info["type"] == "auto_attack":
         x_adv = auto_attack(generate_model, attack_info['eps'], input, target)
+        # print(input.shape)
     elif attack_info["type"] == "carlini_wagner":
         x_adv = carlini_wagner_attack(generate_model, input, target)
     else:
@@ -55,16 +58,18 @@ def unified_adversarial_generation(generate_model, input, target, attack_info):
 def auto_attack(model, epsilon, inputs, labels):
     assert model.model_type == "compiled_based" or model.model_type == "supernet_based"
     adversary = AutoAttack(model, norm='Linf', eps=epsilon, version='standard')
-    x_adv = adversary.run_standard_evaluation(inputs, labels, bs=input.size(0))
+    x_adv = adversary.run_standard_evaluation(inputs, labels, bs=inputs.size(0))
     return x_adv
 
 def carlini_wagner_attack(model, inputs, labels):
     assert model.model_type == "compiled_based" or model.model_type == "supernet_based"
-    x_adv = CarliniLi(tf.session(), model).attack(inputs.cpu().numpy(), labels.cpu().numpy())
+    x_adv = CarliniWagnerL2Attack(model, 10).perturb(inputs, labels)
+
     return torch.tensor(x_adv)
 
 def classic_pgd_attack(generator_model, input, target, eps, alpha, steps, is_targeted=False, rand_start=True, momentum=False, mu=1, criterion=nn.CrossEntropyLoss()):
     
+    generator_model.eval()
     def _gradient_wrt_input(model, inputs, targets, criterion=nn.CrossEntropyLoss()):
         inputs.requires_grad = True
 
