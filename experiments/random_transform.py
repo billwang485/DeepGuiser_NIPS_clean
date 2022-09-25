@@ -1,7 +1,7 @@
 import os
 import shutil
 import sys
-STEM_WORK_DIR = os.path.join(os.getcwd(), "..", "..")
+STEM_WORK_DIR = os.path.join(os.getcwd(), "..")
 sys.path.append(STEM_WORK_DIR)
 import glob
 import random
@@ -21,11 +21,6 @@ This files tests the transferbility isotonicity on supernets and trained-from-sc
 '''
 # sys.stdout = open(os.devnull, 'w'
 parser = argparse.ArgumentParser("DeepGuiser")
-parser.add_argument('--data', type=str, default=os.path.join(STEM_WORK_DIR, '../data'), help='location of the data corpus')
-parser.add_argument('--batch_size', type=int, default=64, help='batch size')
-parser.add_argument('--learning_rate', type=float, default=0.1, help='init learning rate')
-parser.add_argument('--momentum', type=float, default=0.9, help='momentum')
-parser.add_argument('--weight_decay', type=float, default=3e-4, help='weight decay')
 parser.add_argument('--gpu', type=int, default=4, help='gpu device id')#
 parser.add_argument('--epochs', type=int, default=100, help='number of signle model training epochs')
 # parser.add_argument('--init_channels', type=int, default=20, help='number of init channels')
@@ -35,7 +30,7 @@ parser.add_argument('--seed', type=int, default=1234, help='random seed')
 parser.add_argument('--prefix', type=str, default='.', help='parent save path')
 parser.add_argument('--scheduler', type=str, default='naive_cosine', help='type of LR scheduler')
 parser.add_argument('--learning_rate_min', type=float, default=0.001, help='min learning rate')
-parser.add_argument('--arch_info', type=str, default='example.yaml', help='yaml file contains information about archs be tested')#
+parser.add_argument('--arch', type=str, default='ResBlock', help='genotype')#
 parser.add_argument('--pretrained_weight', '-pw', type=str, default=' ', help='pretrained weight file dir')#
 parser.add_argument('--attack_info', type=str, default=os.path.join(STEM_WORK_DIR, 'final_test/attack_config/pgd1.yaml'), help='yaml file contains information about attack')#
 parser.add_argument('--cifar_classes', type=int, default=10, help='hidden dimension')
@@ -245,9 +240,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-
-
-
-
-

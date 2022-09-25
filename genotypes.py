@@ -220,7 +220,30 @@ ResBlock = Genotype(
     ],
     reduce_concat=[5],
 )
-
+# ResBlock_NAT_D_NIPS = Genotype(
+#     normal=[
+#         ("null", 0, 2),
+#         ("sep_conv_3x3", 1, 2),
+#         ("sep_conv_3x3", 0, 3),
+#         ("conv_5x5", 2, 3),
+#         ("null", 0, 4),
+#         ("conv_3x3", 3, 4),
+#         ("sep_conv_5x5", 2, 5),
+#         ("sep_conv_3x3", 4, 5),
+#     ],
+#     normal_concat=[5],
+#     reduce=[
+#         ("sep_conv_3x3", 0, 2),
+#         ("sep_conv_5x5", 1, 2),
+#         ("null", 0, 3),
+#         ("conv_5x5", 2, 3),
+#         ("conv_3x3", 0, 4),
+#         ("conv_5x5", 3, 4),
+#         ("sep_conv_3x3", 2, 5),
+#         ("sep_conv_5x5", 4, 5),
+#     ],
+#     reduce_concat=[5],
+# )
 NAT_ResBlock = Genotype(
     normal=[
         ("null", 0, 2),

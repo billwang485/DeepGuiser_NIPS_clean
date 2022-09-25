@@ -8,14 +8,15 @@ import utils
 import sys
 import os
 from advertorch.attacks.carlini_wagner import CarliniWagnerL2Attack
+from advertorch.attacks.deepfool import DeepfoolLinfAttack
 def adversarial_test(target_model, surrogate_model, baseline_model, test_queue, attack_info, logger):
     device = next(target_model.parameters()).device
     acc_adv_baseline = utils.AvgrageMeter()
     acc_adv_surrogate = utils.AvgrageMeter()
 
     for step, (input, target) in enumerate(test_queue):
-        if step > 1:
-            break
+        # if step > 0:
+        #     break
         n = input.size(0)
         input = input.to(device)
         target = target.to(device)
@@ -51,6 +52,8 @@ def unified_adversarial_generation(generate_model, input, target, attack_info):
         # print(input.shape)
     elif attack_info["type"] == "carlini_wagner":
         x_adv = carlini_wagner_attack(generate_model, input, target)
+    elif attack_info["type"] == "deepfool":
+        x_adv = carlini_wagner_attack(generate_model, input, target)
     else:
         assert 0
 
@@ -64,8 +67,23 @@ def auto_attack(model, epsilon, inputs, labels):
     return x_adv
 
 def carlini_wagner_attack(model, inputs, labels):
+    # print("into cwa")
     assert model.model_type == "compiled_based" or model.model_type == "supernet_based"
-    x_adv = CarliniWagnerL2Attack(model, 10).perturb(inputs, labels)
+    generator = CarliniWagnerL2Attack(model, 10, max_iterations = 10, learning_rate = 0.1)
+
+    # print("initilize complete")
+
+    x_adv = generator.perturb(inputs, labels)
+
+    return x_adv
+def deepfool_attack(model, inputs, labels):
+    # print("into cwa")
+    assert model.model_type == "compiled_based" or model.model_type == "supernet_based"
+    generator = DeepfoolLinfAttack(model, 10)
+
+    # print("initilize complete")
+
+    x_adv = generator.perturb(inputs, labels)
 
     return x_adv
 
