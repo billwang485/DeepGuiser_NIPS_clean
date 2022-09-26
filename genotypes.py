@@ -1382,3 +1382,10 @@ LooseEnd_Transition_Dict = {
         "null",
     ],
 }
+
+ResBlock_Random_0 = Genotype(normal=[('sep_conv_3x3', 0, 2), ('max_pool_3x3', 1, 2), ('max_pool_3x3',
+    0, 3), ('max_pool_3x3', 2, 3), ('sep_conv_5x5', 0, 4), ('max_pool_3x3', 3, 4),
+    ('conv_1x1', 2, 5), ('conv_1x1', 4, 5)], normal_concat=[5], reduce=[('max_pool_3x3',
+    0, 2), ('max_pool_3x3', 1, 2), ('skip_connect', 0, 3), ('max_pool_3x3', 2, 3),
+    ('max_pool_3x3', 0, 4), ('max_pool_3x3', 3, 4), ('max_pool_3x3', 2, 5), ('skip_connect',
+    4, 5)], reduce_concat=[5])

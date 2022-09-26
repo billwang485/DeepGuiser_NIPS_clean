@@ -24,9 +24,9 @@ import scipy.sparse as sp
 import genotypes
 from genotypes import Genotype
 from genotypes import TRANSFORM_MASK_LOOSE_END, TRANSFORM_MASK_BOTTLENECK
+from tqdm import tqdm
 
-
-def compute_nparam(module: nn.Module, size, arch_normal, arch_reduce, skip_pattern):
+def compute_nparam(module: nn.Module, size, skip_pattern):
     def size_hook(module: nn.Module, input: torch.Tensor, output: torch.Tensor):
         module.param_hook = True
 
@@ -36,7 +36,7 @@ def compute_nparam(module: nn.Module, size, arch_normal, arch_reduce, skip_patte
     with torch.no_grad():
         training = module.training
         module.eval()
-        module._inner_forward(torch.rand(size, device=module._device), arch_normal, arch_reduce)
+        module(torch.rand(size, device=module._device))
         module.train(mode=training)
     for hook in hooks:
         hook.remove()
@@ -57,7 +57,7 @@ def compute_nparam(module: nn.Module, size, arch_normal, arch_reduce, skip_patte
     return params
 
 
-def compute_flops(module: nn.Module, size, arch_normal, arch_reduce, skip_pattern="null"):
+def compute_flops(module: nn.Module, size, skip_pattern="null"):
     def size_hook(module: nn.Module, input: torch.Tensor, output: torch.Tensor):
         *_, h, w = output.shape
         module.output_size = (h, w)
@@ -69,7 +69,7 @@ def compute_flops(module: nn.Module, size, arch_normal, arch_reduce, skip_patter
     with torch.no_grad():
         training = module.training
         module.eval()
-        module._inner_forward(torch.rand(size, device=module._device), arch_normal, arch_reduce)
+        module(torch.rand(size, device=module._device))
         module.train(mode=training)
     for hook in hooks:
         hook.remove()
@@ -112,7 +112,47 @@ def parse_loose_end_concat(arch, num_nodes = 4):
         if not i in used_nodes:
             concat.append(i)
     return concat
-    
+
+def compute_latency(model, STEM_WORK_DIR):
+
+    class tmp_args:
+        cutout = False
+
+    train_transform, valid_transform = _data_transforms_cifar10(tmp_args())
+
+    test_data = dset.CIFAR10(root=os.path.join(STEM_WORK_DIR, "..") , train=False, download=True, transform=valid_transform)
+
+    indices_test = list(range(len(test_data)))
+    random.seed(1234)
+    random.shuffle(indices_test)
+    random.seed(1234)
+
+    test_queue = torch.utils.data.DataLoader(test_data, batch_size=1, sampler=torch.utils.data.sampler.SubsetRandomSampler(indices_test), pin_memory=True, num_workers=4)
+
+
+    start_time = time.process_time()
+    for step, (input, target) in enumerate(test_queue):
+        if step >= 1000:
+            break
+        input = input.to(model._device)
+        target = target.to(model._device)
+        logits = model(input)
+    end_time = time.process_time()
+    run_time1 = end_time - start_time
+
+    start_time = time.process_time()
+    for step, (input, target) in enumerate(test_queue):
+        if step >= 1000:
+            break
+        input = input.to(model._device)
+        target = target.to(model._device)
+        # logits = target_model._inner_forward(input, target_model.arch_normal, target_model.arch_reduce)
+    end_time = time.process_time()
+    run_time2 = end_time - start_time
+
+    target_run_time = (run_time1 - run_time2) / 1000
+
+    return target_run_time
 
 def imagewise_accuracy(output, target, pid):
 
@@ -1081,6 +1121,9 @@ def test_clean_accuracy(model, test_queue, logger = None,  device = None, ):
         device = next(model.parameters()).device
     top1 = AvgrageMeter()
     top5 = AvgrageMeter()
+
+    pbar = tqdm(total=len(test_queue))
+    
     for step, (input, target) in enumerate(test_queue):
         model.eval()
         n = input.size(0)
@@ -1090,6 +1133,8 @@ def test_clean_accuracy(model, test_queue, logger = None,  device = None, ):
         prec1, prec5 = accuracy(logits, target, topk=(1, 5))
         top1.update(prec1.item() / 100.0, n)
         top5.update(prec5.item() / 100.0, n)
+        pbar.update(1)
+    pbar.close()
     if logger is not None:
         logger.info('Test Accuracy: Top1=%f Top5=%f', top1.avg, top5.avg)
     return top1.avg, top5.avg
@@ -1221,3 +1266,32 @@ class keydefaultdict(defaultdict):
         else:
             ret = self[key] = self.default_factory(key)
             return ret
+
+class suppress_stdout_stderr(object):
+    '''
+    A context manager for doing a "deep suppression" of stdout and stderr in
+    Python, i.e. will suppress all print, even if the print originates in a
+    compiled C/Fortran sub-function.
+       This will not suppress raised exceptions, since exceptions are printed
+    to stderr just before a script exits, and after the context manager has
+    exited (at least, I think that is why it lets exceptions through).
+
+    '''
+    def __init__(self):
+        # Open a pair of null files
+        self.null_fds = [os.open(os.devnull, os.O_RDWR) for x in range(2)]
+        # Save the actual stdout (1) and stderr (2) file descriptors.
+        self.save_fds = (os.dup(1), os.dup(2))
+
+    def __enter__(self):
+        # Assign the null pointers to stdout and stderr.
+        os.dup2(self.null_fds[0], 1)
+        os.dup2(self.null_fds[1], 2)
+
+    def __exit__(self, *_):
+        # Re-assign the real stdout/stderr back to (1) and (2)
+        os.dup2(self.save_fds[0], 1)
+        os.dup2(self.save_fds[1], 2)
+        # Close the null files
+        os.close(self.null_fds[0])
+        os.close(self.null_fds[1])

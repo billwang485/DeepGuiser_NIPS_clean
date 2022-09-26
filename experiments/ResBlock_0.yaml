@@ -1,0 +1,18 @@
+surrogate:
+  flops: 179988480.0
+  genotpye: Genotype(normal=[('conv_5x5', 0, 2), ('skip_connect', 1, 2), ('sep_conv_3x3',
+    0, 3), ('conv_3x3', 2, 3), ('conv_1x1', 0, 4), ('conv_3x3', 3, 4), ('conv_1x1',
+    2, 5), ('conv_1x1', 4, 5)], normal_concat=[5], reduce=[('sep_conv_3x3', 0, 2),
+    ('skip_connect', 1, 2), ('conv_3x3', 0, 3), ('conv_3x3', 2, 3), ('sep_conv_3x3',
+    0, 4), ('conv_3x3', 3, 4), ('skip_connect', 2, 5), ('sep_conv_5x5', 4, 5)], reduce_concat=[5])
+  latency: 0.03046555018099999
+  nparam: 1244580
+target:
+  flops: 91361280.0
+  genotype: Genotype(normal=[('null', 0, 2), ('skip_connect', 1, 2), ('null', 0, 3),
+    ('conv_3x3', 2, 3), ('null', 0, 4), ('conv_3x3', 3, 4), ('skip_connect', 2, 5),
+    ('skip_connect', 4, 5)], normal_concat=[5], reduce=[('null', 0, 2), ('skip_connect',
+    1, 2), ('null', 0, 3), ('conv_3x3', 2, 3), ('null', 0, 4), ('conv_3x3', 3, 4),
+    ('skip_connect', 2, 5), ('skip_connect', 4, 5)], reduce_concat=[5])
+  latency: 0.017482428755999996
+  nparam: 605220

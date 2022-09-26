@@ -15,6 +15,7 @@ import torch.backends.cudnn as cudnn
 import utils
 import attacks
 import genotypes
+from genotypes import Genotype
 from final_test.supernet_based.models import LooseEndModel
 '''
 This files tests the transferbility isotonicity on supernets and trained-from-scratch models
@@ -37,7 +38,7 @@ parser.add_argument('--scheduler', type=str, default='naive_cosine', help='type 
 parser.add_argument('--learning_rate_min', type=float, default=0.001, help='min learning rate')
 parser.add_argument('--arch_info', type=str, default='example.yaml', help='yaml file contains information about archs be tested')#
 parser.add_argument('--pretrained_weight', '-pw', type=str, default=' ', help='pretrained weight file dir')#
-parser.add_argument('--attack_info', type=str, default=os.path.join(STEM_WORK_DIR, 'final_test/attack_config/pgd1.yaml'), help='yaml file contains information about attack')#
+parser.add_argument('--attack_info', type=str, default=os.path.join(STEM_WORK_DIR, 'final_test/attack_config/pgd007.yaml'), help='yaml file contains information about attack')#
 parser.add_argument('--cifar_classes', type=int, default=10, help='hidden dimension')
 parser.add_argument("--debug", action="store_true", default=False, help="debug mode")
 args = parser.parse_args()
@@ -58,7 +59,7 @@ def get_dir_name(args):
     attack_info = utils.load_yaml(args.attack_info)
 
     # prefix = "{}_seed_{}_eps_{}_type_{}_".format(arch_info["name"], args.seed, attack_info["eps"], attack_info["type"])
-    prefix = "{}_type_{}_".format(arch_info["name"], attack_info["type"])
+    prefix = "{}_type_{}_fixprec_".format(arch_info["name"], attack_info["type"])
     default_EXP = prefix + default_EXP
     return default_EXP
 

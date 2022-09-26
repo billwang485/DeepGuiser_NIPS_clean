@@ -1,7 +1,3 @@
-# classic pgd is in utils
-
-from this import d
-from autoattack import AutoAttack
 import torch
 import torch.nn as nn
 import utils
@@ -9,13 +5,21 @@ import sys
 import os
 from advertorch.attacks.carlini_wagner import CarliniWagnerL2Attack
 from advertorch.attacks.deepfool import DeepfoolLinfAttack
+from tqdm import tqdm
+with utils.suppress_stdout_stderr():
+    from autoattack import AutoAttack
+    import torchattacks
 def adversarial_test(target_model, surrogate_model, baseline_model, test_queue, attack_info, logger):
     device = next(target_model.parameters()).device
     acc_adv_baseline = utils.AvgrageMeter()
     acc_adv_surrogate = utils.AvgrageMeter()
 
+    
+    pbar = tqdm(total= len(test_queue))
+    # pbar = tqdm(total= 10)
+
     for step, (input, target) in enumerate(test_queue):
-        # if step > 0:
+        # if step > 9:
         #     break
         n = input.size(0)
         input = input.to(device)
@@ -38,8 +42,10 @@ def adversarial_test(target_model, surrogate_model, baseline_model, test_queue, 
         logits1 = utils.unified_forward(target_model, input_adv1)
         acc_adv_surrogate_ = utils.accuracy(logits1, target, topk=(1, 5))[0] / 100.0
         acc_adv_surrogate.update(acc_adv_surrogate_.item(), n)
+        pbar.update(1)
+    pbar.close()
     if logger is not None:
-        logger.info('PGD Test Results: acc_adv_baseline=%f acc_adv_surrogate=%.2f',\
+        logger.info('Adversarial Test Results: acc_adv_baseline=%f acc_adv_surrogate=%f',\
                 acc_adv_baseline.avg, acc_adv_surrogate.avg)
     return acc_adv_baseline.avg, acc_adv_surrogate.avg
 
@@ -52,8 +58,8 @@ def unified_adversarial_generation(generate_model, input, target, attack_info):
         # print(input.shape)
     elif attack_info["type"] == "carlini_wagner":
         x_adv = carlini_wagner_attack(generate_model, input, target)
-    elif attack_info["type"] == "deepfool":
-        x_adv = carlini_wagner_attack(generate_model, input, target)
+    elif attack_info["type"] == "DIFGSM":
+        x_adv = DIFGSM_attack(generate_model, input, target)
     else:
         assert 0
 
@@ -62,8 +68,9 @@ def unified_adversarial_generation(generate_model, input, target, attack_info):
 
 def auto_attack(model, epsilon, inputs, labels):
     assert model.model_type == "compiled_based" or model.model_type == "supernet_based"
-    adversary = AutoAttack(model, norm='Linf', eps=epsilon, version='standard')
-    x_adv = adversary.run_standard_evaluation(inputs, labels, bs=inputs.size(0))
+    with utils.suppress_stdout_stderr():
+        adversary = AutoAttack(model, norm='Linf', eps=epsilon, version='standard')
+        x_adv = adversary.run_standard_evaluation(inputs, labels, bs=inputs.size(0))
     return x_adv
 
 def carlini_wagner_attack(model, inputs, labels):
@@ -76,14 +83,19 @@ def carlini_wagner_attack(model, inputs, labels):
     x_adv = generator.perturb(inputs, labels)
 
     return x_adv
-def deepfool_attack(model, inputs, labels):
+def DIFGSM_attack(model, inputs, labels):
+    # print("here")
     # print("into cwa")
-    assert model.model_type == "compiled_based" or model.model_type == "supernet_based"
-    generator = DeepfoolLinfAttack(model, 10)
+    # assert model.model_type == "compiled_based" or model.model_type == "supernet_based"
+    # criterion = nn.CrossEntropyLoss().to(model._device)
+    # generator = DeepfoolLinfAttack(model, nb_iter=500, eps=0.2, loss_fn = criterion)
+
+    atk = torchattacks.DIFGSM(model)
+    x_adv = atk(inputs.to(model._device), labels.to(model._device))
 
     # print("initilize complete")
 
-    x_adv = generator.perturb(inputs, labels)
+    # x_adv = generator.perturb(inputs, labels)
 
     return x_adv
 
