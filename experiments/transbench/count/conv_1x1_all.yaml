@@ -1,0 +1,24 @@
+conv_1x1_count:
+  normal: 0.10328282828282828
+  reduce: 0.11388888888888889
+transform_count:
+  normal:
+    avg_pool_3x3: 0.0
+    conv_1x1: 0.35207823960880197
+    conv_3x3: 0.30012224938875304
+    conv_5x5: 0.347799511002445
+    max_pool_3x3: 0.0
+    'null': 0.0
+    sep_conv_3x3: 0.0
+    sep_conv_5x5: 0.0
+    skip_connect: 0.0
+  reduce:
+    avg_pool_3x3: 0.0
+    conv_1x1: 0.3187361419068736
+    conv_3x3: 0.3237250554323725
+    conv_5x5: 0.3575388026607539
+    max_pool_3x3: 0.0
+    'null': 0.0
+    sep_conv_3x3: 0.0
+    sep_conv_5x5: 0.0
+    skip_connect: 0.0

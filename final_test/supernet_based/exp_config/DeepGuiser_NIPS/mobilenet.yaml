@@ -7,6 +7,7 @@ target:
 surrogate:
   - genotype: 'genotypes.Mobilenetv2_DeepGuiser_NIPS'
     # pretrained_weight: None
+    # /home/ChenYu_Wang/nfs/projects/DeepGuiser_NIPS_clean/final_test/supernet_based/log/mobilenet_deepguiser_nips_seed_1234_Sep 21 14 02 09/surrogate_model.pt
     pretrained_weight: "final_test/supernet_based/log/mobilenet_deepguiser_nips_seed_1234_Sep 22 15 28 11/surrogate_model.pt"
 name:
   'mobilenet_deepguiser_nips'
